@@ -81,21 +81,3 @@ export const ProductContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
 `;
-
-export const PaginationButtons = styled.div`
-  width: 100%;
-
-  margin-top: 10px;
-  padding-right: 20px;
-
-  display: flex;
-  justify-content: flex-end;
-
-  button + button {
-    margin-left: 10px;
-  }
-`;
-
-export const PaginationButton = styled(Button)`
-  height: 27px;
-`;

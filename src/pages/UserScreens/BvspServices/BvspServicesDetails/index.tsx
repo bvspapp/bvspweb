@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { MdArrowBack } from 'react-icons/md';
@@ -8,6 +8,7 @@ import light from '../../../../styles/themes/light';
 
 import HighlightTitle from '../../../../components/HighlightTitle';
 import Load from '../../../../components/Load';
+import ImageSliderPreview from '../../../../components/ImageSliderPreview';
 import MessageAlert from '../../../../utils/MessageAlert';
 
 import {
@@ -22,9 +23,6 @@ import {
   ServiceDescription,
   ServiceInfoContainer,
   ImageContainer,
-  ImagePreview,
-  ThumnailContainer,
-  ThumnailButton,
 } from './styles';
 
 interface IBvspServiceData {
@@ -57,7 +55,6 @@ const BvspServicesDetails: React.FC<IRouteParams> = ({ match }) => {
   const [detail, setDatail] = useState<IBvspServiceData>(
     {} as IBvspServiceData,
   );
-  const [photoSelected, setPhotoSelected] = useState('');
 
   const history = useHistory();
   const { id: bvspServiceId } = match.params;
@@ -71,17 +68,25 @@ const BvspServicesDetails: React.FC<IRouteParams> = ({ match }) => {
       .then(snapshot => {
         const data = snapshot.data() as IBvspServiceData;
 
-        if (data.photocover.url) {
-          setPhotoSelected(data.photocover.url);
-        } else {
-          setPhotoSelected(data.photos[0].url);
-        }
-
         setDatail(data);
       })
       .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
       .finally(() => setLoading(false));
   }, [bvspServiceId]);
+
+  const photosFormatted = useMemo(() => {
+    const formatted = !detail.photos
+      ? {
+          photoDefault: '',
+          photos: [''],
+        }
+      : {
+          photoDefault: detail.photos[0].url,
+          photos: detail.photos.map(photo => photo.url),
+        };
+
+    return formatted;
+  }, [detail]);
 
   useEffect(() => {
     handleFetchSpecialSolutionData();
@@ -105,16 +110,10 @@ const BvspServicesDetails: React.FC<IRouteParams> = ({ match }) => {
       ) : (
         <ServiceInfoContainer>
           <ImageContainer>
-            <ImagePreview image={photoSelected} />
-            <ThumnailContainer>
-              {detail.photos.map(photo => (
-                <ThumnailButton
-                  key={photo.name}
-                  image={photo.url}
-                  onClick={() => setPhotoSelected(photo.url)}
-                />
-              ))}
-            </ThumnailContainer>
+            <ImageSliderPreview
+              imageDefault={photosFormatted.photoDefault}
+              photos={photosFormatted.photos}
+            />
           </ImageContainer>
 
           <ServiceInfo>

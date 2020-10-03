@@ -8,13 +8,7 @@ import React, {
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 
-import {
-  FiSearch,
-  FiFilter,
-  FiX,
-  FiArrowLeft,
-  FiArrowRight,
-} from 'react-icons/fi';
+import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
 import { MdArrowBack } from 'react-icons/md';
 
 import firebase from '../../../../config/firebase';
@@ -23,6 +17,7 @@ import Load from '../../../../components/Load';
 
 import HighlightTitle from '../../../../components/HighlightTitle';
 import ProductCard from '../../../../components/ProductCard';
+import Pagination from '../../../../components/Pagination';
 import MessageAlert from '../../../../utils/MessageAlert';
 
 import {
@@ -36,8 +31,6 @@ import {
   ClearButton,
   SelectFilter,
   ProductContainer,
-  PaginationButtons,
-  PaginationButton,
 } from './styles';
 
 interface IData {
@@ -55,9 +48,22 @@ interface IDataSearch {
   filterValue: string;
 }
 
-const BvspPartsStSearch: React.FC = () => {
+interface IRouteParams {
+  match: {
+    params: {
+      machine_id: string;
+    };
+  };
+}
+
+interface IMachineData {
+  description: string;
+}
+
+const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
   const [dataTable, setDataTable] = useState<IData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [machine, setMachine] = useState<IMachineData>({} as IMachineData);
   const [lastValueConsulted, setLastValueConsulted] = useState<string>();
   const [lastFilterConsulted, setLastFilterConsulted] = useState<string>(
     'description_insensitive',
@@ -71,9 +77,10 @@ const BvspPartsStSearch: React.FC = () => {
     firebase.firestore.QueryDocumentSnapshot
   >();
 
+  const { machine_id } = match.params;
   const formRef = useRef<FormHandles>(null);
 
-  const pageSize = 8;
+  const pageSize = 14;
   const history = useHistory();
 
   const optionsSearchFilterBvspPart = useMemo(() => {
@@ -93,50 +100,56 @@ const BvspPartsStSearch: React.FC = () => {
     ];
   }, []);
 
-  const handleFetchBvspPart = useCallback(async (data: IDataSearch) => {
-    const { searchValue, filterValue } = data;
+  const handleFetchBvspPart = useCallback(
+    async (data: IDataSearch) => {
+      const { searchValue, filterValue } = data;
 
-    setLoading(true);
+      setLoading(true);
 
-    const valueFormatted = searchValue.toLowerCase().trim();
-    setLastValueConsulted(valueFormatted);
-    setLastFilterConsulted(filterValue);
+      const valueFormatted = searchValue.toLowerCase().trim();
+      setLastValueConsulted(valueFormatted);
+      setLastFilterConsulted(filterValue);
 
-    await firebase
-      .firestore()
-      .collection('parts')
-      .orderBy(filterValue)
-      .startAt(valueFormatted)
-      .endAt(`${valueFormatted}\uf8ff`)
-      .limit(pageSize)
-      .get()
-      .then(snapshot => {
-        const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-        setLastDocPaginate(lastVisible);
+      await firebase
+        .firestore()
+        .collection('parts')
+        .where('machines', 'array-contains', machine_id)
+        .orderBy(filterValue)
+        .startAt(valueFormatted)
+        .endAt(`${valueFormatted}\uf8ff`)
+        .limit(pageSize)
+        .get()
+        .then(snapshot => {
+          const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+          setLastDocPaginate(lastVisible);
 
-        const firstVisible = snapshot.docs[0];
-        setFirstDocPaginate(firstVisible);
+          const firstVisible = snapshot.docs[0];
+          setFirstDocPaginate(firstVisible);
 
-        // show or unshow next button.
-        snapshot.docs.length === pageSize
-          ? setExistsMoreRecords(true)
-          : setExistsMoreRecords(false);
+          // show or unshow next button.
+          snapshot.docs.length === pageSize
+            ? setExistsMoreRecords(true)
+            : setExistsMoreRecords(false);
 
-        const dataFormatted = snapshot.docs.map(doc => {
-          return {
-            id: String(doc.id),
-            oemcode: String(doc.data().oemcode),
-            bvspcode: String(doc.data().bvspcode),
-            description: String(doc.data().description),
-            photos: doc.data().photos,
-          };
-        });
+          const dataFormatted = snapshot.docs.map(doc => {
+            return {
+              id: String(doc.id),
+              oemcode: String(doc.data().oemcode),
+              bvspcode: String(doc.data().bvspcode),
+              description: String(doc.data().description),
+              photos: doc.data().photos,
+            };
+          });
 
-        setDataTable(dataFormatted);
-      })
-      .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
-      .finally(() => setLoading(false));
-  }, []);
+          setDataTable(dataFormatted);
+        })
+        .catch(() =>
+          MessageAlert('Não foi possível carregar os dados!', 'error'),
+        )
+        .finally(() => setLoading(false));
+    },
+    [machine_id],
+  );
 
   const handlePagination = useCallback(
     async (action: 'prev' | 'next') => {
@@ -227,10 +240,32 @@ const BvspPartsStSearch: React.FC = () => {
     });
   }, [handleFetchBvspPart]);
 
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection('machines')
+      .doc(machine_id)
+      .get()
+      .then(snapshot => {
+        const { description } = snapshot.data() as IMachineData;
+
+        setMachine({
+          description,
+        });
+      })
+      .catch(() => {
+        MessageAlert('Não foi possível atualizado!', 'error');
+      })
+      .finally(() => setLoading(false));
+  }, [machine_id]);
+
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Peças Linhas ST" lineAlign="left" />
+        <HighlightTitle
+          title={machine.description ? `Peças ${machine.description}` : 'Peças'}
+          lineAlign="left"
+        />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -278,27 +313,12 @@ const BvspPartsStSearch: React.FC = () => {
             ))}
           </ProductContainer>
 
-          <PaginationButtons>
-            {pageNumber > 1 && (
-              <PaginationButton
-                type="button"
-                color={light.colors.success}
-                onClick={() => handlePagination('prev')}
-              >
-                <FiArrowLeft />
-              </PaginationButton>
-            )}
-
-            {existsMoreRecords && (
-              <PaginationButton
-                type="button"
-                color={light.colors.success}
-                onClick={() => handlePagination('next')}
-              >
-                <FiArrowRight />
-              </PaginationButton>
-            )}
-          </PaginationButtons>
+          <Pagination
+            showPrev={pageNumber > 1}
+            handlePrev={() => handlePagination('prev')}
+            showNext={existsMoreRecords}
+            handleNext={() => handlePagination('next')}
+          />
         </>
       )}
 

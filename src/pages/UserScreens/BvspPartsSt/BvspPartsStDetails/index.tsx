@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { MdArrowBack } from 'react-icons/md';
@@ -6,8 +6,8 @@ import { MdArrowBack } from 'react-icons/md';
 import firebase from '../../../../config/firebase';
 import light from '../../../../styles/themes/light';
 import Load from '../../../../components/Load';
-
 import HighlightTitle from '../../../../components/HighlightTitle';
+import ImageSliderPreview from '../../../../components/ImageSliderPreview';
 
 import {
   Container,
@@ -24,9 +24,6 @@ import {
   DepartmentTags,
   ProductInfoContainer,
   ImageContainer,
-  ImagePreview,
-  ThumnailContainer,
-  ThumnailButton,
 } from './styles';
 
 interface IBvspPartData {
@@ -74,7 +71,6 @@ interface IData {
 const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [detail, setDetail] = useState<IData>({} as IData);
-  const [photoSelected, setPhotoSelected] = useState('');
 
   const history = useHistory();
   const { id: bvspPartId } = match.params;
@@ -87,12 +83,6 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
       .get()
       .then(snapshot => {
         const part = snapshot.data() as IBvspPartData;
-
-        if (part.photocover.url) {
-          setPhotoSelected(part.photocover.url);
-        } else {
-          setPhotoSelected(part.photos[0].url);
-        }
 
         return part;
       });
@@ -134,6 +124,20 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
     setLoading(false);
   }, [bvspPartId]);
 
+  const photosFormatted = useMemo(() => {
+    const formatted = !detail.part
+      ? {
+          photoDefault: '',
+          photos: [''],
+        }
+      : {
+          photoDefault: detail.part.photos[0].url,
+          photos: detail.part.photos.map(photo => photo.url),
+        };
+
+    return formatted;
+  }, [detail]);
+
   useEffect(() => {
     handleFetchBvspPartData();
   }, [handleFetchBvspPartData]);
@@ -156,16 +160,10 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
       ) : (
         <ProductInfoContainer>
           <ImageContainer>
-            <ImagePreview image={photoSelected} />
-            <ThumnailContainer>
-              {detail.part.photos.map(photo => (
-                <ThumnailButton
-                  key={photo.name}
-                  image={photo.url}
-                  onClick={() => setPhotoSelected(photo.url)}
-                />
-              ))}
-            </ThumnailContainer>
+            <ImageSliderPreview
+              imageDefault={photosFormatted.photoDefault}
+              photos={photosFormatted.photos}
+            />
           </ImageContainer>
 
           <ProductInfo>

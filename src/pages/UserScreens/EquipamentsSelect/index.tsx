@@ -8,13 +8,7 @@ import React, {
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 
-import {
-  FiSearch,
-  FiFilter,
-  FiX,
-  FiArrowLeft,
-  FiArrowRight,
-} from 'react-icons/fi';
+import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
 import { MdArrowBack } from 'react-icons/md';
 
 import firebase from '../../../config/firebase';
@@ -22,6 +16,8 @@ import light from '../../../styles/themes/light';
 
 import HighlightTitle from '../../../components/HighlightTitle';
 import SimpleSelectCard from '../../../components/SimpleSelectCard';
+import Pagination from '../../../components/Pagination';
+import SubTitleDivider from '../../../components/SubTitleDivider';
 import MessageAlert from '../../../utils/MessageAlert';
 import Load from '../../../components/Load';
 
@@ -36,10 +32,6 @@ import {
   ClearButton,
   ServiceContainer,
   SelectFilter,
-  MessageContainer,
-  MessageText,
-  PaginationButtons,
-  PaginationButton,
 } from './styles';
 
 interface IRouteParams {
@@ -204,7 +196,7 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
 
           setDataTable(dataFormatted);
         })
-        .catch(() =>
+        .catch(error =>
           MessageAlert('Não foi possível carregar os dados!', 'error'),
         )
         .finally(() => setLoading(false));
@@ -271,9 +263,7 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
         </ClearButton>
       </SearchContainer>
 
-      <MessageContainer>
-        <MessageText>Escolha o departamento</MessageText>
-      </MessageContainer>
+      <SubTitleDivider title="Escolha o departamento" />
 
       {loading ? (
         <Load />
@@ -289,27 +279,12 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
             ))}
           </ServiceContainer>
 
-          <PaginationButtons>
-            {pageNumber > 1 && (
-              <PaginationButton
-                type="button"
-                color={light.colors.success}
-                onClick={() => handlePagination('prev')}
-              >
-                <FiArrowLeft />
-              </PaginationButton>
-            )}
-
-            {existsMoreRecords && (
-              <PaginationButton
-                type="button"
-                color={light.colors.success}
-                onClick={() => handlePagination('next')}
-              >
-                <FiArrowRight />
-              </PaginationButton>
-            )}
-          </PaginationButtons>
+          <Pagination
+            showPrev={pageNumber > 1}
+            handlePrev={() => handlePagination('prev')}
+            showNext={existsMoreRecords}
+            handleNext={() => handlePagination('next')}
+          />
         </>
       )}
 

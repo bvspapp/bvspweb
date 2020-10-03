@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { MdArrowBack } from 'react-icons/md';
@@ -8,6 +8,7 @@ import light from '../../../../styles/themes/light';
 
 import HighlightTitle from '../../../../components/HighlightTitle';
 import Load from '../../../../components/Load';
+import ImageSliderPreview from '../../../../components/ImageSliderPreview';
 
 import {
   Container,
@@ -24,9 +25,6 @@ import {
   DepartmentTags,
   ProductInfoContainer,
   ImageContainer,
-  ImagePreview,
-  ThumnailContainer,
-  ThumnailButton,
 } from './styles';
 
 interface IBvspMachineData {
@@ -73,7 +71,6 @@ interface IData {
 const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<IData>({} as IData);
-  const [photoSelected, setPhotoSelected] = useState('');
 
   const history = useHistory();
   const { id: bvspMachineId } = match.params;
@@ -86,12 +83,6 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
       .get()
       .then(snapshot => {
         const machineData = snapshot.data() as IBvspMachineData;
-
-        if (machineData.photocover.url) {
-          setPhotoSelected(machineData.photocover.url);
-        } else {
-          setPhotoSelected(machineData.photos[0].url);
-        }
 
         return machineData;
       });
@@ -133,6 +124,20 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
     setLoading(false);
   }, [bvspMachineId]);
 
+  const photosFormatted = useMemo(() => {
+    const formatted = !data.machine
+      ? {
+          photoDefault: '',
+          photos: [''],
+        }
+      : {
+          photoDefault: data.machine.photos[0].url,
+          photos: data.machine.photos.map(photo => photo.url),
+        };
+
+    return formatted;
+  }, [data]);
+
   useEffect(() => {
     handleFetchBvspMachineData();
   }, [handleFetchBvspMachineData]);
@@ -155,17 +160,10 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
       ) : (
         <ProductInfoContainer>
           <ImageContainer>
-            <ImagePreview image={photoSelected} />
-
-            <ThumnailContainer>
-              {data.machine.photos.map(photo => (
-                <ThumnailButton
-                  key={photo.name}
-                  image={photo.url}
-                  onClick={() => setPhotoSelected(photo.url)}
-                />
-              ))}
-            </ThumnailContainer>
+            <ImageSliderPreview
+              imageDefault={photosFormatted.photoDefault}
+              photos={photosFormatted.photos}
+            />
           </ImageContainer>
 
           <ProductInfo>

@@ -48,6 +48,11 @@ export const ProductInfo = styled.div`
   padding: 20px;
 
   width: 57%;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    margin-top: 10px;
+  }
 `;
 
 export const InfoLine = styled.div`
@@ -95,47 +100,16 @@ export const ProductInfoContainer = styled.div`
 
   padding: 20px;
   margin-top: 40px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 export const ImageContainer = styled.div`
-  border: 3px solid ${props => props.theme.colors.secondary};
-  border-radius: 5px;
-
-  padding: 20px;
-
   width: 40%;
-`;
 
-export const ImagePreview = styled.div<IImagePreviewProps>`
-  height: 250px;
-
-  background: url(${props => props.image});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
-
-export const ThumnailContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-export const ThumnailButton = styled.button<IImagePreviewProps>`
-  background: url(${props => props.image});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  width: 100px;
-  height: 80px;
-  margin: 13px;
-
-  border: 1px solid ${props => props.theme.colors.secondary};
-  border-radius: 5px;
-
-  transition: transform 0.3s;
-
-  &:hover {
-    transform: scale(1.07);
+  @media (max-width: 600px) {
+    width: 100%;
   }
 `;

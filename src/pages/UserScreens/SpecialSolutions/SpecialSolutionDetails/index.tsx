@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { MdArrowBack } from 'react-icons/md';
@@ -9,6 +9,7 @@ import light from '../../../../styles/themes/light';
 import HighlightTitle from '../../../../components/HighlightTitle';
 import MessageAlert from '../../../../utils/MessageAlert';
 import Load from '../../../../components/Load';
+import ImageSliderPreview from '../../../../components/ImageSliderPreview';
 
 import {
   Container,
@@ -22,9 +23,6 @@ import {
   ProductDescription,
   ProductInfoContainer,
   ImageContainer,
-  ImagePreview,
-  ThumnailContainer,
-  ThumnailButton,
 } from './styles';
 
 interface ISpecialSolutionData {
@@ -52,7 +50,6 @@ interface IRouteParams {
 
 const SpecialSolutionDetails: React.FC<IRouteParams> = ({ match }) => {
   const [loading, setLoading] = useState(true);
-  const [photoSelected, setPhotoSelected] = useState('');
   const [detail, setDetail] = useState<ISpecialSolutionData>(
     {} as ISpecialSolutionData,
   );
@@ -69,17 +66,25 @@ const SpecialSolutionDetails: React.FC<IRouteParams> = ({ match }) => {
       .then(snapshot => {
         const data = snapshot.data() as ISpecialSolutionData;
 
-        if (data.photocover.url) {
-          setPhotoSelected(data.photocover.url);
-        } else {
-          setPhotoSelected(data.photos[0].url);
-        }
-
         setDetail(data);
       })
       .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
       .finally(() => setLoading(false));
   }, [specialSolutionId]);
+
+  const photosFormatted = useMemo(() => {
+    const formatted = !detail.photos
+      ? {
+          photoDefault: '',
+          photos: [''],
+        }
+      : {
+          photoDefault: detail.photos[0].url,
+          photos: detail.photos.map(photo => photo.url),
+        };
+
+    return formatted;
+  }, [detail]);
 
   useEffect(() => {
     handleFetchSpecialSolutionData();
@@ -103,16 +108,10 @@ const SpecialSolutionDetails: React.FC<IRouteParams> = ({ match }) => {
       ) : (
         <ProductInfoContainer>
           <ImageContainer>
-            <ImagePreview image={photoSelected} />
-            <ThumnailContainer>
-              {detail.photos.map(photo => (
-                <ThumnailButton
-                  key={photo.name}
-                  image={photo.url}
-                  onClick={() => setPhotoSelected(photo.url)}
-                />
-              ))}
-            </ThumnailContainer>
+            <ImageSliderPreview
+              imageDefault={photosFormatted.photoDefault}
+              photos={photosFormatted.photos}
+            />
           </ImageContainer>
 
           <ProductInfo>

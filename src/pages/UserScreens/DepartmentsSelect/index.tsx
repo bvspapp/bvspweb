@@ -10,6 +10,7 @@ import light from '../../../styles/themes/light';
 
 import HighlightTitle from '../../../components/HighlightTitle';
 import SimpleSelectCard from '../../../components/SimpleSelectCard';
+import SubTitleDivider from '../../../components/SubTitleDivider';
 import MessageAlert from '../../../utils/MessageAlert';
 import Load from '../../../components/Load';
 
@@ -23,8 +24,6 @@ import {
   SearchButton,
   ClearButton,
   ServiceContainer,
-  MessageContainer,
-  MessageText,
 } from './styles';
 
 interface IData {
@@ -53,7 +52,6 @@ const DepartmentsSelect: React.FC = () => {
       await firebase
         .firestore()
         .collection('departments')
-        .orderBy('order')
         .orderBy('description_insensitive')
         .startAt(valueFormatted)
         .endAt(`${valueFormatted}\uf8ff`)
@@ -76,7 +74,7 @@ const DepartmentsSelect: React.FC = () => {
       await firebase
         .firestore()
         .collection('departments')
-
+        .orderBy('order')
         .get()
         .then(snapshot => {
           const dataFormatted = snapshot.docs.map(doc => {
@@ -138,9 +136,7 @@ const DepartmentsSelect: React.FC = () => {
         </ClearButton>
       </SearchContainer>
 
-      <MessageContainer>
-        <MessageText>Escolha o departamento</MessageText>
-      </MessageContainer>
+      <SubTitleDivider title="Escolha o departamento" />
 
       {loading ? (
         <Load />
