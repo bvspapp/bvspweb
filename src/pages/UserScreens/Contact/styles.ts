@@ -29,13 +29,10 @@ export const Header = styled.header`
 export const UserContainer = styled.div``;
 
 export const Content = styled.main`
-  flex: 1;
-  margin-top: 65px;
+  width: 100%;
 
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-around;
 `;
 
 export const BackButton = styled(Button)`
@@ -46,7 +43,7 @@ export const BackButton = styled(Button)`
 
 export const ContactContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
   margin-top: 30px;
 
@@ -54,44 +51,50 @@ export const ContactContainer = styled.div`
 `;
 
 export const ContactBox = styled.div`
-  width: 300px;
+  width: 400px;
   height: 100px;
+  overflow: hidden;
 
   border-radius: 5px;
 
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 10px;
+
   margin: 10px;
 
-  background: linear-gradient(0deg, #be1d20 0%, #d42427 100%);
-  color: ${props => props.theme.colors.white};
+  background: linear-gradient(160deg, #ebebeb 0%, #e0e0e0 100%);
+  color: ${props => props.theme.colors.black};
 `;
 
 export const ContactLabel = styled.p`
   font-size: 14px;
+  margin-left: -50px;
 `;
 
 export const ContactText = styled.p`
   font-size: 22px;
   font-weight: bold;
+  margin-left: -50px;
 `;
 
 export const ContactIcon = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background-color: ${props => props.theme.colors.white};
+  position: relative;
+  left: -45px;
+
+  background-color: ${props => props.theme.colors.primary};
 
   > svg {
     font-size: 30px;
-    color: ${props => props.theme.colors.primary};
+    color: ${props => props.theme.colors.white};
+    margin-left: 30px;
   }
 `;
 
@@ -101,10 +104,6 @@ export const ContactDetail = styled.div`
 `;
 
 export const ContactIllustration = styled.img`
-  height: 240px;
-  width: 280px;
-
-  position: absolute;
-  bottom: 18px;
-  right: 40px;
+  height: 570px;
+  width: 550px;
 `;

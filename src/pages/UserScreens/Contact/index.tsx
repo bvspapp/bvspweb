@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { MdArrowBack } from 'react-icons/md';
 import { FaPhone, FaGlobe, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
-import callImg from '../../../assets/call.svg';
+import onlineImg from '../../../assets/online.svg';
 import light from '../../../styles/themes/light';
 import HighlightTitle from '../../../components/HighlightTitle';
 
@@ -27,7 +27,11 @@ const Contact: React.FC = () => {
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Contato" lineAlign="left" />
+        <HighlightTitle
+          title="Atentimento"
+          subtitle="Nossos meios de comunicação"
+          lineAlign="left"
+        />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -38,11 +42,6 @@ const Contact: React.FC = () => {
       </Header>
 
       <Content>
-        <HighlightTitle
-          title="Atentimento"
-          subtitle="Nossos meios de comunicação"
-        />
-
         <ContactContainer>
           <ContactBox>
             <ContactIcon>
@@ -84,9 +83,8 @@ const Contact: React.FC = () => {
             </ContactDetail>
           </ContactBox>
         </ContactContainer>
+        <ContactIllustration src={onlineImg} />
       </Content>
-
-      <ContactIllustration src={callImg} />
     </Container>
   );
 };

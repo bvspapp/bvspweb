@@ -70,7 +70,7 @@ const ExportPdfPartsByMachine: React.FC<IRouteParams> = ({ match }) => {
   const { id: machineId } = match.params;
 
   const handleBack = useCallback(() => {
-    history.push('/users');
+    history.goBack();
   }, [history]);
 
   const handleStorageFileUpdate = useCallback(

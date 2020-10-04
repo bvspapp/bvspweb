@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { FaHome, FaUser, FaPhoneAlt } from 'react-icons/fa';
+import { FaHome, FaUser, FaPhoneAlt, FaMobile } from 'react-icons/fa';
 import { TiWorld } from 'react-icons/ti';
 import { GiExitDoor } from 'react-icons/gi';
 

@@ -8,7 +8,7 @@ import React, {
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 
-import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiX, FiFile } from 'react-icons/fi';
 import { MdArrowBack } from 'react-icons/md';
 
 import firebase from '../../../../config/firebase';
@@ -33,6 +33,8 @@ import {
   ProductContainer,
   HeaderLeft,
   MachineName,
+  HeaderRight,
+  PdfButton,
 } from './styles';
 
 interface IData {
@@ -78,6 +80,7 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
   const [firstDocPaginate, setFirstDocPaginate] = useState<
     firebase.firestore.QueryDocumentSnapshot
   >();
+  const [linkFilePdf, setLinkFilePdf] = useState();
 
   const { machine_id } = match.params;
   const formRef = useRef<FormHandles>(null);
@@ -261,6 +264,23 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
       .finally(() => setLoading(false));
   }, [machine_id]);
 
+  useEffect(() => {
+    // obtem o link do arquivo.
+    async function getLink() {
+      // const translatedFolder = translation === 'pt-br' ? 'ptbr' : 'usa';
+
+      await firebase
+        .storage()
+        .ref(`files/machines/ptbr/${machine_id}.pdf`)
+        .getDownloadURL()
+        .then(linkFile => setLinkFilePdf(linkFile));
+    }
+
+    if (machine_id) {
+      getLink();
+    }
+  }, [machine_id]);
+
   return (
     <Container>
       <Header>
@@ -269,13 +289,21 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
           <MachineName>{machine.description}</MachineName>
         </HeaderLeft>
 
-        <BackButton
-          type="button"
-          color={light.colors.primary}
-          onClick={() => history.goBack()}
-        >
-          <MdArrowBack />
-        </BackButton>
+        <HeaderRight>
+          <BackButton
+            type="button"
+            color={light.colors.primary}
+            onClick={() => history.goBack()}
+          >
+            <MdArrowBack />
+          </BackButton>
+
+          {linkFilePdf && (
+            <PdfButton href={linkFilePdf} target="_blank">
+              <FiFile />
+            </PdfButton>
+          )}
+        </HeaderRight>
       </Header>
 
       <SearchContainer ref={formRef} onSubmit={handleFetchBvspPart}>

@@ -263,7 +263,7 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
         </ClearButton>
       </SearchContainer>
 
-      <SubTitleDivider title="Escolha o departamento" />
+      <SubTitleDivider title="Escolha o equipamento" />
 
       {loading ? (
         <Load />

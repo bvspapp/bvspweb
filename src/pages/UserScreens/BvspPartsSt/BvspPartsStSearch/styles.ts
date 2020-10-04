@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Form } from '@unform/web';
 import TextInput from '../../../../components/Form/TextInput';
 import Button from '../../../../components/Form/Button';
@@ -38,6 +39,26 @@ export const BackButton = styled(Button)`
   font-size: 22px;
   width: 50px;
   height: 40px;
+`;
+
+export const PdfButton = styled.a`
+  width: 50px;
+  height: 40px;
+  line-height: 50px;
+  border-radius: 5px;
+
+  margin-left: 10px;
+  text-align: center;
+
+  font-size: 22px;
+  background-color: ${props => props.theme.colors.success};
+  color: ${props => props.theme.colors.white};
+
+  transition: opacity 0.3s;
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 export const SearchContainer = styled(Form)`
@@ -92,4 +113,8 @@ export const MachineName = styled.p`
   font-size: 14px;
   color: ${props => props.theme.colors.tertiary};
   margin-top: 15px;
+`;
+
+export const HeaderRight = styled.div`
+  display: flex;
 `;
