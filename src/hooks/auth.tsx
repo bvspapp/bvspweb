@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
-
 import firebase from '../config/firebase';
 import MessageAlert from '../utils/MessageAlert';
 
@@ -82,7 +81,6 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const signOut = useCallback(() => {
     localStorage.removeItem('@bvspparts:user');
-
     setData({} as IAuthState);
   }, []);
 

@@ -26,4 +26,12 @@ export const Container = styled.div`
   .bottom:focus {
     outline: 0;
   }
+
+  .image-gallery-icon {
+    color: ${props => props.theme.colors.white};
+
+    &:hover {
+      color: ${props => props.theme.colors.primary};
+    }
+  }
 `;

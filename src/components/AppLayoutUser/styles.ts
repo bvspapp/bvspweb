@@ -56,7 +56,7 @@ export const Content = styled.main`
     width: 10px;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: ${props => props.theme.colors.tertiary};
+    background-color: #c9c9c9;
     border-radius: 10px;
   }
   ::-webkit-scrollbar-track {

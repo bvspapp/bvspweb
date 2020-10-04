@@ -16,6 +16,7 @@ interface IProps {
   image: string;
   title: string;
   subtitle?: string;
+  inative?: boolean;
 }
 
 const HighlightMenuCard: React.FC<IProps> = ({
@@ -23,9 +24,10 @@ const HighlightMenuCard: React.FC<IProps> = ({
   image,
   title,
   subtitle,
+  inative = false,
 }) => {
   return (
-    <Container to={link}>
+    <Container to={link} style={inative ? { opacity: 0.3 } : { opacity: 1 }}>
       <Image imageURL={image} />
 
       <TextContainer>

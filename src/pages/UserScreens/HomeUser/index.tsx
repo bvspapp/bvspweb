@@ -20,6 +20,7 @@ import {
   Message,
   Content,
   MenuContainer,
+  MessageText,
 } from './styles';
 
 const HomeUser: React.FC = () => {
@@ -51,20 +52,29 @@ const HomeUser: React.FC = () => {
             image={ImgManufacturing}
             title="Nossos produtos"
             subtitle="Portfólio de equipamentos, peças de reposição e soluções especiais"
+            inative={false}
           />
           <HighlightMenuCard
             link="#"
             image={ImgPartner}
             title="Nossos parceiros"
             subtitle="Tecnologia aplicada e serviços"
+            inative
           />
           <HighlightMenuCard
             link="#"
             image={ImgToolbox}
             title="Nossas ferramentas"
             subtitle="Informações, cálculos e tabelas"
+            inative
           />
         </MenuContainer>
+
+        <MessageText>
+          Em breve, você também poderá acessar
+          <strong>Nossos parceiros e ferramentas</strong>
+.
+</MessageText>
       </Content>
     </Container>
   );

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { FaHome, FaUser, FaPhoneAlt } from 'react-icons/fa';
 import { TiWorld } from 'react-icons/ti';
@@ -19,6 +20,12 @@ import {
 
 const FloatMenuUser: React.FC = () => {
   const { signOut } = useAuth();
+  const history = useHistory();
+
+  const handleSignOut = useCallback(() => {
+    signOut();
+    history.push('/');
+  }, [history, signOut]);
 
   return (
     <Container>
@@ -32,7 +39,7 @@ const FloatMenuUser: React.FC = () => {
           Início
         </Menu>
 
-        <Menu to="#">
+        <Menu to="/institutional">
           <TiWorld />
           Institucional
         </Menu>
@@ -42,13 +49,13 @@ const FloatMenuUser: React.FC = () => {
           Perfil
         </Menu>
 
-        <Menu to="#">
+        <Menu to="/contact">
           <FaPhoneAlt />
           Contato
         </Menu>
       </MenuContainer>
 
-      <Logout type="button" onClick={signOut} title="Sair e Desconectar">
+      <Logout type="button" onClick={handleSignOut} title="Sair e Desconectar">
         <GiExitDoor />
         Sair
       </Logout>
