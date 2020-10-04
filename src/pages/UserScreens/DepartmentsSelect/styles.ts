@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Form } from '@unform/web';
 import TextInput from '../../../components/Form/TextInput';
 import Button from '../../../components/Form/Button';
+import Select from '../../../components/Form/SelectInput';
 
 export const Container = styled.div`
   display: flex;
@@ -73,4 +74,18 @@ export const ServiceContainer = styled.div`
 
   flex-wrap: wrap;
   justify-content: center;
+`;
+
+export const SelectFilter = styled(Select).attrs({
+  containerCustomStyle: {
+    marginTop: '16px',
+  },
+})``;
+
+export const HeaderLeft = styled.div``;
+
+export const Subtitle = styled.p`
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 20px;
 `;

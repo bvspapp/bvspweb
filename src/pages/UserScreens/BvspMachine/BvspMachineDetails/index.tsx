@@ -127,12 +127,20 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
   const photosFormatted = useMemo(() => {
     const formatted = !data.machine
       ? {
-          photoDefault: '',
-          photos: [''],
+          photos: [
+            {
+              original: '',
+              thumbnail: '',
+            },
+          ],
         }
       : {
-          photoDefault: data.machine.photos[0].url,
-          photos: data.machine.photos.map(photo => photo.url),
+          photos: data.machine.photos.map(photo => {
+            return {
+              original: photo.url,
+              thumbnail: photo.url,
+            };
+          }),
         };
 
     return formatted;
@@ -160,10 +168,7 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
       ) : (
         <ProductInfoContainer>
           <ImageContainer>
-            <ImageSliderPreview
-              imageDefault={photosFormatted.photoDefault}
-              photos={photosFormatted.photos}
-            />
+            <ImageSliderPreview photos={photosFormatted.photos} />
           </ImageContainer>
 
           <ProductInfo>

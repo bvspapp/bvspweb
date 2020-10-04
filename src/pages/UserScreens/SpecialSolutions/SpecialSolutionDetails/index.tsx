@@ -75,12 +75,20 @@ const SpecialSolutionDetails: React.FC<IRouteParams> = ({ match }) => {
   const photosFormatted = useMemo(() => {
     const formatted = !detail.photos
       ? {
-          photoDefault: '',
-          photos: [''],
+          photos: [
+            {
+              original: '',
+              thumbnail: '',
+            },
+          ],
         }
       : {
-          photoDefault: detail.photos[0].url,
-          photos: detail.photos.map(photo => photo.url),
+          photos: detail.photos.map(photo => {
+            return {
+              original: photo.url,
+              thumbnail: photo.url,
+            };
+          }),
         };
 
     return formatted;
@@ -108,10 +116,7 @@ const SpecialSolutionDetails: React.FC<IRouteParams> = ({ match }) => {
       ) : (
         <ProductInfoContainer>
           <ImageContainer>
-            <ImageSliderPreview
-              imageDefault={photosFormatted.photoDefault}
-              photos={photosFormatted.photos}
-            />
+            <ImageSliderPreview photos={photosFormatted.photos} />
           </ImageContainer>
 
           <ProductInfo>

@@ -81,3 +81,15 @@ export const ProductContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
 `;
+
+export const HeaderLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const MachineName = styled.p`
+  font-weight: bold;
+  font-size: 14px;
+  color: ${props => props.theme.colors.black};
+  margin-top: 15px;
+`;

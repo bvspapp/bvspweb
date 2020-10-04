@@ -1,48 +1,29 @@
 import styled from 'styled-components';
-
-interface IImagePreviewProps {
-  image: string;
-}
+import 'react-image-gallery/styles/css/image-gallery.css';
 
 export const Container = styled.div`
-  border: 3px solid ${props => props.theme.colors.secondary};
-  border-radius: 5px;
-
-  padding: 20px;
-
-  width: 100%;
-`;
-
-export const ImagePreview = styled.div<IImagePreviewProps>`
-  height: 250px;
-
-  background: url(${props => props.image});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
-
-export const ThumbnailContainer = styled.div`
   display: flex;
-  justify-content: center;
-`;
+  flex: 1;
 
-export const ThumbnailButton = styled.button<IImagePreviewProps>`
-  background: url(${props => props.image});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  .image-gallery-fullscreen-button {
+    color: ${props => props.theme.colors.primary};
+  }
 
-  width: 100px;
-  height: 80px;
-  margin: 13px;
+  .image-gallery-thumbnails-wrapper {
+    margin-top: 25px;
+  }
 
-  border: 1px solid ${props => props.theme.colors.secondary};
-  border-radius: 5px;
+  .image-gallery-thumbnail-image {
+    max-height: 70px;
+  }
 
-  transition: transform 0.3s;
+  .fullscreen,
+  .image-gallery .image-gallery-using-mouse {
+    background: #fff;
+    height: 100vh;
+  }
 
-  &:hover {
-    transform: scale(1.07);
+  .bottom:focus {
+    outline: 0;
   }
 `;

@@ -31,6 +31,8 @@ import {
   ClearButton,
   SelectFilter,
   ProductContainer,
+  HeaderLeft,
+  MachineName,
 } from './styles';
 
 interface IData {
@@ -262,10 +264,11 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
   return (
     <Container>
       <Header>
-        <HighlightTitle
-          title={machine.description ? `Peças ${machine.description}` : 'Peças'}
-          lineAlign="left"
-        />
+        <HeaderLeft>
+          <HighlightTitle title="Peças" lineAlign="left" />
+          <MachineName>{machine.description}</MachineName>
+        </HeaderLeft>
+
         <BackButton
           type="button"
           color={light.colors.primary}

@@ -87,6 +87,13 @@ export const ServiceInfoContainer = styled.div`
 
 export const ImageContainer = styled.div`
   width: 40%;
+  min-height: 400px;
+
+  display: flex;
+  align-items: center;
+
+  border: 3px solid ${props => props.theme.colors.secondary};
+  border-radius: 5px;
 
   @media (max-width: 600px) {
     width: 100%;

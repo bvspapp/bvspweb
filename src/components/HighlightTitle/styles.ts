@@ -5,8 +5,6 @@ interface IContainerProps {
 }
 
 export const Container = styled.div<IContainerProps>`
-  text-align: center;
-
   &:after {
     content: '';
     display: block;

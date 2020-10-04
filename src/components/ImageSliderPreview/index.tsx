@@ -1,35 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
+import ImageGallery from 'react-image-gallery';
 
-import {
-  Container,
-  ImagePreview,
-  ThumbnailContainer,
-  ThumbnailButton,
-} from './styles';
+import { Container } from './styles';
 
 interface IImageSliderPreviewProps {
-  imageDefault: string;
-  photos: string[];
+  photos: {
+    original: string;
+    thumbnail: string;
+  }[];
 }
 
-const ImageSliderPreview: React.FC<IImageSliderPreviewProps> = ({
-  imageDefault,
-  photos,
-}) => {
-  const [photoSelected, setPhotoSelected] = useState(imageDefault);
-
+const ImageSliderPreview: React.FC<IImageSliderPreviewProps> = ({ photos }) => {
   return (
     <Container>
-      <ImagePreview image={photoSelected} />
-      <ThumbnailContainer>
-        {photos.map(photo => (
-          <ThumbnailButton
-            key={photo}
-            image={photo}
-            onClick={() => setPhotoSelected(photo)}
-          />
-        ))}
-      </ThumbnailContainer>
+      <ImageGallery items={photos} showPlayButton={false} />
     </Container>
   );
 };

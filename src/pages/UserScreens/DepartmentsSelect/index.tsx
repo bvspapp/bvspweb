@@ -1,8 +1,14 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react';
+import React, {
+  useRef,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 
-import { FiSearch, FiX } from 'react-icons/fi';
+import { FiSearch, FiX, FiFilter } from 'react-icons/fi';
 import { MdArrowBack } from 'react-icons/md';
 
 import firebase from '../../../config/firebase';
@@ -24,6 +30,9 @@ import {
   SearchButton,
   ClearButton,
   ServiceContainer,
+  SelectFilter,
+  HeaderLeft,
+  Subtitle,
 } from './styles';
 
 interface IData {
@@ -33,6 +42,7 @@ interface IData {
 
 interface IDataSearch {
   searchValue: string;
+  filterValue: string;
 }
 
 const DepartmentsSelect: React.FC = () => {
@@ -42,72 +52,78 @@ const DepartmentsSelect: React.FC = () => {
 
   const history = useHistory();
 
-  const handleFetchDepartments = useCallback(async (data: IDataSearch) => {
-    setLoading(true);
+  const handleSearchPartByCode = useCallback(
+    async (data: IDataSearch) => {
+      setLoading(true);
 
-    const { searchValue } = data;
-    const valueFormatted = searchValue.toLowerCase().trim();
+      const { searchValue, filterValue } = data;
+      const valueFormatted = searchValue.toLowerCase().trim();
 
-    if (valueFormatted) {
       await firebase
         .firestore()
-        .collection('departments')
-        .orderBy('description_insensitive')
-        .startAt(valueFormatted)
-        .endAt(`${valueFormatted}\uf8ff`)
+        .collection('parts')
+        .where(filterValue, '==', valueFormatted)
         .get()
         .then(snapshot => {
-          const dataFormatted = snapshot.docs.map(doc => {
-            return {
-              id: String(doc.id),
-              description: String(doc.data().description),
-            };
-          });
-
-          setDataTable(dataFormatted);
+          history.push(`/part/${snapshot.docs[0].id}`);
         })
-        .catch(() =>
-          MessageAlert('Não foi possível carregar os dados!', 'error'),
-        )
-        .finally(() => setLoading(false));
-    } else {
-      await firebase
-        .firestore()
-        .collection('departments')
-        .orderBy('order')
-        .get()
-        .then(snapshot => {
-          const dataFormatted = snapshot.docs.map(doc => {
-            return {
-              id: String(doc.id),
-              description: String(doc.data().description),
-            };
-          });
+        .catch(() => {
+          MessageAlert('Não há uma peça com esse código!', 'info');
+          setLoading(false);
+        });
+    },
+    [history],
+  );
 
-          setDataTable(dataFormatted);
-        })
-        .catch(() =>
-          MessageAlert('Não foi possível carregar os dados!', 'error'),
-        )
-        .finally(() => setLoading(false));
-    }
+  const optionsSearchFilterBvspPart = useMemo(() => {
+    return [
+      {
+        value: 'oemcode',
+        label: 'Código OEM',
+      },
+      {
+        value: 'bvspcode',
+        label: 'Código BVSP',
+      },
+    ];
+  }, []);
+
+  const handleFetchDepartments = useCallback(async () => {
+    await firebase
+      .firestore()
+      .collection('departments')
+      .orderBy('order')
+      .get()
+      .then(snapshot => {
+        const dataFormatted = snapshot.docs.map(doc => {
+          return {
+            id: String(doc.id),
+            description: String(doc.data().description),
+          };
+        });
+
+        setDataTable(dataFormatted);
+      })
+      .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
+      .finally(() => setLoading(false));
   }, []);
 
   const handleSearchClear = useCallback(() => {
     formRef.current?.setFieldValue('searchValue', '');
     formRef.current?.getFieldRef('searchValue').focus();
-
-    handleFetchDepartments({ searchValue: '' });
-  }, [handleFetchDepartments]);
+  }, []);
 
   useEffect(() => {
-    handleFetchDepartments({ searchValue: '' });
+    handleFetchDepartments();
   }, [handleFetchDepartments]);
 
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Departamentos" lineAlign="left" />
+        <HeaderLeft>
+          <HighlightTitle title="Departamentos" lineAlign="left" />
+          <Subtitle>Você pode encontrar a peça pelo código.</Subtitle>
+        </HeaderLeft>
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -117,11 +133,16 @@ const DepartmentsSelect: React.FC = () => {
         </BackButton>
       </Header>
 
-      <SearchContainer ref={formRef} onSubmit={handleFetchDepartments}>
+      <SearchContainer ref={formRef} onSubmit={handleSearchPartByCode}>
         <SearchInput
           type="text"
           name="searchValue"
           placeholder="Pesquisar..."
+        />
+        <SelectFilter
+          name="filterValue"
+          icon={FiFilter}
+          options={optionsSearchFilterBvspPart}
         />
 
         <SearchButton type="submit" color={light.colors.success}>
@@ -136,7 +157,7 @@ const DepartmentsSelect: React.FC = () => {
         </ClearButton>
       </SearchContainer>
 
-      <SubTitleDivider title="Escolha o departamento" />
+      <SubTitleDivider title="Ou escolha o departamento" />
 
       {loading ? (
         <Load />
