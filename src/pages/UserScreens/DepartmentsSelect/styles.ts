@@ -57,16 +57,22 @@ export const SearchInput = styled(TextInput).attrs({
 })``;
 
 export const SearchButton = styled(Button)`
-  margin-top: 15px;
+  margin-top: 18px;
   height: 40px;
   margin-left: 10px;
 `;
 
 export const ClearButton = styled(Button)`
-  margin-top: 15px;
+  margin-top: 18px;
   height: 40px;
   margin-left: 5px;
 `;
+
+export const SelectFilter = styled(Select).attrs({
+  containerCustomStyle: {
+    marginTop: '19px',
+  },
+})``;
 
 export const ServiceContainer = styled.div`
   padding: 0 20px;
@@ -75,12 +81,6 @@ export const ServiceContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
 `;
-
-export const SelectFilter = styled(Select).attrs({
-  containerCustomStyle: {
-    marginTop: '16px',
-  },
-})``;
 
 export const HeaderLeft = styled.div``;
 

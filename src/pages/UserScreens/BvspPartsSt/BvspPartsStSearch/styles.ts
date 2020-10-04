@@ -57,20 +57,20 @@ export const SearchInput = styled(TextInput).attrs({
 })``;
 
 export const SearchButton = styled(Button)`
-  margin-top: 14px;
+  margin-top: 18px;
   height: 40px;
   margin-left: 10px;
 `;
 
 export const ClearButton = styled(Button)`
-  margin-top: 14px;
+  margin-top: 18px;
   height: 40px;
   margin-left: 5px;
 `;
 
 export const SelectFilter = styled(Select).attrs({
   containerCustomStyle: {
-    marginTop: '16px',
+    marginTop: '19px',
   },
 })``;
 
@@ -90,6 +90,6 @@ export const HeaderLeft = styled.div`
 export const MachineName = styled.p`
   font-weight: bold;
   font-size: 14px;
-  color: ${props => props.theme.colors.black};
+  color: ${props => props.theme.colors.tertiary};
   margin-top: 15px;
 `;

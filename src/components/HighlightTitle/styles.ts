@@ -5,6 +5,8 @@ interface IContainerProps {
 }
 
 export const Container = styled.div<IContainerProps>`
+  text-align: ${props => (props.lineAlign === 'center' ? 'center' : 'left')};
+
   &:after {
     content: '';
     display: block;
