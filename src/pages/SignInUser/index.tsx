@@ -36,52 +36,6 @@ const SignInUser: React.FC = () => {
   const { signIn } = useAuth();
   const history = useHistory();
 
-  // const handleSubmitUsingAPIServer = useCallback(
-  //   async (data: ISignFormData) => {
-  //     try {
-  //       setLoading(true);
-
-  //       const schema = Yup.object().shape({
-  //         email: Yup.string()
-  //           .required('E-mail obrigatório.')
-  //           .email('Digite um e-mail válido.'),
-  //         password: Yup.string().required('A senha é obrigatória.'),
-  //       });
-
-  //       await schema.validate(data);
-
-  //       const { email, password } = data;
-
-  //       await api.post('sessions', {
-  //         email,
-  //         password,
-  //       });
-
-  //       localStorage.setItem(
-  //         '@bvspparts:user',
-  //         JSON.stringify({ email, type: 'user' }),
-  //       );
-  //       setData({
-  //         user: {
-  //           email,
-  //           type: 'user',
-  //         },
-  //       });
-
-  //       history.push('/');
-  //     } catch (error) {
-  //       if (error instanceof Yup.ValidationError) {
-  //         MessageAlert(error.errors[0], 'info');
-  //       } else {
-  //         MessageAlert('Senha ou e-mail inválido.', 'info');
-  //       }
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   },
-  //   [history, setData],
-  // );
-
   const handleSubmit = useCallback(
     async (data: ISignFormData) => {
       try {
@@ -97,7 +51,6 @@ const SignInUser: React.FC = () => {
         await schema.validate(data);
 
         const { email, password } = data;
-
         await signIn({ email, password, type: 'user' });
 
         history.push('/');
@@ -113,6 +66,38 @@ const SignInUser: React.FC = () => {
     },
     [history, signIn],
   );
+
+  // const handleSubmit = useCallback(
+  //   async (data: ISignFormData) => {
+  //     try {
+  //       setLoading(true);
+
+  //       const schema = Yup.object().shape({
+  //         email: Yup.string()
+  //           .required('E-mail obrigatório.')
+  //           .email('Digite um e-mail válido.'),
+  //         password: Yup.string().required('A senha é obrigatória.'),
+  //       });
+
+  //       await schema.validate(data);
+
+  //       const { email, password } = data;
+
+  //       await signIn({ email, password, type: 'user' });
+
+  //       history.push('/');
+  //     } catch (error) {
+  //       if (error instanceof Yup.ValidationError) {
+  //         MessageAlert(error.errors[0], 'info');
+  //       } else {
+  //         MessageAlert('Senha ou e-mail inválido.', 'info');
+  //       }
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   },
+  //   [history, signIn],
+  // );
 
   return (
     <Container>

@@ -1,9 +1,11 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
 import firebase from '../config/firebase';
+import api from '../services/api';
 import MessageAlert from '../utils/MessageAlert';
 
 interface IAuthState {
   user: IUser;
+  token?: string;
 }
 
 interface IUser {
@@ -34,8 +36,15 @@ const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<IAuthState>(() => {
     const user = localStorage.getItem('@bvspparts:user');
+    const token = localStorage.getItem('@bvspparts:token');
 
-    return user ? { user: JSON.parse(user) } : ({} as IAuthState);
+    if (token && user) {
+      api.defaults.headers.authorization = `Bearer ${token}`;
+
+      return { token, user: JSON.parse(user) };
+    }
+
+    return {} as IAuthState;
   });
 
   const signIn = useCallback(
@@ -47,33 +56,24 @@ const AuthProvider: React.FC = ({ children }) => {
           .then(() => {
             const user = { email, type };
             localStorage.setItem('@bvspparts:user', JSON.stringify(user));
-            setData({ user });
+            setData({ user, token: '' });
           })
           .catch(() => MessageAlert('Usuário e/ou senha inválidos!', 'info'));
       }
 
       if (type === 'user') {
-        await firebase
-          .firestore()
-          .collection('users')
-          .where('email', '==', email.toLowerCase().trim())
-          .where('accesscode', '==', password.trim())
-          .get()
-          .then(snapshot => {
-            if (snapshot.empty) {
-              MessageAlert('Usuário e/ou senha inválidos!', 'info');
-            } else {
-              const user = {
-                id: snapshot.docs[0].id,
-                name: String(snapshot.docs[0].data().name),
-                country: String(snapshot.docs[0].data()?.country),
-                email,
-                type,
-              };
-              localStorage.setItem('@bvspparts:user', JSON.stringify(user));
-              setData({ user });
-            }
-          });
+        const userData = await api.post('sessions', {
+          email,
+          password,
+        });
+
+        const { user: userResponse, token }: IAuthState = userData.data;
+
+        localStorage.setItem(
+          '@bvspparts:user',
+          JSON.stringify({ userResponse, token }),
+        );
+        setData({ user: { ...userResponse, type: 'user' }, token });
       }
     },
     [],
