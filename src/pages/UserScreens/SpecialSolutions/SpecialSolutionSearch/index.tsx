@@ -1,4 +1,10 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react';
+import React, {
+  useRef,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 
@@ -12,6 +18,9 @@ import HighlightTitle from '../../../../components/HighlightTitle';
 import ProductCard from '../../../../components/ProductCard';
 import MessageAlert from '../../../../utils/MessageAlert';
 import Load from '../../../../components/Load';
+
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../../hooks/translation';
 
 import {
   Container,
@@ -44,36 +53,49 @@ const SpecialSolutionSearch: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   const history = useHistory();
+  const { translation } = useTranslation();
 
-  const handleFetchSpecialSolutions = useCallback(async (data: IDataSearch) => {
-    const { searchValue } = data;
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
 
-    setLoading(true);
+  const handleFetchSpecialSolutions = useCallback(
+    async (data: IDataSearch) => {
+      const { searchValue } = data;
 
-    const valueFormatted = searchValue.toLowerCase().trim();
+      setLoading(true);
 
-    await firebase
-      .firestore()
-      .collection('special-solutions')
-      .orderBy('description_insensitive')
-      .startAt(valueFormatted)
-      .endAt(`${valueFormatted}\uf8ff`)
-      .get()
-      .then(snapshot => {
-        const dataFormatted = snapshot.docs.map(doc => {
-          return {
-            id: String(doc.id),
-            bvspcode: String(doc.data().bvspcode),
-            description: String(doc.data().description),
-            photos: doc.data().photos,
-          };
-        });
+      const valueFormatted = searchValue.toLowerCase().trim();
 
-        setDataTable(dataFormatted);
-      })
-      .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
-      .finally(() => setLoading(false));
-  }, []);
+      await firebase
+        .firestore()
+        .collection('special-solutions')
+        .orderBy(translated.filter_value_description)
+        .startAt(valueFormatted)
+        .endAt(`${valueFormatted}\uf8ff`)
+        .get()
+        .then(snapshot => {
+          const dataFormatted = snapshot.docs.map(doc => {
+            return {
+              id: String(doc.id),
+              bvspcode: String(doc.data().bvspcode),
+              description:
+                translation === 'en-us'
+                  ? String(doc.data().description_english)
+                  : String(doc.data().description),
+              photos: doc.data().photos,
+            };
+          });
+
+          setDataTable(dataFormatted);
+        })
+        .catch(() => MessageAlert(translated.error_load_data, 'error'))
+        .finally(() => setLoading(false));
+    },
+    [translated, translation],
+  );
 
   const handleSearchClear = useCallback(() => {
     formRef.current?.setFieldValue('searchValue', '');
@@ -93,7 +115,7 @@ const SpecialSolutionSearch: React.FC = () => {
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Soluções Especiais" lineAlign="left" />
+        <HighlightTitle title={translated.title} lineAlign="left" />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -107,7 +129,7 @@ const SpecialSolutionSearch: React.FC = () => {
         <SearchInput
           type="text"
           name="searchValue"
-          placeholder="Pesquisar..."
+          placeholder={translated.input_search_placeholder}
         />
         <SearchButton type="submit" color={light.colors.success}>
           <FiSearch />

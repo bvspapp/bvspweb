@@ -1,4 +1,10 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react';
+import React, {
+  useRef,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 
@@ -12,6 +18,9 @@ import HighlightTitle from '../../../../components/HighlightTitle';
 import SimpleSelectCard from '../../../../components/SimpleSelectCard';
 import Load from '../../../../components/Load';
 import MessageAlert from '../../../../utils/MessageAlert';
+
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../../hooks/translation';
 
 import {
   Container,
@@ -40,57 +49,69 @@ const BvspServicesSearch: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   const history = useHistory();
+  const { translation } = useTranslation();
 
-  const handleFetchBvspService = useCallback(async (data: IDataSearch) => {
-    setLoading(true);
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
 
-    const { searchValue } = data;
-    const valueFormatted = searchValue.toLowerCase().trim();
+  const handleFetchBvspService = useCallback(
+    async (data: IDataSearch) => {
+      setLoading(true);
 
-    if (valueFormatted) {
-      await firebase
-        .firestore()
-        .collection('services')
-        .orderBy('description_insensitive')
-        .startAt(valueFormatted)
-        .endAt(`${valueFormatted}\uf8ff`)
-        .get()
-        .then(snapshot => {
-          const dataFormatted = snapshot.docs.map(doc => {
-            return {
-              id: String(doc.id),
-              description: String(doc.data().description),
-            };
-          });
+      const { searchValue } = data;
+      const valueFormatted = searchValue.toLowerCase().trim();
 
-          setDataTable(dataFormatted);
-        })
-        .catch(() =>
-          MessageAlert('Não foi possível carregar os dados!', 'error'),
-        )
-        .finally(() => setLoading(false));
-    } else {
-      await firebase
-        .firestore()
-        .collection('services')
-        .orderBy('order')
-        .get()
-        .then(snapshot => {
-          const dataFormatted = snapshot.docs.map(doc => {
-            return {
-              id: String(doc.id),
-              description: String(doc.data().description),
-            };
-          });
+      if (valueFormatted) {
+        await firebase
+          .firestore()
+          .collection('services')
+          .orderBy(translated.filter_value_description)
+          .startAt(valueFormatted)
+          .endAt(`${valueFormatted}\uf8ff`)
+          .get()
+          .then(snapshot => {
+            const dataFormatted = snapshot.docs.map(doc => {
+              return {
+                id: String(doc.id),
+                description:
+                  translation === 'en-us'
+                    ? String(doc.data().description_english)
+                    : String(doc.data().description),
+              };
+            });
 
-          setDataTable(dataFormatted);
-        })
-        .catch(() =>
-          MessageAlert('Não foi possível carregar os dados!', 'error'),
-        )
-        .finally(() => setLoading(false));
-    }
-  }, []);
+            setDataTable(dataFormatted);
+          })
+          .catch(() => MessageAlert(translated.error_load_data, 'error'))
+          .finally(() => setLoading(false));
+      } else {
+        await firebase
+          .firestore()
+          .collection('services')
+          .orderBy('order')
+          .get()
+          .then(snapshot => {
+            const dataFormatted = snapshot.docs.map(doc => {
+              return {
+                id: String(doc.id),
+                description:
+                  translation === 'en-us'
+                    ? String(doc.data().description_english)
+                    : String(doc.data().description),
+              };
+            });
+
+            setDataTable(dataFormatted);
+          })
+          .catch(() => MessageAlert(translated.error_load_data, 'error'))
+          .finally(() => setLoading(false));
+      }
+    },
+    [translated, translation],
+  );
 
   const handleSearchClear = useCallback(() => {
     formRef.current?.getFieldRef('searchValue').focus();
@@ -109,7 +130,7 @@ const BvspServicesSearch: React.FC = () => {
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Serviços" lineAlign="left" />
+        <HighlightTitle title={translated.title} lineAlign="left" />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -123,7 +144,7 @@ const BvspServicesSearch: React.FC = () => {
         <SearchInput
           type="text"
           name="searchValue"
-          placeholder="Pesquisar..."
+          placeholder={translated.input_search_placeholder}
         />
 
         <SearchButton type="submit" color={light.colors.success}>

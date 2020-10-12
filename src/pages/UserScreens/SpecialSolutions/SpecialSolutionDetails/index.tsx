@@ -11,6 +11,9 @@ import MessageAlert from '../../../../utils/MessageAlert';
 import Load from '../../../../components/Load';
 import ImageSliderPreview from '../../../../components/ImageSliderPreview';
 
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../../hooks/translation';
+
 import {
   Container,
   Header,
@@ -29,8 +32,10 @@ interface ISpecialSolutionData {
   bvspcode: string;
   description: string;
   description_english: string;
+  descriptionFormatted: string;
   about: string;
   about_english: string;
+  aboutFormatted: string;
   photos: IImageStoraged[];
   photocover: IImageStoraged;
 }
@@ -55,6 +60,14 @@ const SpecialSolutionDetails: React.FC<IRouteParams> = ({ match }) => {
   );
 
   const history = useHistory();
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
+
   const { id: specialSolutionId } = match.params;
 
   const handleFetchSpecialSolutionData = useCallback(async () => {
@@ -66,11 +79,17 @@ const SpecialSolutionDetails: React.FC<IRouteParams> = ({ match }) => {
       .then(snapshot => {
         const data = snapshot.data() as ISpecialSolutionData;
 
+        data.descriptionFormatted =
+          translation === 'en-us' ? data.description_english : data.description;
+
+        data.aboutFormatted =
+          translation === 'en-us' ? data.about_english : data.about;
+
         setDetail(data);
       })
-      .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
+      .catch(() => MessageAlert(translated.error_load_data, 'error'))
       .finally(() => setLoading(false));
-  }, [specialSolutionId]);
+  }, [specialSolutionId, translated, translation]);
 
   const photosFormatted = useMemo(() => {
     const formatted = !detail.photos
@@ -101,7 +120,7 @@ const SpecialSolutionDetails: React.FC<IRouteParams> = ({ match }) => {
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Detalhes" lineAlign="left" />
+        <HighlightTitle title={translated.title} lineAlign="left" />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -121,17 +140,19 @@ const SpecialSolutionDetails: React.FC<IRouteParams> = ({ match }) => {
 
           <ProductInfo>
             <InfoLine>
-              <ProductLabel>Nome</ProductLabel>
-              <ProductTitle>{detail.description}</ProductTitle>
+              <ProductLabel>
+                {translated.details_description_label}
+              </ProductLabel>
+              <ProductTitle>{detail.descriptionFormatted}</ProductTitle>
             </InfoLine>
 
             <InfoLine>
-              <ProductLabel>Descrição</ProductLabel>
-              <ProductDescription>{detail.about}</ProductDescription>
+              <ProductLabel>{translated.details_about_label}</ProductLabel>
+              <ProductDescription>{detail.aboutFormatted}</ProductDescription>
             </InfoLine>
 
             <InfoLine>
-              <ProductLabel>Código BVSP</ProductLabel>
+              <ProductLabel>{translated.details_bvspcode_label}</ProductLabel>
               <ProductDescription>{detail.bvspcode}</ProductDescription>
             </InfoLine>
           </ProductInfo>

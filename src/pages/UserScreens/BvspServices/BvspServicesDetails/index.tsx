@@ -11,6 +11,9 @@ import Load from '../../../../components/Load';
 import ImageSliderPreview from '../../../../components/ImageSliderPreview';
 import MessageAlert from '../../../../utils/MessageAlert';
 
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../../hooks/translation';
+
 import {
   Container,
   Header,
@@ -30,8 +33,10 @@ interface IBvspServiceData {
   description_insensitive: string;
   description_english: string;
   description_insensitive_english: string;
+  descriptionFormatted: string;
   about: string;
   about_english: string;
+  aboutFormatted: string;
   photos: IImageStoraged[];
   photocover: IImageStoraged;
   order?: number;
@@ -57,6 +62,14 @@ const BvspServicesDetails: React.FC<IRouteParams> = ({ match }) => {
   );
 
   const history = useHistory();
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
+
   const { id: bvspServiceId } = match.params;
 
   const handleFetchSpecialSolutionData = useCallback(async () => {
@@ -68,11 +81,17 @@ const BvspServicesDetails: React.FC<IRouteParams> = ({ match }) => {
       .then(snapshot => {
         const data = snapshot.data() as IBvspServiceData;
 
+        data.descriptionFormatted =
+          translation === 'en-us' ? data.description_english : data.description;
+
+        data.aboutFormatted =
+          translation === 'en-us' ? data.about_english : data.about;
+
         setDatail(data);
       })
-      .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
+      .catch(() => MessageAlert(translated.error_load_data, 'error'))
       .finally(() => setLoading(false));
-  }, [bvspServiceId]);
+  }, [bvspServiceId, translated, translation]);
 
   const photosFormatted = useMemo(() => {
     const formatted = !detail.photos
@@ -103,7 +122,7 @@ const BvspServicesDetails: React.FC<IRouteParams> = ({ match }) => {
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Detalhes" lineAlign="left" />
+        <HighlightTitle title={translated.title} lineAlign="left" />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -123,13 +142,15 @@ const BvspServicesDetails: React.FC<IRouteParams> = ({ match }) => {
 
           <ServiceInfo>
             <InfoLine>
-              <ServiceLabel>Nome</ServiceLabel>
-              <ServiceTitle>{detail.description}</ServiceTitle>
+              <ServiceLabel>
+                {translated.details_description_label}
+              </ServiceLabel>
+              <ServiceTitle>{detail.descriptionFormatted}</ServiceTitle>
             </InfoLine>
 
             <InfoLine>
-              <ServiceLabel>Descrição</ServiceLabel>
-              <ServiceDescription>{detail.about}</ServiceDescription>
+              <ServiceLabel>{translated.details_about_label}</ServiceLabel>
+              <ServiceDescription>{detail.aboutFormatted}</ServiceDescription>
             </InfoLine>
           </ServiceInfo>
         </ServiceInfoContainer>
