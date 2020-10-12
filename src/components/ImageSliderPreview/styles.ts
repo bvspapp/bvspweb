@@ -34,4 +34,13 @@ export const Container = styled.div`
       color: ${props => props.theme.colors.primary};
     }
   }
+
+  .image-gallery-slides img {
+    height: 300px;
+  }
+
+  .fullscreen img {
+    margin-top: 10px;
+    height: 80vh;
+  }
 `;

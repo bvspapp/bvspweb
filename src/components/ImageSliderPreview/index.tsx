@@ -13,7 +13,7 @@ interface IImageSliderPreviewProps {
 const ImageSliderPreview: React.FC<IImageSliderPreviewProps> = ({ photos }) => {
   return (
     <Container>
-      <ImageGallery items={photos} showPlayButton={false} />
+      <ImageGallery items={photos} showPlayButton={false} showBullets />
     </Container>
   );
 };
