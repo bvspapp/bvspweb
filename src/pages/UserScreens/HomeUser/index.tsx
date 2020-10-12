@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useAuth } from '../../../hooks/auth';
 
@@ -23,8 +23,18 @@ import {
   MessageText,
 } from './styles';
 
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../hooks/translation';
+
 const HomeUser: React.FC = () => {
   const { user } = useAuth();
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
 
   return (
     <Container>
@@ -32,49 +42,45 @@ const HomeUser: React.FC = () => {
         <UserContainer>
           <UserInfo>
             <User>
-              <Welcome>Olá,</Welcome>
+              <Welcome>{translated.greet}</Welcome>
               <UserName>{user.name}</UserName>
             </User>
-            <Message>Bem-vindo a BVSP. É bom ter você aqui!</Message>
+            <Message>{translated.welcome}</Message>
           </UserInfo>
         </UserContainer>
       </Header>
 
       <Content>
         <HighlightTitle
-          title="Menu principal"
-          subtitle="Navegue pelo nosso app e descubra as soluções que temos para você"
+          title={translated.title}
+          subtitle={translated.subtitle}
         />
 
         <MenuContainer>
           <HighlightMenuCard
             link="/bvspproducts"
             image={ImgManufacturing}
-            title="Nossos produtos"
-            subtitle="Portfólio de equipamentos, peças de reposição e soluções especiais"
+            title={translated.button_our_products_title}
+            subtitle={translated.button_our_products_subtitle}
             inative={false}
           />
           <HighlightMenuCard
             link="#"
             image={ImgPartner}
-            title="Nossos parceiros"
-            subtitle="Tecnologia aplicada e serviços"
+            title={translated.button_our_patterns_title}
+            subtitle={translated.button_our_patterns_subtitle}
             inative
           />
           <HighlightMenuCard
             link="#"
             image={ImgToolbox}
-            title="Nossas ferramentas"
-            subtitle="Informações, cálculos e tabelas"
+            title={translated.button_our_tools_title}
+            subtitle={translated.button_our_tools_subtitle}
             inative
           />
         </MenuContainer>
 
-        <MessageText>
-          Em breve, você também poderá acessar
-          <strong>Nossos parceiros e ferramentas</strong>
-.
-</MessageText>
+        <MessageText>{translated.message_title}</MessageText>
       </Content>
     </Container>
   );

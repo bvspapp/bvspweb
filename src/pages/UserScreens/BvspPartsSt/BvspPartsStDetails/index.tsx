@@ -3,6 +3,9 @@ import { useHistory } from 'react-router-dom';
 
 import { MdArrowBack } from 'react-icons/md';
 
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../../hooks/translation';
+
 import firebase from '../../../../config/firebase';
 import light from '../../../../styles/themes/light';
 import Load from '../../../../components/Load';
@@ -31,6 +34,7 @@ interface IBvspPartData {
   bvspcode: string;
   description: string;
   description_english: string;
+  descriptionFormatted: string;
   photos: IImageStoraged[];
   photocover: IImageStoraged;
   family: string;
@@ -55,11 +59,15 @@ interface IRouteParams {
 interface IDepartmentData {
   id: string;
   description: string;
+  description_english: string;
+  descriptionFormatted: string;
 }
 
 interface IFamilyData {
   id: string;
   description: string;
+  description_english: string;
+  descriptionFormatted: string;
 }
 
 interface IData {
@@ -75,6 +83,13 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
   const history = useHistory();
   const { id: bvspPartId } = match.params;
 
+  const { translation } = useTranslation();
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
+
   const handleFetchBvspPartData = useCallback(async () => {
     const partResponse = await firebase
       .firestore()
@@ -83,6 +98,9 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
       .get()
       .then(snapshot => {
         const part = snapshot.data() as IBvspPartData;
+
+        part.descriptionFormatted =
+          translation === 'en-us' ? part.description_english : part.description;
 
         return part;
       });
@@ -97,6 +115,11 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
             return {
               id: doc.id,
               description: String(doc.data().description),
+              description_english: String(doc.data().description_english),
+              descriptionFormatted:
+                translation === 'en-us'
+                  ? String(doc.data().description_english)
+                  : String(doc.data().description),
             };
           })
           .filter(doc => partResponse.departments.includes(doc.id));
@@ -111,6 +134,10 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
       .get()
       .then(snapshot => {
         const family = snapshot.data() as IFamilyData;
+        family.descriptionFormatted =
+          translation === 'en-us'
+            ? family.description_english
+            : family.description;
 
         return family;
       });
@@ -122,7 +149,7 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
     });
 
     setLoading(false);
-  }, [bvspPartId]);
+  }, [bvspPartId, translation]);
 
   const photosFormatted = useMemo(() => {
     const formatted = !detail.part
@@ -153,7 +180,7 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Detalhes" lineAlign="left" />
+        <HighlightTitle title={translated.title} lineAlign="left" />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -173,26 +200,28 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
 
           <ProductInfo>
             <InfoLine>
-              <ProductLabel>Nome</ProductLabel>
-              <ProductTitle>{detail.part.description}</ProductTitle>
+              <ProductLabel>
+                {translated.details_description_label}
+              </ProductLabel>
+              <ProductTitle>{detail.part.descriptionFormatted}</ProductTitle>
             </InfoLine>
 
             <InfoColumn>
               <InfoLine>
-                <ProductLabel>Código BVSP</ProductLabel>
+                <ProductLabel>{translated.details_bvspcode_label}</ProductLabel>
                 <ProductDescription>{detail.part.bvspcode}</ProductDescription>
               </InfoLine>
 
               <InfoLine>
-                <ProductLabel>Código OEM</ProductLabel>
+                <ProductLabel>{translated.details_oemcode_label}</ProductLabel>
                 <ProductDescription>{detail.part.oemcode}</ProductDescription>
               </InfoLine>
             </InfoColumn>
 
             <InfoLine>
-              <ProductLabel>Família</ProductLabel>
+              <ProductLabel>{translated.details_family_label}</ProductLabel>
               <ProductDescription>
-                {detail.family.description}
+                {detail.family.descriptionFormatted}
               </ProductDescription>
             </InfoLine>
 
@@ -201,7 +230,7 @@ const BvspPartsStDetails: React.FC<IRouteParams> = ({ match }) => {
               <DepartmentTagsContainer>
                 {detail.departments.map(department => (
                   <DepartmentTags key={department.id}>
-                    {department.description}
+                    {department.descriptionFormatted}
                   </DepartmentTags>
                 ))}
               </DepartmentTagsContainer>

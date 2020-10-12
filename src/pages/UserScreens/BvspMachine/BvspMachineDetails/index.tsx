@@ -10,6 +10,9 @@ import HighlightTitle from '../../../../components/HighlightTitle';
 import Load from '../../../../components/Load';
 import ImageSliderPreview from '../../../../components/ImageSliderPreview';
 
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../../hooks/translation';
+
 import {
   Container,
   Header,
@@ -33,10 +36,12 @@ interface IBvspMachineData {
   description_english: string;
   about: string;
   about_english: string;
+  about_formatted: string;
   photos: IImageStoraged[];
   photocover: IImageStoraged;
   family: string;
   departments: string[];
+  descriptionFormatted: string;
 }
 
 interface IImageStoraged {
@@ -55,11 +60,15 @@ interface IRouteParams {
 interface IFamilyData {
   id: string;
   description: string;
+  description_english: string;
+  descriptionFormatted: string;
 }
 
 interface IDepartmentData {
   id: string;
   description: string;
+  description_english: string;
+  descriptionFormatted: string;
 }
 
 interface IData {
@@ -75,6 +84,14 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
   const history = useHistory();
   const { id: bvspMachineId } = match.params;
 
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
+
   const handleFetchBvspMachineData = useCallback(async () => {
     const machineResponse = await firebase
       .firestore()
@@ -83,6 +100,16 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
       .get()
       .then(snapshot => {
         const machineData = snapshot.data() as IBvspMachineData;
+
+        machineData.descriptionFormatted =
+          translation === 'en-us'
+            ? machineData.description_english
+            : machineData.description;
+
+        machineData.about_formatted =
+          translation === 'en-us'
+            ? machineData.about_english
+            : machineData.about;
 
         return machineData;
       });
@@ -97,6 +124,11 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
             return {
               id: doc.id,
               description: String(doc.data().description),
+              description_english: String(doc.data().description_english),
+              descriptionFormatted:
+                translation === 'en-us'
+                  ? String(doc.data().description_english)
+                  : String(doc.data().description),
             };
           })
           .filter(doc => machineResponse.departments.includes(doc.id));
@@ -112,6 +144,11 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
       .then(snapshot => {
         const familyData = snapshot.data() as IFamilyData;
 
+        familyData.descriptionFormatted =
+          translation === 'en-us'
+            ? familyData.description_english
+            : familyData.description;
+
         return familyData;
       });
 
@@ -122,7 +159,7 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
     });
 
     setLoading(false);
-  }, [bvspMachineId]);
+  }, [bvspMachineId, translation]);
 
   const photosFormatted = useMemo(() => {
     const formatted = !data.machine
@@ -153,7 +190,7 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Detalhes" lineAlign="left" />
+        <HighlightTitle title={translated.details_title} lineAlign="left" />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -173,35 +210,43 @@ const BvspMachineDetails: React.FC<IRouteParams> = ({ match }) => {
 
           <ProductInfo>
             <InfoLine>
-              <ProductLabel>Nome</ProductLabel>
-              <ProductTitle>{data.machine.description}</ProductTitle>
+              <ProductLabel>
+                {translated.details_description_label}
+              </ProductLabel>
+              <ProductTitle>{data.machine.descriptionFormatted}</ProductTitle>
             </InfoLine>
 
             <InfoLine>
-              <ProductLabel>Descrição</ProductLabel>
-              <ProductDescription>{data.machine.about}</ProductDescription>
+              <ProductLabel>{translated.details_about_label}</ProductLabel>
+              <ProductDescription>
+                {data.machine.about_formatted}
+              </ProductDescription>
             </InfoLine>
 
             <InfoColumn>
               <InfoLine>
-                <ProductLabel>Código BVSP</ProductLabel>
+                <ProductLabel>{translated.details_bvspcode_label}</ProductLabel>
                 <ProductDescription>{data.machine.bvspcode}</ProductDescription>
               </InfoLine>
 
               <InfoLine>
-                <ProductLabel>Família</ProductLabel>
+                <ProductLabel>{translated.details_family_label}</ProductLabel>
                 <ProductDescription>
-                  {data.family.description}
+                  {data.family.descriptionFormatted}
                 </ProductDescription>
               </InfoLine>
             </InfoColumn>
 
             <InfoLine>
-              <ProductLabel>Departamentos</ProductLabel>
+              <ProductLabel>
+                {translated.details_departments_label}
+              </ProductLabel>
 
               <DepartmentTagsContainer>
                 {data.departments.map(d => (
-                  <DepartmentTags key={d.id}>{d.description}</DepartmentTags>
+                  <DepartmentTags key={d.id}>
+                    {d.descriptionFormatted}
+                  </DepartmentTags>
                 ))}
               </DepartmentTagsContainer>
             </InfoLine>

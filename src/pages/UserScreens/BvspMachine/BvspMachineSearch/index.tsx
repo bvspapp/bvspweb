@@ -27,6 +27,9 @@ import ProductCard from '../../../../components/ProductCard';
 import MessageAlert from '../../../../utils/MessageAlert';
 import Load from '../../../../components/Load';
 
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../../hooks/translation';
+
 import {
   Container,
   Header,
@@ -75,64 +78,77 @@ const BvspMachineSearch: React.FC = () => {
 
   const pageSize = 10;
   const history = useHistory();
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
 
   const optionsSearchFilterBvspPart = useMemo(() => {
     return [
       {
-        value: 'description_insensitive',
-        label: 'Nome',
+        value: translated.filter_by_name_value,
+        label: translated.filter_by_name_label,
       },
       {
         value: 'bvspcode',
-        label: 'Código BVSP',
+        label: translated.filter_by_bvspcode_label,
       },
     ];
-  }, []);
+  }, [translated]);
 
-  const handleFetchBvspMachines = useCallback(async (data: IDataSearch) => {
-    const { searchValue, filterValue } = data;
+  const handleFetchBvspMachines = useCallback(
+    async (data: IDataSearch) => {
+      const { searchValue, filterValue } = data;
 
-    setLoading(true);
+      setLoading(true);
 
-    const valueFormatted = searchValue.toLowerCase().trim();
-    setLastValueConsulted(valueFormatted);
-    setLastFilterConsulted(filterValue);
+      const valueFormatted = searchValue.toLowerCase().trim();
+      setLastValueConsulted(valueFormatted);
+      setLastFilterConsulted(filterValue);
 
-    await firebase
-      .firestore()
-      .collection('machines')
-      .where('type', '==', 'bvsp-machine')
-      .orderBy(filterValue)
-      .startAt(valueFormatted)
-      .endAt(`${valueFormatted}\uf8ff`)
-      .limit(pageSize)
-      .get()
-      .then(snapshot => {
-        const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-        setLastDocPaginate(lastVisible);
+      await firebase
+        .firestore()
+        .collection('machines')
+        .where('type', '==', 'bvsp-machine')
+        .orderBy(filterValue)
+        .startAt(valueFormatted)
+        .endAt(`${valueFormatted}\uf8ff`)
+        .limit(pageSize)
+        .get()
+        .then(snapshot => {
+          const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+          setLastDocPaginate(lastVisible);
 
-        const firstVisible = snapshot.docs[0];
-        setFirstDocPaginate(firstVisible);
+          const firstVisible = snapshot.docs[0];
+          setFirstDocPaginate(firstVisible);
 
-        // show or unshow next button.
-        snapshot.docs.length === pageSize
-          ? setExistsMoreRecords(true)
-          : setExistsMoreRecords(false);
+          // show or unshow next button.
+          snapshot.docs.length === pageSize
+            ? setExistsMoreRecords(true)
+            : setExistsMoreRecords(false);
 
-        const dataFormatted = snapshot.docs.map(doc => {
-          return {
-            id: String(doc.id),
-            bvspcode: String(doc.data().bvspcode),
-            description: String(doc.data().description),
-            photos: doc.data().photos,
-          };
-        });
+          const dataFormatted = snapshot.docs.map(doc => {
+            return {
+              id: String(doc.id),
+              bvspcode: String(doc.data().bvspcode),
+              description:
+                translation === 'en-us'
+                  ? String(doc.data().description_english)
+                  : String(doc.data().description),
+              photos: doc.data().photos,
+            };
+          });
 
-        setDataTable(dataFormatted);
-      })
-      .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
-      .finally(() => setLoading(false));
-  }, []);
+          setDataTable(dataFormatted);
+        })
+        .catch(() => MessageAlert(translated.error_load_data, 'error'))
+        .finally(() => setLoading(false));
+    },
+    [translated, translation],
+  );
 
   const handlePagination = useCallback(
     async (action: 'prev' | 'next') => {
@@ -187,16 +203,17 @@ const BvspMachineSearch: React.FC = () => {
             return {
               id: String(doc.id),
               bvspcode: String(doc.data().bvspcode),
-              description: String(doc.data().description),
+              description:
+                translation === 'en-us'
+                  ? String(doc.data().description_english)
+                  : String(doc.data().description),
               photos: doc.data().photos,
             };
           });
 
           setDataTable(dataFormatted);
         })
-        .catch(() =>
-          MessageAlert('Não foi possível carregar os dados!', 'error'),
-        )
+        .catch(() => MessageAlert(translated.error_load_data, 'error'))
         .finally(() => setLoading(false));
     },
     [
@@ -204,6 +221,8 @@ const BvspMachineSearch: React.FC = () => {
       lastDocPaginate,
       lastFilterConsulted,
       lastValueConsulted,
+      translated,
+      translation,
     ],
   );
 
@@ -213,21 +232,21 @@ const BvspMachineSearch: React.FC = () => {
 
     handleFetchBvspMachines({
       searchValue: '',
-      filterValue: 'description_insensitive',
+      filterValue: translated.filter_by_name_value,
     });
-  }, [handleFetchBvspMachines]);
+  }, [handleFetchBvspMachines, translated]);
 
   useEffect(() => {
     handleFetchBvspMachines({
       searchValue: '',
-      filterValue: 'description_insensitive',
+      filterValue: translated.filter_by_name_value,
     });
-  }, [handleFetchBvspMachines]);
+  }, [handleFetchBvspMachines, translated]);
 
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Máquinas" lineAlign="left" />
+        <HighlightTitle title={translated.title} lineAlign="left" />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -241,7 +260,7 @@ const BvspMachineSearch: React.FC = () => {
         <SearchInput
           type="text"
           name="searchValue"
-          placeholder="Pesquisar..."
+          placeholder={translated.input_search_placeholder}
         />
         <SelectFilter
           name="filterValue"

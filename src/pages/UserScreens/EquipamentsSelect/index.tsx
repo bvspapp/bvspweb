@@ -14,6 +14,9 @@ import { MdArrowBack } from 'react-icons/md';
 import firebase from '../../../config/firebase';
 import light from '../../../styles/themes/light';
 
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../hooks/translation';
+
 import HighlightTitle from '../../../components/HighlightTitle';
 import SimpleSelectCard from '../../../components/SimpleSelectCard';
 import Pagination from '../../../components/Pagination';
@@ -73,18 +76,26 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
   const history = useHistory();
   const { department_id } = match.params;
 
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
+
   const optionsSearchFilterBvspPart = useMemo(() => {
     return [
       {
-        value: 'description_insensitive',
-        label: 'Nome',
+        value: translated.filter_value_name,
+        label: translated.filter_label_name,
       },
       {
         value: 'bvspcode',
-        label: 'Código BVSP',
+        label: translated.filter_label_bvspcode,
       },
     ];
-  }, []);
+  }, [translated]);
 
   const handleFetchMachines = useCallback(
     async (data: IDataSearch) => {
@@ -121,19 +132,20 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
             return {
               id: String(doc.id),
               bvspcode: String(doc.data().bvspcode),
-              description: String(doc.data().description),
+              description:
+                translation === 'en-us'
+                  ? String(doc.data().description_english)
+                  : String(doc.data().description),
               photos: doc.data().photos,
             };
           });
 
           setDataTable(dataFormatted);
         })
-        .catch(() =>
-          MessageAlert('Não foi possível carregar os dados!', 'error'),
-        )
+        .catch(() => MessageAlert(translated.error_load, 'error'))
         .finally(() => setLoading(false));
     },
-    [department_id],
+    [department_id, translated, translation],
   );
 
   const handlePagination = useCallback(
@@ -189,16 +201,17 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
             return {
               id: String(doc.id),
               bvspcode: String(doc.data().bvspcode),
-              description: String(doc.data().description),
+              description:
+                translation === 'en-us'
+                  ? String(doc.data().description_english)
+                  : String(doc.data().description),
               photos: doc.data().photos,
             };
           });
 
           setDataTable(dataFormatted);
         })
-        .catch(error =>
-          MessageAlert('Não foi possível carregar os dados!', 'error'),
-        )
+        .catch(() => MessageAlert(translated.error_load, 'error'))
         .finally(() => setLoading(false));
     },
     [
@@ -207,6 +220,8 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
       lastFilterConsulted,
       lastValueConsulted,
       department_id,
+      translated,
+      translation,
     ],
   );
 
@@ -216,21 +231,21 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
 
     handleFetchMachines({
       searchValue: '',
-      filterValue: 'description_insensitive',
+      filterValue: translated.filter_value_name,
     });
-  }, [handleFetchMachines]);
+  }, [handleFetchMachines, translated]);
 
   useEffect(() => {
     handleFetchMachines({
       searchValue: '',
-      filterValue: 'description_insensitive',
+      filterValue: translated.filter_value_name,
     });
-  }, [handleFetchMachines]);
+  }, [handleFetchMachines, translated]);
 
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Equipamentos" lineAlign="left" />
+        <HighlightTitle title={translated.title} lineAlign="left" />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -244,7 +259,7 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
         <SearchInput
           type="text"
           name="searchValue"
-          placeholder="Pesquisar..."
+          placeholder={translated.input_search_placeholder}
         />
         <SelectFilter
           name="filterValue"
@@ -263,7 +278,7 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
         </ClearButton>
       </SearchContainer>
 
-      <SubTitleDivider title="Escolha o equipamento" />
+      <SubTitleDivider title={translated.subtitle} />
 
       {loading ? (
         <Load />

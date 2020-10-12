@@ -7,6 +7,10 @@ import TextInput from '../../components/Form/TextInput';
 
 import bgImage from '../../assets/bgsignin.png';
 
+interface ITranslateProps {
+  actived: boolean;
+}
+
 const animate = keyframes`
     0% {
         transform: translateX(-100px);
@@ -160,4 +164,29 @@ export const ForgotPassword = styled(Link)`
   &:hover {
     opacity: 0.8;
   }
+`;
+
+export const TranslateContainer = styled.div`
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+`;
+
+export const TranslateButton = styled.button<ITranslateProps>`
+  margin: 0 10px;
+  transition: opacity 0.3s;
+
+  background: none;
+  border: none;
+
+  opacity: ${props => (props.actived ? 1 : 0.4)};
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+export const TranslateImage = styled.img`
+  width: 30px;
 `;

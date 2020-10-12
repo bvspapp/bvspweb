@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useAuth } from '../../../hooks/auth';
 
@@ -9,6 +9,9 @@ import ImgBvspmachines from '../../../assets/bvspmachines.png';
 import ImgBvsppartners from '../../../assets/bvsppartners.png';
 import ImgConfigs from '../../../assets/configs.png';
 import ImgMaintenance from '../../../assets/maintenance.png';
+
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../hooks/translation';
 
 import {
   Container,
@@ -26,47 +29,55 @@ import {
 const BvspProducts: React.FC = () => {
   const { user } = useAuth();
 
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
+
   return (
     <Container>
       <Header>
         <UserContainer>
           <UserInfo>
             <User>
-              <Welcome>Olá,</Welcome>
+              <Welcome>{translated.greet}</Welcome>
               <UserName>{user.name}</UserName>
             </User>
-            <Message>Bem-vindo a BVSP. É bom ter você aqui!</Message>
+            <Message>{translated.welcome}</Message>
           </UserInfo>
         </UserContainer>
       </Header>
 
       <Content>
         <HighlightTitle
-          title="Nossos Produtos"
-          subtitle="Portfólio de equipamentos, peças de reposição e soluções especiais"
+          title={translated.title}
+          subtitle={translated.subtitle}
         />
 
         <MenuContainer>
           <HighlightMenuCard
             link="/bvspmachines"
             image={ImgBvspmachines}
-            title="Máquinas BVSP"
+            title={translated.menu_bvsp_machines}
           />
           <HighlightMenuCard
             link="/departments/equipaments"
             image={ImgBvsppartners}
-            title="Peças Linhas ST"
+            title={translated.menu_parts_st_lines}
           />
           <HighlightMenuCard
             link="/specialsolutions"
             image={ImgConfigs}
-            title="Soluções Especiais"
+            title={translated.menu_special_solutions}
           />
 
           <HighlightMenuCard
             link="/bvspservices"
             image={ImgMaintenance}
-            title="Serviços"
+            title={translated.menu_services}
           />
         </MenuContainer>
       </Content>

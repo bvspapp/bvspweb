@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { FaHome, FaUser, FaPhoneAlt } from 'react-icons/fa';
@@ -8,6 +8,9 @@ import { GiExitDoor } from 'react-icons/gi';
 import logoImg from '../../assets/logo.png';
 
 import { useAuth } from '../../hooks/auth';
+
+import { useTranslation } from '../../hooks/translation';
+import translatedContent from './translatedcontent';
 
 import {
   Container,
@@ -21,6 +24,14 @@ import {
 const FloatMenuUser: React.FC = () => {
   const { signOut } = useAuth();
   const history = useHistory();
+
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
 
   const handleSignOut = useCallback(() => {
     signOut();
@@ -36,28 +47,28 @@ const FloatMenuUser: React.FC = () => {
       <MenuContainer>
         <Menu to="/">
           <FaHome />
-          Início
+          {translated.menubar_button_home}
         </Menu>
 
         <Menu to="/institutional">
           <TiWorld />
-          Institucional
+          {translated.menubar_button_institutional}
         </Menu>
 
         <Menu to="/profile">
           <FaUser />
-          Perfil
+          {translated.menubar_button_profile}
         </Menu>
 
         <Menu to="/contact">
           <FaPhoneAlt />
-          Contato
+          {translated.menubar_button_contact}
         </Menu>
       </MenuContainer>
 
       <Logout type="button" onClick={handleSignOut} title="Sair e Desconectar">
         <GiExitDoor />
-        Sair
+        {translated.menubar_button_logout}
       </Logout>
     </Container>
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 
@@ -19,6 +19,9 @@ import { useAuth } from '../../../hooks/auth';
 import HighlightTitle from '../../../components/HighlightTitle';
 import Load from '../../../components/Load';
 import MessageAlert from '../../../utils/MessageAlert';
+
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../hooks/translation';
 
 import {
   Container,
@@ -56,6 +59,13 @@ const BvspServicesDetails: React.FC = () => {
 
   const { user, setData } = useAuth();
   const history = useHistory();
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
 
   const handleSubmit = useCallback(
     async (data: IUserFormData) => {
@@ -63,17 +73,17 @@ const BvspServicesDetails: React.FC = () => {
         setLoading(true);
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome é obrigatório.'),
-          company: Yup.string().required('Empresa é obrigatório.'),
-          city: Yup.string().required('Cidade é obrigatório.'),
-          country: Yup.string().required('País é obrigatório.'),
+          name: Yup.string().required(translated.error_notfound_name),
+          company: Yup.string().required(translated.error_notfound_compay),
+          city: Yup.string().required(translated.error_notfound_cidade),
+          country: Yup.string().required(translated.error_notfound_country),
           password: Yup.string()
-            .min(6, 'A senha deve ter no mínimo 6 dígitos')
-            .required('A senha é obrigatória.'),
+            .min(6, translated.error_min_password)
+            .required(translated.error_notfound_password),
           password_confirm: Yup.string()
-            .min(6, 'A senha deve ter no mínimo 6 dígitos')
-            .oneOf([Yup.ref('password')], 'A confirmação de senha não confere')
-            .required('Digite a confirmação de senha'),
+            .min(6, translated.error_min_password)
+            .oneOf([Yup.ref('password')], translated.error_password_not_match)
+            .required(translated.error_notfound_password_confirm),
         });
 
         await schema.validate(data);
@@ -104,18 +114,18 @@ const BvspServicesDetails: React.FC = () => {
             });
           });
 
-        MessageAlert('Seus dados foram atualizados.', 'success');
+        MessageAlert(translated.message_updated, 'success');
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           MessageAlert(error.errors[0], 'info');
         } else {
-          MessageAlert('Não foi possível atualizar os dados.', 'info');
+          MessageAlert(translated.error_updated, 'info');
         }
       } finally {
         setLoading(false);
       }
     },
-    [user.id, setData, user.email],
+    [user.id, setData, user.email, translated],
   );
 
   const handleFetchUserData = useCallback(async () => {
@@ -148,7 +158,11 @@ const BvspServicesDetails: React.FC = () => {
   return (
     <Container>
       <Header>
-        <HighlightTitle title="Perfil" lineAlign="left" />
+        <HighlightTitle
+          title={translated.title}
+          subtitle={translated.subtitle}
+          lineAlign="left"
+        />
         <BackButton
           type="button"
           color={light.colors.primary}
@@ -163,14 +177,14 @@ const BvspServicesDetails: React.FC = () => {
       ) : (
         <Form onSubmit={handleSubmit} initialData={userData}>
           <Input
-            label="Nome"
+            label={translated.label_name}
             name="name"
             type="text"
             icon={MdPerson}
             required
           />
           <Input
-            label="Empresa"
+            label={translated.label_company}
             name="company"
             type="text"
             icon={FaBuilding}
@@ -178,7 +192,7 @@ const BvspServicesDetails: React.FC = () => {
           />
           <InputRows>
             <Input
-              label="Cidade"
+              label={translated.label_city}
               name="city"
               type="text"
               icon={MdLocationOn}
@@ -186,7 +200,7 @@ const BvspServicesDetails: React.FC = () => {
             />
             &nbsp;
             <Input
-              label="País"
+              label={translated.label_country}
               name="country"
               type="text"
               icon={MdLocationCity}
@@ -195,7 +209,7 @@ const BvspServicesDetails: React.FC = () => {
           </InputRows>
           <InputRows>
             <Input
-              label="Senha"
+              label={translated.label_password}
               name="password"
               type="password"
               icon={MdLock}
@@ -203,7 +217,7 @@ const BvspServicesDetails: React.FC = () => {
             />
             &nbsp;
             <Input
-              label="Confirme a Senha"
+              label={translated.label_password_confirm}
               name="password_confirm"
               type="password"
               icon={MdLock}
@@ -215,7 +229,7 @@ const BvspServicesDetails: React.FC = () => {
             <Load />
           ) : (
             <SaveButton color={light.colors.primary} type="submit">
-              Salvar
+              {translated.button_save}
             </SaveButton>
           )}
         </Form>

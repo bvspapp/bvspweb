@@ -20,6 +20,9 @@ import SubTitleDivider from '../../../components/SubTitleDivider';
 import MessageAlert from '../../../utils/MessageAlert';
 import Load from '../../../components/Load';
 
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../hooks/translation';
+
 import {
   Container,
   Header,
@@ -51,6 +54,13 @@ const DepartmentsSelect: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   const history = useHistory();
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
 
   const handleSearchPartByCode = useCallback(
     async (data: IDataSearch) => {
@@ -68,25 +78,25 @@ const DepartmentsSelect: React.FC = () => {
           history.push(`/part/${snapshot.docs[0].id}`);
         })
         .catch(() => {
-          MessageAlert('Não há uma peça com esse código!', 'info');
+          MessageAlert(translated.error_not_found, 'info');
           setLoading(false);
         });
     },
-    [history],
+    [history, translated],
   );
 
   const optionsSearchFilterBvspPart = useMemo(() => {
     return [
       {
         value: 'oemcode',
-        label: 'Código OEM',
+        label: translated.filter_label_oemcode,
       },
       {
         value: 'bvspcode',
-        label: 'Código BVSP',
+        label: translated.filter_label_bvspcode,
       },
     ];
-  }, []);
+  }, [translated]);
 
   const handleFetchDepartments = useCallback(async () => {
     await firebase
@@ -98,15 +108,18 @@ const DepartmentsSelect: React.FC = () => {
         const dataFormatted = snapshot.docs.map(doc => {
           return {
             id: String(doc.id),
-            description: String(doc.data().description),
+            description:
+              translation === 'en-us'
+                ? String(doc.data().description_english)
+                : String(doc.data().description),
           };
         });
 
         setDataTable(dataFormatted);
       })
-      .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
+      .catch(() => MessageAlert(translated.erro_load, 'error'))
       .finally(() => setLoading(false));
-  }, []);
+  }, [translated.erro_load, translation]);
 
   const handleSearchClear = useCallback(() => {
     formRef.current?.setFieldValue('searchValue', '');
@@ -121,8 +134,8 @@ const DepartmentsSelect: React.FC = () => {
     <Container>
       <Header>
         <HeaderLeft>
-          <HighlightTitle title="Departamentos" lineAlign="left" />
-          <Subtitle>Você pode encontrar a peça pelo código.</Subtitle>
+          <HighlightTitle title={translated.title} lineAlign="left" />
+          <Subtitle>{translated.subtitle}</Subtitle>
         </HeaderLeft>
         <BackButton
           type="button"
@@ -137,7 +150,7 @@ const DepartmentsSelect: React.FC = () => {
         <SearchInput
           type="text"
           name="searchValue"
-          placeholder="Pesquisar..."
+          placeholder={translated.input_search_placeholder}
         />
         <SelectFilter
           name="filterValue"
@@ -157,7 +170,7 @@ const DepartmentsSelect: React.FC = () => {
         </ClearButton>
       </SearchContainer>
 
-      <SubTitleDivider title="Ou escolha o departamento" />
+      <SubTitleDivider title={translated.label_choise_department} />
 
       {loading ? (
         <Load />

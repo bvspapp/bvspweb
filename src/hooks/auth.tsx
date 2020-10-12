@@ -5,7 +5,6 @@ import MessageAlert from '../utils/MessageAlert';
 
 interface IAuthState {
   user: IUser;
-  token?: string;
 }
 
 interface IUser {
@@ -22,6 +21,11 @@ interface ISignInCredentials {
   email: string;
   password: string;
   type: 'user' | 'admin';
+}
+
+interface IResponseSession {
+  user: IUser;
+  token: string;
 }
 
 interface IAuthContextData {
@@ -56,7 +60,7 @@ const AuthProvider: React.FC = ({ children }) => {
           .then(() => {
             const user = { email, type };
             localStorage.setItem('@bvspparts:user', JSON.stringify(user));
-            setData({ user, token: '' });
+            setData({ user });
           })
           .catch(() => MessageAlert('Usuário e/ou senha inválidos!', 'info'));
       }
@@ -67,13 +71,17 @@ const AuthProvider: React.FC = ({ children }) => {
           password,
         });
 
-        const { user: userResponse, token }: IAuthState = userData.data;
+        const { user: userResponse, token }: IResponseSession = userData.data;
+
+        api.defaults.headers.authorization = `Bearer ${token}`;
 
         localStorage.setItem(
           '@bvspparts:user',
-          JSON.stringify({ userResponse, token }),
+          JSON.stringify({ ...userResponse, type: 'user' }),
         );
-        setData({ user: { ...userResponse, type: 'user' }, token });
+        localStorage.setItem('@bvspparts:token', JSON.stringify(token));
+
+        setData({ user: { ...userResponse, type: 'user' } });
       }
     },
     [],

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { MdArrowBack } from 'react-icons/md';
@@ -6,6 +6,9 @@ import { FaPhone, FaGlobe, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import onlineImg from '../../../assets/online.svg';
 import light from '../../../styles/themes/light';
 import HighlightTitle from '../../../components/HighlightTitle';
+
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../hooks/translation';
 
 import {
   Container,
@@ -23,13 +26,20 @@ import {
 
 const Contact: React.FC = () => {
   const history = useHistory();
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
 
   return (
     <Container>
       <Header>
         <HighlightTitle
-          title="Atentimento"
-          subtitle="Nossos meios de comunicação"
+          title={translated.contact_title}
+          subtitle={translated.contact_subtitle}
           lineAlign="left"
         />
         <BackButton
@@ -48,8 +58,8 @@ const Contact: React.FC = () => {
               <FaPhone />
             </ContactIcon>
             <ContactDetail>
-              <ContactLabel>Ligue agora mesmo</ContactLabel>
-              <ContactText>+55 51 3783-0875</ContactText>
+              <ContactLabel>{translated.contact_call_label}</ContactLabel>
+              <ContactText>{translated.contact_call_value}</ContactText>
             </ContactDetail>
           </ContactBox>
 
@@ -58,8 +68,8 @@ const Contact: React.FC = () => {
               <FaGlobe />
             </ContactIcon>
             <ContactDetail>
-              <ContactLabel>Acesse nosso site</ContactLabel>
-              <ContactText>www.bvsp.ind.br</ContactText>
+              <ContactLabel>{translated.contact_website_label}</ContactLabel>
+              <ContactText>{translated.contact_website_value}</ContactText>
             </ContactDetail>
           </ContactBox>
 
@@ -68,8 +78,8 @@ const Contact: React.FC = () => {
               <FaEnvelope />
             </ContactIcon>
             <ContactDetail>
-              <ContactLabel>Para enviar e-mail</ContactLabel>
-              <ContactText>sac@bvsp.ind.br</ContactText>
+              <ContactLabel>{translated.contact_email_label}</ContactLabel>
+              <ContactText>{translated.contact_email_value}</ContactText>
             </ContactDetail>
           </ContactBox>
 
@@ -78,8 +88,8 @@ const Contact: React.FC = () => {
               <FaWhatsapp />
             </ContactIcon>
             <ContactDetail>
-              <ContactLabel>Nosso Whatsapp</ContactLabel>
-              <ContactText>+55 47 9740-2011</ContactText>
+              <ContactLabel>{translated.contact_whatsapp_label}</ContactLabel>
+              <ContactText>{translated.contact_whatsapp_number}</ContactText>
             </ContactDetail>
           </ContactBox>
         </ContactContainer>

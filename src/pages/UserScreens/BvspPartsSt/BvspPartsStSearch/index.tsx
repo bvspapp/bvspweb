@@ -20,6 +20,9 @@ import ProductCard from '../../../../components/ProductCard';
 import Pagination from '../../../../components/Pagination';
 import MessageAlert from '../../../../utils/MessageAlert';
 
+import translatedContent from './translatedcontent';
+import { useTranslation } from '../../../../hooks/translation';
+
 import {
   Container,
   Header,
@@ -62,6 +65,8 @@ interface IRouteParams {
 
 interface IMachineData {
   description: string;
+  description_english: string;
+  descriptionFormatted: string;
 }
 
 const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
@@ -69,9 +74,7 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [machine, setMachine] = useState<IMachineData>({} as IMachineData);
   const [lastValueConsulted, setLastValueConsulted] = useState<string>();
-  const [lastFilterConsulted, setLastFilterConsulted] = useState<string>(
-    'description_insensitive',
-  );
+
   const [lastDocPaginate, setLastDocPaginate] = useState<
     firebase.firestore.QueryDocumentSnapshot
   >();
@@ -87,23 +90,34 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
 
   const pageSize = 14;
   const history = useHistory();
+  const { translation } = useTranslation();
+
+  const translated = useMemo(() => {
+    return translation === 'en-us'
+      ? translatedContent.en_US
+      : translatedContent.pt_BR;
+  }, [translation]);
+
+  const [lastFilterConsulted, setLastFilterConsulted] = useState<string>(
+    translated.filter_value_name,
+  );
 
   const optionsSearchFilterBvspPart = useMemo(() => {
     return [
       {
         value: 'oemcode',
-        label: 'Código OEM',
+        label: translated.filter_label_oemcode,
       },
       {
         value: 'bvspcode',
-        label: 'Código BVSP',
+        label: translated.filter_label_bvspcode,
       },
       {
-        value: 'description_insensitive',
-        label: 'Nome',
+        value: translated.filter_value_name,
+        label: translated.filter_label_name,
       },
     ];
-  }, []);
+  }, [translated]);
 
   const handleFetchBvspPart = useCallback(
     async (data: IDataSearch) => {
@@ -141,19 +155,20 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
               id: String(doc.id),
               oemcode: String(doc.data().oemcode),
               bvspcode: String(doc.data().bvspcode),
-              description: String(doc.data().description),
+              description:
+                translation === 'en-us'
+                  ? String(doc.data().description_english)
+                  : String(doc.data().description),
               photos: doc.data().photos,
             };
           });
 
           setDataTable(dataFormatted);
         })
-        .catch(() =>
-          MessageAlert('Não foi possível carregar os dados!', 'error'),
-        )
+        .catch(() => MessageAlert(translated.error_load_data, 'error'))
         .finally(() => setLoading(false));
     },
-    [machine_id],
+    [machine_id, translation, translated],
   );
 
   const handlePagination = useCallback(
@@ -208,16 +223,17 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
               id: String(doc.id),
               oemcode: String(doc.data().oemcode),
               bvspcode: String(doc.data().bvspcode),
-              description: String(doc.data().description),
+              description:
+                translation === 'en-us'
+                  ? String(doc.data().description_english)
+                  : String(doc.data().description),
               photos: doc.data().photos,
             };
           });
 
           setDataTable(dataFormatted);
         })
-        .catch(() =>
-          MessageAlert('Não foi possível carregar os dados!', 'error'),
-        )
+        .catch(() => MessageAlert(translated.error_load_data, 'error'))
         .finally(() => setLoading(false));
     },
     [
@@ -225,6 +241,8 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
       lastDocPaginate,
       lastFilterConsulted,
       lastValueConsulted,
+      translation,
+      translated,
     ],
   );
 
@@ -234,16 +252,16 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
 
     handleFetchBvspPart({
       searchValue: '',
-      filterValue: 'description_insensitive',
+      filterValue: translated.filter_value_name,
     });
-  }, [handleFetchBvspPart]);
+  }, [handleFetchBvspPart, translated]);
 
   useEffect(() => {
     handleFetchBvspPart({
       searchValue: '',
-      filterValue: 'description_insensitive',
+      filterValue: translated.filter_value_name,
     });
-  }, [handleFetchBvspPart]);
+  }, [handleFetchBvspPart, translated]);
 
   useEffect(() => {
     firebase
@@ -252,17 +270,20 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
       .doc(machine_id)
       .get()
       .then(snapshot => {
-        const { description } = snapshot.data() as IMachineData;
+        const machineResponse = snapshot.data() as IMachineData;
 
-        setMachine({
-          description,
-        });
+        machineResponse.descriptionFormatted =
+          translation === 'en-us'
+            ? machineResponse.description_english
+            : machineResponse.description;
+
+        setMachine(machineResponse);
       })
       .catch(() => {
-        MessageAlert('Não foi possível atualizado!', 'error');
+        MessageAlert(translated.error_load_data, 'error');
       })
       .finally(() => setLoading(false));
-  }, [machine_id]);
+  }, [machine_id, translated, translation]);
 
   useEffect(() => {
     // obtem o link do arquivo.
@@ -285,8 +306,8 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
     <Container>
       <Header>
         <HeaderLeft>
-          <HighlightTitle title="Peças" lineAlign="left" />
-          <MachineName>{machine.description}</MachineName>
+          <HighlightTitle title={translated.title} lineAlign="left" />
+          <MachineName>{machine.descriptionFormatted}</MachineName>
         </HeaderLeft>
 
         <HeaderRight>
@@ -310,7 +331,7 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
         <SearchInput
           type="text"
           name="searchValue"
-          placeholder="Pesquisar..."
+          placeholder={translated.search_input_placeholder}
         />
         <SelectFilter
           name="filterValue"
