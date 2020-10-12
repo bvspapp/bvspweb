@@ -15,6 +15,7 @@ interface IUser {
   name?: string;
   email: string;
   type: 'user' | 'admin';
+  currentCountryCode?: string;
 }
 
 interface ISignInCredentials {
@@ -60,6 +61,7 @@ const AuthProvider: React.FC = ({ children }) => {
           .then(() => {
             const user = { email, type };
             localStorage.setItem('@bvspparts:user', JSON.stringify(user));
+
             setData({ user });
           })
           .catch(() => MessageAlert('Usuário e/ou senha inválidos!', 'info'));
@@ -75,13 +77,34 @@ const AuthProvider: React.FC = ({ children }) => {
 
         api.defaults.headers.authorization = `Bearer ${token}`;
 
+        // Get current country user.
+        const countryCode = await fetch(
+          'https://geolocation-db.com/json/7733a990-ebd4-11ea-b9a6-2955706ddbf3',
+        )
+          .then(response => {
+            return response.json();
+          })
+          .then(response => {
+            return response.country_code;
+          });
+
         localStorage.setItem(
           '@bvspparts:user',
-          JSON.stringify({ ...userResponse, type: 'user' }),
+          JSON.stringify({
+            ...userResponse,
+            currentCountryCode: countryCode,
+            type: 'user',
+          }),
         );
         localStorage.setItem('@bvspparts:token', JSON.stringify(token));
 
-        setData({ user: { ...userResponse, type: 'user' } });
+        setData({
+          user: {
+            ...userResponse,
+            currentCountryCode: countryCode,
+            type: 'user',
+          },
+        });
       }
     },
     [],
