@@ -48,10 +48,20 @@ interface IDataSearch {
   filterValue: string;
 }
 
-const DepartmentsSelect: React.FC = () => {
+interface IRouteParams {
+  match: {
+    params: {
+      to: string;
+    };
+  };
+}
+
+const DepartmentsSelect: React.FC<IRouteParams> = ({ match }) => {
   const [dataTable, setDataTable] = useState<IData[]>([]);
   const [loading, setLoading] = useState(true);
   const formRef = useRef<FormHandles>(null);
+
+  const { to } = match.params;
 
   const history = useHistory();
   const { translation } = useTranslation();
@@ -180,7 +190,7 @@ const DepartmentsSelect: React.FC = () => {
             <SimpleSelectCard
               key={department.id}
               title={department.description}
-              link={`/equipaments/${department.id}`}
+              link={`/equipaments/${department.id}/${to}`}
             />
           ))}
         </ServiceContainer>

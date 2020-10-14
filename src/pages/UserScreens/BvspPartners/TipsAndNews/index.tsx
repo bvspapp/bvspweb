@@ -55,7 +55,7 @@ const TipsAndNews: React.FC = () => {
 
         <MenuContainer>
           <HighlightMenuCard
-            link="/bvspproducts"
+            link="/departments/checklistdetails"
             image={listImg}
             title={translated.menu_checklist_label}
             inative={false}

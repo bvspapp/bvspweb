@@ -59,8 +59,8 @@ const OurPartnersList: React.FC = () => {
         />
 
         <MenuContainer>
-          <PartnerButton to="">
-            <PartnerImage src={tsubakilogoImg} />
+          <PartnerButton to="/metasolutions">
+            <PartnerImage src={metalogoImg} />
             <PartnerArrowBox>
               <FaArrowRight />
             </PartnerArrowBox>
@@ -75,8 +75,8 @@ const OurPartnersList: React.FC = () => {
             </PartnerButton>
           )}
 
-          <PartnerButton to="/metasolutions">
-            <PartnerImage src={metalogoImg} />
+          <PartnerButton to="">
+            <PartnerImage src={tsubakilogoImg} />
             <PartnerArrowBox>
               <FaArrowRight />
             </PartnerArrowBox>

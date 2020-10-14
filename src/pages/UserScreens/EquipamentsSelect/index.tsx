@@ -41,6 +41,7 @@ interface IRouteParams {
   match: {
     params: {
       department_id: string;
+      to: string;
     };
   };
 }
@@ -74,7 +75,7 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
 
   const pageSize = 6;
   const history = useHistory();
-  const { department_id } = match.params;
+  const { department_id, to } = match.params;
 
   const { translation } = useTranslation();
 
@@ -289,7 +290,7 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
               <SimpleSelectCard
                 key={machine.id}
                 title={machine.description}
-                link={`/partsbymachine/${machine.id}`}
+                link={`/${to}/${machine.id}`}
               />
             ))}
           </ServiceContainer>

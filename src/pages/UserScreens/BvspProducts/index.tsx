@@ -64,7 +64,7 @@ const BvspProducts: React.FC = () => {
             title={translated.menu_bvsp_machines}
           />
           <HighlightMenuCard
-            link="/departments/equipaments"
+            link="/departments/partsbymachine"
             image={ImgBvsppartners}
             title={translated.menu_parts_st_lines}
           />
