@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -60,10 +59,9 @@ export const Message = styled.span`
 
 export const Content = styled.main`
   flex: 1;
-  margin-top: 70px;
+  margin-top: 45px;
 
   display: flex;
-
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -75,45 +73,4 @@ export const MenuContainer = styled.nav`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-`;
-
-export const PartnerButton = styled(Link)`
-  width: 270px;
-  height: 200px;
-  border-radius: 7px;
-  margin: 0 10px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-
-  background: #fff;
-
-  cursor: pointer;
-  transition: transform 0.3s;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-
-export const PartnerImage = styled.img`
-  width: 230px;
-`;
-
-export const PartnerArrowBox = styled.div`
-  background-color: ${props => props.theme.colors.primary};
-
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  > svg {
-    color: ${props => props.theme.colors.white};
-  }
 `;

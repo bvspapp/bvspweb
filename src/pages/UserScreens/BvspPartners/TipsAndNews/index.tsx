@@ -1,13 +1,11 @@
 import React, { useMemo } from 'react';
 
-import { FaArrowRight } from 'react-icons/fa';
 import { useAuth } from '../../../../hooks/auth';
 
 import HighlightTitle from '../../../../components/HighlightTitle';
+import HighlightMenuCard from '../../../../components/HighlightMenuCard';
 
-import tsubakilogoImg from '../../../../assets/tsubakilogo.png';
-import foodmatelogoImg from '../../../../assets/foodmatelogo.png';
-import metalogoImg from '../../../../assets/metalogo.png';
+import listImg from '../../../../assets/list.png';
 
 import {
   Container,
@@ -20,15 +18,12 @@ import {
   Message,
   Content,
   MenuContainer,
-  PartnerButton,
-  PartnerImage,
-  PartnerArrowBox,
 } from './styles';
 
 import translatedContent from './translatedcontent';
 import { useTranslation } from '../../../../hooks/translation';
 
-const OurPartnersList: React.FC = () => {
+const TipsAndNews: React.FC = () => {
   const { user } = useAuth();
   const { translation } = useTranslation();
 
@@ -59,32 +54,16 @@ const OurPartnersList: React.FC = () => {
         />
 
         <MenuContainer>
-          <PartnerButton to="">
-            <PartnerImage src={tsubakilogoImg} />
-            <PartnerArrowBox>
-              <FaArrowRight />
-            </PartnerArrowBox>
-          </PartnerButton>
-
-          {user.currentCountryCode === 'BR' && (
-            <PartnerButton to="">
-              <PartnerImage src={foodmatelogoImg} />
-              <PartnerArrowBox>
-                <FaArrowRight />
-              </PartnerArrowBox>
-            </PartnerButton>
-          )}
-
-          <PartnerButton to="/metasolutions">
-            <PartnerImage src={metalogoImg} />
-            <PartnerArrowBox>
-              <FaArrowRight />
-            </PartnerArrowBox>
-          </PartnerButton>
+          <HighlightMenuCard
+            link="/bvspproducts"
+            image={listImg}
+            title={translated.menu_checklist_label}
+            inative={false}
+          />
         </MenuContainer>
       </Content>
     </Container>
   );
 };
 
-export default OurPartnersList;
+export default TipsAndNews;

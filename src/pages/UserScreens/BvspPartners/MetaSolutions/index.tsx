@@ -54,7 +54,7 @@ const MetaSolutions: React.FC = () => {
     <Container>
       <Header>
         <LogoImg src={metalogoImg} />
-        <ButtonBack onKeyPress={() => history.goBack()}>
+        <ButtonBack onClick={() => history.goBack()}>
           <FaArrowLeft />
         </ButtonBack>
       </Header>
@@ -91,7 +91,7 @@ const MetaSolutions: React.FC = () => {
         </PatternsContainer>
 
         <ButtonsContainer>
-          <ButtonNews to="">
+          <ButtonNews to="/tipsnews">
             {translated.tips_and_news_button}
             <FaArrowRight />
           </ButtonNews>
