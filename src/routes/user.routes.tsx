@@ -20,6 +20,8 @@ import BvspPartsStDetails from '../pages/UserScreens/BvspPartsSt/BvspPartsStDeta
 import DepartmentsSelect from '../pages/UserScreens/DepartmentsSelect';
 import EquipamentsSelect from '../pages/UserScreens/EquipamentsSelect';
 
+import OurPartnersList from '../pages/UserScreens/BvspPartners/OurPartnersList';
+
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
 
@@ -57,6 +59,8 @@ const UserRoutes: React.FC = () => (
         exact
         component={EquipamentsSelect}
       />
+
+      <Route path="/ourpartners" exact component={OurPartnersList} />
 
       <Route path="/institutional" exact component={Institutional} />
       <Route path="/contact" exact component={Contact} />

@@ -65,11 +65,11 @@ const HomeUser: React.FC = () => {
             inative={false}
           />
           <HighlightMenuCard
-            link="#"
+            link="/ourpartners"
             image={ImgPartner}
             title={translated.button_our_patterns_title}
             subtitle={translated.button_our_patterns_subtitle}
-            inative
+            inative={false}
           />
           <HighlightMenuCard
             link="#"
