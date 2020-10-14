@@ -73,7 +73,7 @@ const OurPartnersList: React.FC = () => {
             </PartnerArrowBox>
           </PartnerButton>
 
-          <PartnerButton to="">
+          <PartnerButton to="/metasolutions">
             <PartnerImage src={metalogoImg} />
             <PartnerArrowBox>
               <FaArrowRight />

@@ -21,6 +21,7 @@ import DepartmentsSelect from '../pages/UserScreens/DepartmentsSelect';
 import EquipamentsSelect from '../pages/UserScreens/EquipamentsSelect';
 
 import OurPartnersList from '../pages/UserScreens/BvspPartners/OurPartnersList';
+import MetaSolutions from '../pages/UserScreens/BvspPartners/MetaSolutions';
 
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
@@ -61,6 +62,7 @@ const UserRoutes: React.FC = () => (
       />
 
       <Route path="/ourpartners" exact component={OurPartnersList} />
+      <Route path="/metasolutions" exact component={MetaSolutions} />
 
       <Route path="/institutional" exact component={Institutional} />
       <Route path="/contact" exact component={Contact} />
