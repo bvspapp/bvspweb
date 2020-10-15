@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -70,12 +69,11 @@ export const LineInfo = styled.div`
   margin-bottom: 30px;
 `;
 
-export const PatternsContainer = styled.div`
+export const HistoryList = styled.div`
   width: 100%;
-`;
 
-export const PatternsList = styled.div`
   display: flex;
+
   overflow-x: auto;
   margin-bottom: 7px;
 
@@ -94,44 +92,45 @@ export const PatternsList = styled.div`
   }
 `;
 
-export const PatternImage = styled.img`
-  height: 100px;
-  margin: 0 10px;
-`;
-
-export const PatternsInfo = styled.span`
+export const HistoryInfo = styled.span`
+  display: block;
   font-size: 14px;
   color: ${props => props.theme.colors.tertiary};
+  margin-bottom: 30px;
 `;
 
-export const ButtonNews = styled(Link)`
-  padding: 10px;
-  border-radius: 5px;
+export const CardContainer = styled.div`
+  margin-right: 20px;
+`;
 
-  margin-top: 50px;
+export const CardYear = styled.div`
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
 
-  color: ${props => props.theme.colors.white};
-  background-color: ${props => props.theme.colors.primary};
-  text-decoration: none;
-
-  width: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  transition: opacity 0.3s;
+  background-color: ${props => props.theme.colors.primary};
+  color: ${props => props.theme.colors.white};
 
-  &:hover {
-    opacity: 0.8;
-  }
-
-  > svg {
-    margin-left: 5px;
-  }
+  margin: 0 auto;
+  position: relative;
+  bottom: -25px;
 `;
 
-export const ButtonsContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
+export const CardDescription = styled.div`
+  width: 330px;
+
+  font-size: 14px;
+  text-align: justify;
+  padding: 30px 10px 10px;
+  border-radius: 5px;
+
+  background-color: ${props => props.theme.colors.fifth};
+  color: ${props => props.theme.colors.white};
 `;
+
+export const MenuContainer = styled.div``;

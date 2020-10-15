@@ -67,7 +67,7 @@ const OurPartnersList: React.FC = () => {
           </PartnerButton>
 
           {user.currentCountryCode === 'BR' && (
-            <PartnerButton to="">
+            <PartnerButton to="/foodmate">
               <PartnerImage src={foodmatelogoImg} />
               <PartnerArrowBox>
                 <FaArrowRight />

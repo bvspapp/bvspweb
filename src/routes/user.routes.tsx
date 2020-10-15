@@ -25,6 +25,8 @@ import MetaSolutions from '../pages/UserScreens/BvspPartners/MetaSolutions';
 import TipsAndNews from '../pages/UserScreens/BvspPartners/TipsAndNews';
 import ChecklistDetails from '../pages/UserScreens/ChecklistDetails';
 
+import FoodmateAbout from '../pages/UserScreens/BvspPartners/Foodmate/FoodmateAbout';
+
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
 
@@ -65,6 +67,8 @@ const UserRoutes: React.FC = () => (
 
       <Route path="/ourpartners" exact component={OurPartnersList} />
       <Route path="/metasolutions" exact component={MetaSolutions} />
+      <Route path="/foodmate" exact component={FoodmateAbout} />
+
       <Route path="/tipsnews" exact component={TipsAndNews} />
 
       <Route

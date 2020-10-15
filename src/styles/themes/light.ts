@@ -6,6 +6,7 @@ export default {
     secondary: '#E3E1E1',
     tertiary: '#7C7C80',
     quartenary: '#2F2C37',
+    fifth: '#38363F',
 
     white: '#FFF',
     black: '#333232',

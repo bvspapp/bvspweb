@@ -17,10 +17,10 @@ export const Container = styled(Link)`
 
   text-decoration: none;
 
-  transition: transform .3s;
+  transition: transform 0.3s;
 
   &:hover {
-    transform: translateX(10px)
+    transform: translateX(10px);
   }
 `;
 
