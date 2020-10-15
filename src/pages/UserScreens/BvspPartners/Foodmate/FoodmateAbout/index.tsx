@@ -74,9 +74,15 @@ const FoodmateAbout: React.FC = () => {
         <LineInfo>
           <Title>{translated.title_options_menu}</Title>
           <MenuContainer>
-            <ArrowMenu title={translated.cut_menu} to="" />
-            <ArrowMenu title={translated.leg_breast_disposal_menu} to="" />
-            <ArrowMenu title={translated.breast_disposal_menu} to="" />
+            <ArrowMenu title={translated.cut_menu} to="foodmateoptions/cut" />
+            <ArrowMenu
+              title={translated.leg_breast_disposal_menu}
+              to="foodmateoptions/leg_breast_disposal"
+            />
+            <ArrowMenu
+              title={translated.breast_disposal_menu}
+              to="foodmateoptions/breast_disposal"
+            />
           </MenuContainer>
         </LineInfo>
       </Content>

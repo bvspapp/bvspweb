@@ -26,6 +26,8 @@ import TipsAndNews from '../pages/UserScreens/BvspPartners/TipsAndNews';
 import ChecklistDetails from '../pages/UserScreens/ChecklistDetails';
 
 import FoodmateAbout from '../pages/UserScreens/BvspPartners/Foodmate/FoodmateAbout';
+import FoodmateOptions from '../pages/UserScreens/BvspPartners/Foodmate/FoodmateOptions';
+import FoodmateOptionDetails from '../pages/UserScreens/BvspPartners/Foodmate/FoodmateOptionDetails';
 
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
@@ -68,6 +70,17 @@ const UserRoutes: React.FC = () => (
       <Route path="/ourpartners" exact component={OurPartnersList} />
       <Route path="/metasolutions" exact component={MetaSolutions} />
       <Route path="/foodmate" exact component={FoodmateAbout} />
+      <Route
+        path="/foodmateoptions/:option"
+        exact
+        component={FoodmateOptions}
+      />
+
+      <Route
+        path="/foodmatedetails/:option"
+        exact
+        component={FoodmateOptionDetails}
+      />
 
       <Route path="/tipsnews" exact component={TipsAndNews} />
 
