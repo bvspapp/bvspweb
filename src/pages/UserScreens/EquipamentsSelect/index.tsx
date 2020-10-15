@@ -102,6 +102,20 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
     async (data: IDataSearch) => {
       const { searchValue, filterValue } = data;
 
+      const machinesIdWithChecklists: string[] = [];
+
+      if (to === 'checklistdetails') {
+        await firebase
+          .firestore()
+          .collection('checklists')
+          .get()
+          .then(async snapshot =>
+            snapshot.forEach(doc =>
+              machinesIdWithChecklists.push(String(doc.data().machines)),
+            ),
+          );
+      }
+
       setLoading(true);
 
       const valueFormatted = searchValue.toLowerCase().trim();
@@ -141,12 +155,20 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
             };
           });
 
-          setDataTable(dataFormatted);
+          if (machinesIdWithChecklists.length > 0) {
+            const onlyMachinesWithChecklist = dataFormatted.filter(d =>
+              machinesIdWithChecklists.includes(d.id),
+            );
+
+            setDataTable(onlyMachinesWithChecklist);
+          } else {
+            setDataTable(dataFormatted);
+          }
         })
         .catch(() => MessageAlert(translated.error_load, 'error'))
         .finally(() => setLoading(false));
     },
-    [department_id, translated, translation],
+    [department_id, translated, translation, to],
   );
 
   const handlePagination = useCallback(

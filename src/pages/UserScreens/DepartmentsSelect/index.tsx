@@ -109,27 +109,82 @@ const DepartmentsSelect: React.FC<IRouteParams> = ({ match }) => {
   }, [translated]);
 
   const handleFetchDepartments = useCallback(async () => {
-    await firebase
-      .firestore()
-      .collection('departments')
-      .orderBy('order')
-      .get()
-      .then(snapshot => {
-        const dataFormatted = snapshot.docs.map(doc => {
-          return {
-            id: String(doc.id),
-            description:
-              translation === 'en-us'
-                ? String(doc.data().description_english)
-                : String(doc.data().description),
-          };
-        });
+    try {
+      // Se a próxima tela for para mostrar checklist. Então, vamos mostrar aqui somente os departamentos que tem checklist.
+      if (to === 'checklistdetails') {
+        const machinesIdWithChecklists = await firebase
+          .firestore()
+          .collection('checklists')
+          .get()
+          .then(async snapshot => {
+            return snapshot.docs.map(doc => String(doc.data().machines));
+          });
 
-        setDataTable(dataFormatted);
-      })
-      .catch(() => MessageAlert(translated.erro_load, 'error'))
-      .finally(() => setLoading(false));
-  }, [translated.erro_load, translation]);
+        const departmentsIdChecklists: string[] = [];
+
+        await firebase
+          .firestore()
+          .collection('machines')
+          .get()
+          .then(async snapshot => {
+            snapshot.docs.forEach(doc => {
+              if (machinesIdWithChecklists.includes(doc.id))
+                departmentsIdChecklists.push(...doc.data().departments);
+            });
+          });
+
+        const departmentsFormatted = await firebase
+          .firestore()
+          .collection('departments')
+          .orderBy('order')
+          .get()
+          .then(snapshot => {
+            const dataFormatted = snapshot.docs.map(doc => {
+              return {
+                id: String(doc.id),
+                description:
+                  translation === 'en-us'
+                    ? String(doc.data().description_english)
+                    : String(doc.data().description),
+              };
+            });
+
+            return dataFormatted;
+          });
+
+        const departmentsFiltered = departmentsFormatted.filter(dep =>
+          departmentsIdChecklists.includes(dep.id),
+        );
+
+        setDataTable(departmentsFiltered);
+      } else {
+        const departmentsFormatted = await firebase
+          .firestore()
+          .collection('departments')
+          .orderBy('order')
+          .get()
+          .then(snapshot => {
+            const dataFormatted = snapshot.docs.map(doc => {
+              return {
+                id: String(doc.id),
+                description:
+                  translation === 'en-us'
+                    ? String(doc.data().description_english)
+                    : String(doc.data().description),
+              };
+            });
+
+            return dataFormatted;
+          });
+
+        setDataTable(departmentsFormatted);
+      }
+    } catch {
+      MessageAlert(translated.erro_load, 'error');
+    } finally {
+      setLoading(false);
+    }
+  }, [translated.erro_load, translation, to]);
 
   const handleSearchClear = useCallback(() => {
     formRef.current?.setFieldValue('searchValue', '');
