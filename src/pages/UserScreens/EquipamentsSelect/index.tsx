@@ -104,6 +104,8 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
 
       const machinesIdWithChecklists: string[] = [];
 
+      setLoading(true);
+
       if (to === 'checklistdetails') {
         await firebase
           .firestore()
@@ -116,7 +118,8 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
           );
       }
 
-      setLoading(true);
+      console.log(department_id);
+      console.log(machinesIdWithChecklists);
 
       const valueFormatted = searchValue.toLowerCase().trim();
       setLastValueConsulted(valueFormatted);
@@ -155,9 +158,11 @@ const EquipamentsSelect: React.FC<IRouteParams> = ({ match }) => {
             };
           });
 
+          console.log(dataFormatted);
+
           if (machinesIdWithChecklists.length > 0) {
-            const onlyMachinesWithChecklist = dataFormatted.filter(d =>
-              machinesIdWithChecklists.includes(d.id),
+            const onlyMachinesWithChecklist = dataFormatted.filter(data =>
+              machinesIdWithChecklists.includes(data.id),
             );
 
             setDataTable(onlyMachinesWithChecklist);
