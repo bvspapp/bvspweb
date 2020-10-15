@@ -128,8 +128,9 @@ const DepartmentsSelect: React.FC<IRouteParams> = ({ match }) => {
           .get()
           .then(async snapshot => {
             snapshot.docs.forEach(doc => {
-              if (machinesIdWithChecklists.includes(doc.id))
+              if (machinesIdWithChecklists.includes(doc.id)) {
                 departmentsIdChecklists.push(...doc.data().departments);
+              }
             });
           });
 

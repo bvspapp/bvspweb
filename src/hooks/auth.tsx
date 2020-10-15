@@ -43,7 +43,7 @@ const AuthProvider: React.FC = ({ children }) => {
     const user = localStorage.getItem('@bvspparts:user');
     const token = localStorage.getItem('@bvspparts:token');
 
-    if (token && user) {
+    if (user) {
       api.defaults.headers.authorization = `Bearer ${token}`;
 
       return { token, user: JSON.parse(user) };

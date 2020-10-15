@@ -290,6 +290,7 @@ const BvspPartList: React.FC = () => {
           name="filterValue"
           icon={FiFilter}
           options={optionsSearchFilterBvspPart}
+          containerCustomStyle={{ marginTop: 17 }}
         />
         <SearchButton type="submit" color={light.colors.success}>
           <FiSearch />

@@ -44,11 +44,13 @@ export const SearchInput = styled(TextInput).attrs({
 export const SearchButton = styled(Button)`
   height: 40px;
   margin-left: 10px;
+  margin-top: 15px;
 `;
 
 export const ClearButton = styled(Button)`
   height: 40px;
   margin-left: 5px;
+  margin-top: 15px;
 `;
 
 export const PaginationButtons = styled.div`

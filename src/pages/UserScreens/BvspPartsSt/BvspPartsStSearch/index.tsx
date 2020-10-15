@@ -17,7 +17,6 @@ import Load from '../../../../components/Load';
 
 import HighlightTitle from '../../../../components/HighlightTitle';
 import ProductCard from '../../../../components/ProductCard';
-import Pagination from '../../../../components/Pagination';
 import MessageAlert from '../../../../utils/MessageAlert';
 
 import translatedContent from './translatedcontent';
@@ -73,22 +72,12 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
   const [dataTable, setDataTable] = useState<IData[]>([]);
   const [loading, setLoading] = useState(true);
   const [machine, setMachine] = useState<IMachineData>({} as IMachineData);
-  const [lastValueConsulted, setLastValueConsulted] = useState<string>();
 
-  const [lastDocPaginate, setLastDocPaginate] = useState<
-    firebase.firestore.QueryDocumentSnapshot
-  >();
-  const [pageNumber, setPageNumber] = useState(1);
-  const [existsMoreRecords, setExistsMoreRecords] = useState(false);
-  const [firstDocPaginate, setFirstDocPaginate] = useState<
-    firebase.firestore.QueryDocumentSnapshot
-  >();
   const [linkFilePdf, setLinkFilePdf] = useState();
 
   const { machine_id } = match.params;
   const formRef = useRef<FormHandles>(null);
 
-  const pageSize = 14;
   const history = useHistory();
   const { translation } = useTranslation();
 
@@ -97,10 +86,6 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
       ? translatedContent.en_US
       : translatedContent.pt_BR;
   }, [translation]);
-
-  const [lastFilterConsulted, setLastFilterConsulted] = useState<string>(
-    translated.filter_value_name,
-  );
 
   const optionsSearchFilterBvspPart = useMemo(() => {
     return [
@@ -126,8 +111,6 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
       setLoading(true);
 
       const valueFormatted = searchValue.toLowerCase().trim();
-      setLastValueConsulted(valueFormatted);
-      setLastFilterConsulted(filterValue);
 
       await firebase
         .firestore()
@@ -136,20 +119,8 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
         .orderBy(filterValue)
         .startAt(valueFormatted)
         .endAt(`${valueFormatted}\uf8ff`)
-        .limit(pageSize)
         .get()
         .then(snapshot => {
-          const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-          setLastDocPaginate(lastVisible);
-
-          const firstVisible = snapshot.docs[0];
-          setFirstDocPaginate(firstVisible);
-
-          // show or unshow next button.
-          snapshot.docs.length === pageSize
-            ? setExistsMoreRecords(true)
-            : setExistsMoreRecords(false);
-
           const dataFormatted = snapshot.docs.map(doc => {
             return {
               id: String(doc.id),
@@ -169,81 +140,6 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
         .finally(() => setLoading(false));
     },
     [machine_id, translation, translated],
-  );
-
-  const handlePagination = useCallback(
-    async (action: 'prev' | 'next') => {
-      setLoading(true);
-
-      if (action === 'next') {
-        setPageNumber(prevState => prevState + 1);
-      } else {
-        setPageNumber(prevState => prevState - 1);
-      }
-
-      const query =
-        action === 'next'
-          ? firebase
-              .firestore()
-              .collection('parts')
-              .orderBy(lastFilterConsulted)
-              .startAt(lastValueConsulted)
-              .endAt(`${lastValueConsulted}\uf8ff`)
-              .startAfter(lastDocPaginate)
-              .limit(pageSize)
-          : firebase
-              .firestore()
-              .collection('parts')
-              .orderBy(lastFilterConsulted)
-              .startAt(lastValueConsulted)
-              .endAt(`${lastValueConsulted}\uf8ff`)
-              .endBefore(firstDocPaginate)
-              .limitToLast(pageSize);
-
-      query
-        .get()
-        .then(snapshot => {
-          const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-          const firstVisible = snapshot.docs[0];
-
-          if (snapshot.docs.length === pageSize) {
-            setLastDocPaginate(lastVisible);
-            setExistsMoreRecords(true);
-          } else {
-            setExistsMoreRecords(false);
-            setPageNumber(prevState => prevState - 1);
-          }
-
-          if (firstVisible) {
-            setFirstDocPaginate(firstVisible);
-          }
-
-          const dataFormatted = snapshot.docs.map(doc => {
-            return {
-              id: String(doc.id),
-              oemcode: String(doc.data().oemcode),
-              bvspcode: String(doc.data().bvspcode),
-              description:
-                translation === 'en-us'
-                  ? String(doc.data().description_english)
-                  : String(doc.data().description),
-              photos: doc.data().photos,
-            };
-          });
-
-          setDataTable(dataFormatted);
-        })
-        .catch(() => MessageAlert(translated.error_load_data, 'error'))
-        .finally(() => setLoading(false));
-    },
-    [
-      firstDocPaginate,
-      lastDocPaginate,
-      lastFilterConsulted,
-      lastValueConsulted,
-      translation,
-      translated,
-    ],
   );
 
   const handleSearchClear = useCallback(() => {
@@ -353,25 +249,16 @@ const BvspPartsStSearch: React.FC<IRouteParams> = ({ match }) => {
       {loading ? (
         <Load />
       ) : (
-        <>
-          <ProductContainer>
-            {dataTable.map(part => (
-              <ProductCard
-                key={part.id}
-                title={part.description}
-                image={part.photos[0].url}
-                link={`/part/${part.id}`}
-              />
-            ))}
-          </ProductContainer>
-
-          <Pagination
-            showPrev={pageNumber > 1}
-            handlePrev={() => handlePagination('prev')}
-            showNext={existsMoreRecords}
-            handleNext={() => handlePagination('next')}
-          />
-        </>
+        <ProductContainer>
+          {dataTable.map(part => (
+            <ProductCard
+              key={part.id}
+              title={part.description}
+              image={part.photos[0].url}
+              link={`/part/${part.id}`}
+            />
+          ))}
+        </ProductContainer>
       )}
 
       <Content />
