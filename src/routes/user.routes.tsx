@@ -32,6 +32,7 @@ import FoodmateOptionDetails from '../pages/UserScreens/BvspPartners/Foodmate/Fo
 import TsubakiAbout from '../pages/UserScreens/BvspPartners/Tsubaki/TsubakiAbout';
 import NeptuneDetails from '../pages/UserScreens/BvspPartners/Tsubaki/NeptuneDetails';
 import SuperInoxDetails from '../pages/UserScreens/BvspPartners/Tsubaki/SuperInoxDetails';
+import LambdaDetails from '../pages/UserScreens/BvspPartners/Tsubaki/LambdaDetails';
 
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
@@ -97,6 +98,7 @@ const UserRoutes: React.FC = () => (
       <Route path="/tsubaki" exact component={TsubakiAbout} />
       <Route path="/neptunedetails" exact component={NeptuneDetails} />
       <Route path="/superinoxdetails" exact component={SuperInoxDetails} />
+      <Route path="/lambdadetails" exact component={LambdaDetails} />
 
       <Route path="/institutional" exact component={Institutional} />
       <Route path="/contact" exact component={Contact} />
