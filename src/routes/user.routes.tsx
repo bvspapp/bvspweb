@@ -29,6 +29,9 @@ import FoodmateAbout from '../pages/UserScreens/BvspPartners/Foodmate/FoodmateAb
 import FoodmateOptions from '../pages/UserScreens/BvspPartners/Foodmate/FoodmateOptions';
 import FoodmateOptionDetails from '../pages/UserScreens/BvspPartners/Foodmate/FoodmateOptionDetails';
 
+import TsubakiAbout from '../pages/UserScreens/BvspPartners/Tsubaki/TsubakiAbout';
+import NeptuneDetails from '../pages/UserScreens/BvspPartners/Tsubaki/NeptuneDetails';
+
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
 
@@ -89,6 +92,9 @@ const UserRoutes: React.FC = () => (
         exact
         component={ChecklistDetails}
       />
+
+      <Route path="/tsubaki" exact component={TsubakiAbout} />
+      <Route path="/neptunedetails" exact component={NeptuneDetails} />
 
       <Route path="/institutional" exact component={Institutional} />
       <Route path="/contact" exact component={Contact} />

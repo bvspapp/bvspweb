@@ -75,7 +75,7 @@ const OurPartnersList: React.FC = () => {
             </PartnerButton>
           )}
 
-          <PartnerButton to="">
+          <PartnerButton to="/tsubaki">
             <PartnerImage src={tsubakilogoImg} />
             <PartnerArrowBox>
               <FaArrowRight />
