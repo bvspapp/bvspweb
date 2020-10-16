@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -70,43 +69,21 @@ export const LineInfo = styled.div`
   margin-bottom: 30px;
 `;
 
-export const OptionsContainer = styled.div`
-  width: 100%;
-
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+export const ItemsContainer = styled.div`
+  margin-top: 20px;
 `;
 
-export const Option = styled(Link)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  text-decoration: none;
-  color: ${props => props.theme.colors.black};
-  font-size: 14px;
-
-  width: 200px;
-  height: 150px;
-  margin: 10px;
-
-  transition: transform 0.3s;
-
+export const Item = styled.div`
   background-color: ${props => props.theme.colors.white};
+  color: ${props => props.theme.colors.black};
+  text-align: justify;
+
   padding: 10px;
+  margin: 10px 0;
+
+  border-left-style: solid;
+  border-left-color: ${props => props.theme.colors.primary};
+  border-left-width: 10px;
+
   border-radius: 5px;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-
-export const OptionImage = styled.img`
-  width: 170px;
-  height: 70px;
-`;
-
-export const OptionLabel = styled.span`
-  text-align: center;
 `;

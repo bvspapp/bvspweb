@@ -62,7 +62,7 @@ const TsubakiAbout: React.FC = () => {
             <OptionImage src={neptuneImg} />
             <OptionLabel>{translated.neptune_menu_label}</OptionLabel>
           </Option>
-          <Option to="">
+          <Option to="/superinoxdetails">
             <OptionImage src={superstainlessImg} />
             <OptionLabel>{translated.stainlesstm_menu_label}</OptionLabel>
           </Option>
