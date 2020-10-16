@@ -35,6 +35,10 @@ export const LogoContainer = styled.div`
   justify-content: center;
 
   padding: 20px 0;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 
 export const Logo = styled.img`
@@ -50,6 +54,10 @@ export const MenuContainer = styled.nav`
 
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 600px) {
+    flex-direction: row;
+  }
 `;
 
 export const Menu = styled(Link)`
@@ -82,6 +90,14 @@ export const Menu = styled(Link)`
   > svg {
     font-size: 24px;
   }
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+
+    > svg {
+      font-size: 16px;
+    }
+  }
 `;
 
 export const Logout = styled.button`
@@ -110,5 +126,13 @@ export const Logout = styled.button`
   > svg {
     font-size: 24px;
     margin-bottom: 3px;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+
+    > svg {
+      font-size: 16px;
+    }
   }
 `;

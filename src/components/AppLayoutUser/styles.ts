@@ -33,6 +33,14 @@ export const Grid = styled.div`
   padding: 20px;
 
   background: ${props => props.theme.colors.secondary};
+
+  @media (max-width: 600px) {
+    grid-template-columns: 100%;
+    grid-template-rows: 70px auto;
+    grid-template-areas:
+      'FM'
+      'CT';
+  }
 `;
 
 export const Content = styled.main`
