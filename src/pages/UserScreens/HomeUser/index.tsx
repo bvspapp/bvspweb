@@ -62,25 +62,25 @@ const HomeUser: React.FC = () => {
             image={ImgManufacturing}
             title={translated.button_our_products_title}
             subtitle={translated.button_our_products_subtitle}
-            inative={false}
           />
           <HighlightMenuCard
             link="/ourpartners"
             image={ImgPartner}
             title={translated.button_our_patterns_title}
             subtitle={translated.button_our_patterns_subtitle}
-            inative={false}
           />
           <HighlightMenuCard
-            link="#"
+            link="/bvsptoolslist"
             image={ImgToolbox}
             title={translated.button_our_tools_title}
             subtitle={translated.button_our_tools_subtitle}
-            inative
           />
         </MenuContainer>
 
-        <MessageText>{translated.message_title}</MessageText>
+        <MessageText>
+          &copy;
+          {translated.message_title}
+        </MessageText>
       </Content>
     </Container>
   );

@@ -12,7 +12,7 @@ const translation = {
     button_our_patterns_subtitle: 'Tecnologia aplicada e serviços',
     button_our_tools_title: 'Nossas ferramentas',
     button_our_tools_subtitle: 'Informações, cálculos e tabelas',
-    message_title: 'Em breve, você também poderá acessar nossas ferramentas',
+    message_title: ' BVSP | Best Value Spare Parts',
   },
   en_US: {
     greet: 'Hello,',
@@ -26,7 +26,7 @@ const translation = {
     button_our_patterns_subtitle: 'Applied technology and services',
     button_our_tools_title: 'Our tools',
     button_our_tools_subtitle: 'Information, calculations and tables',
-    message_title: 'Soon, you will also be able to access our tools',
+    message_title: ' BVSP | Best Value Spare Parts',
   },
 };
 

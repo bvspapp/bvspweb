@@ -24,10 +24,9 @@ const HighlightMenuCard: React.FC<IProps> = ({
   image,
   title,
   subtitle,
-  inative = false,
 }) => {
   return (
-    <Container to={link} style={inative ? { opacity: 0.3 } : { opacity: 1 }}>
+    <Container to={link}>
       <Image imageURL={image} />
 
       <TextContainer>

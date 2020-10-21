@@ -25,9 +25,6 @@ export const Container = styled(Link)`
 
   transition: transform 0.3s;
 
-  .inative {
-    opacity: 0.3;
-  }
 
   &:hover {
     transform: scale(1.1);
