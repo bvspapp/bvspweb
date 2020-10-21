@@ -6,6 +6,7 @@ import HighlightTitle from '../../../../components/HighlightTitle';
 import HighlightMenuCard from '../../../../components/HighlightMenuCard';
 
 import ImgCalc from '../../../../assets/calc.png';
+import ImgTolerance from '../../../../assets/tolerance.png';
 
 import {
   Container,
@@ -58,6 +59,12 @@ const BvspToolsList: React.FC = () => {
             link="/hardnessconverter"
             image={ImgCalc}
             title={translated.menu_hardness_converter_label}
+          />
+
+          <HighlightMenuCard
+            link="/toleranceconverter"
+            image={ImgTolerance}
+            title={translated.menu_fitting_tolerance_label}
           />
         </MenuContainer>
       </Content>

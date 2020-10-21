@@ -32,14 +32,6 @@ import {
   ReferenceLabel,
 } from './styles';
 
-interface IFormData {
-  brinell: string;
-  rockwellC: string;
-  rockwellB: string;
-  vickers: string;
-  resultMM: string;
-}
-
 const HardnessConverter: React.FC = () => {
   const history = useHistory();
   const { translation } = useTranslation();
