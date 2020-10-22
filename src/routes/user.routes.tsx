@@ -37,8 +37,8 @@ import TitanDetails from '../pages/UserScreens/BvspPartners/Tsubaki/TitanDetails
 
 import BvspToolsList from '../pages/UserScreens/BvspTools/BvspToolsList';
 import HardnessConverter from '../pages/UserScreens/BvspTools/HardnessConverter';
-
 import ToleranceConverter from '../pages/UserScreens/BvspTools/ToleranceConverter';
+import UnitConverter from '../pages/UserScreens/BvspTools/UnitConverter';
 
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
@@ -110,6 +110,7 @@ const UserRoutes: React.FC = () => (
       <Route path="/bvsptoolslist" exact component={BvspToolsList} />
       <Route path="/hardnessconverter" exact component={HardnessConverter} />
       <Route path="/toleranceconverter" exact component={ToleranceConverter} />
+      <Route path="/unitconverter" exact component={UnitConverter} />
 
       <Route path="/institutional" exact component={Institutional} />
       <Route path="/contact" exact component={Contact} />

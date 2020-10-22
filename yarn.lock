@@ -11594,6 +11594,11 @@ unique-slug@^2.0.0:
   dependencies:
     imurmurhash "^0.1.4"
 
+units-converter@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/units-converter/-/units-converter-1.0.3.tgz#c90dfba6582a21981b4cd55a4b30ac58d0b4997a"
+  integrity sha512-tcAwnZxH8NUx0T/eltQ2CUZ21jJxLRHF7dkPoYDFdX+W+VHxbvb/aH5xXBa0Cdp1tpyFI6rju+Jnpj9seuudqg==
+
 universalify@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"

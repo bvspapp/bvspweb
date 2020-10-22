@@ -8,6 +8,7 @@ const translation = {
     menu_steel_classification_label: 'Aços inoxidáveis e classificações',
     menu_fitting_tolerance_label: 'Tolerância de encaixes',
     menu_polymers_label: 'Polímeros',
+    menu_unitconverter_label: 'Conversor de unidades',
     menu_threaded_hole_calculator: 'Calculadora \n Rosca x Furo',
   },
   en_US: {
@@ -19,6 +20,7 @@ const translation = {
     menu_steel_classification_label: 'Aços inoxidáveis e classificações',
     menu_fitting_tolerance_label: 'Tolerância de encaixes',
     menu_polymers_label: 'Polímeros',
+    menu_unitconverter_label: 'Unit converter',
     menu_threaded_hole_calculator: 'Calculadora \n Rosca x Furo',
   },
 };

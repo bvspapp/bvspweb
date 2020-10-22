@@ -1,0 +1,36 @@
+const translations = {
+  pt_BR: {
+    title: 'Escolha o Conversor',
+    subtitle: 'informe o valor e clique no botão converter',
+    reverse_button_text: 'Inverter',
+    convert_result_label: 'Resultado',
+    button_select_cancel: 'Cancelar',
+    button_select_units_title: 'Unidades',
+    button_select_converters_title: 'Conversores',
+    button_conveter: 'Conveter',
+    converter_option_power: 'Potência',
+    converter_option_force: 'Força',
+    converter_option_pressure: 'Pressão',
+    converter_option_temperature: 'Temperatura',
+    converter_option_length: 'Comprimento',
+    converter_value_label: 'Digite o valor para converter',
+  },
+  en_US: {
+    title: 'Choose the Converter',
+    subtitle: 'enter the value and click the convert button',
+    reverse_button_text: 'Reverse',
+    convert_result_label: 'Result',
+    button_select_cancel: 'Cancel',
+    button_select_units_title: 'Units',
+    button_select_converters_title: 'Converters',
+    button_conveter: 'Convert',
+    converter_option_power: 'Power',
+    converter_option_force: 'Force',
+    converter_option_pressure: 'Pressure',
+    converter_option_temperature: 'Temperature',
+    converter_option_length: 'Length',
+    converter_value_label: 'Enter the amount to convert',
+  },
+};
+
+export default translations;
