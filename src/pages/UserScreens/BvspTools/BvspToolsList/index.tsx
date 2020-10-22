@@ -9,6 +9,7 @@ import ImgCalc from '../../../../assets/calc.png';
 import ImgTolerance from '../../../../assets/tolerance.png';
 import ImgPaper from '../../../../assets/paper.png';
 import ImgTable from '../../../../assets/table.png';
+import ImgScient from '../../../../assets/scient.png';
 
 import {
   Container,
@@ -79,6 +80,12 @@ const BvspToolsList: React.FC = () => {
             link="/threadedholecalculator"
             image={ImgTable}
             title={translated.menu_threaded_hole_calculator}
+          />
+
+          <HighlightMenuCard
+            link="/stainlesssteels"
+            image={ImgScient}
+            title={translated.menu_steel_classification_label}
           />
         </MenuContainer>
       </Content>

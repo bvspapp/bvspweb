@@ -40,6 +40,9 @@ import HardnessConverter from '../pages/UserScreens/BvspTools/HardnessConverter'
 import ToleranceConverter from '../pages/UserScreens/BvspTools/ToleranceConverter';
 import UnitConverter from '../pages/UserScreens/BvspTools/UnitConverter';
 import ThreadedHoleCalculator from '../pages/UserScreens/BvspTools/ThreadedHoleCalculator';
+import StainlessSteels from '../pages/UserScreens/Education/StainlessSteels';
+
+import SteelMicrostructures from '../pages/UserScreens/Education/SteelMicrostructures';
 
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
@@ -116,6 +119,13 @@ const UserRoutes: React.FC = () => (
         path="/threadedholecalculator"
         exact
         component={ThreadedHoleCalculator}
+      />
+
+      <Route path="/stainlesssteels" exact component={StainlessSteels} />
+      <Route
+        path="/steelmicrostructures"
+        exact
+        component={SteelMicrostructures}
       />
 
       <Route path="/institutional" exact component={Institutional} />
