@@ -8,6 +8,7 @@ import HighlightMenuCard from '../../../../components/HighlightMenuCard';
 import ImgCalc from '../../../../assets/calc.png';
 import ImgTolerance from '../../../../assets/tolerance.png';
 import ImgPaper from '../../../../assets/paper.png';
+import ImgTable from '../../../../assets/table.png';
 
 import {
   Container,
@@ -72,6 +73,12 @@ const BvspToolsList: React.FC = () => {
             link="/unitconverter"
             image={ImgPaper}
             title={translated.menu_unitconverter_label}
+          />
+
+          <HighlightMenuCard
+            link="/threadedholecalculator"
+            image={ImgTable}
+            title={translated.menu_threaded_hole_calculator}
           />
         </MenuContainer>
       </Content>

@@ -143,7 +143,7 @@ const UnitConverter: React.FC = () => {
       <Content>
         <InputRows>
           <InputGroupUnits>
-            <InputLabel>Unidade</InputLabel>
+            <InputLabel>{translated.label_unit}</InputLabel>
             <OptionSelect onChange={e => setSelectedConverter(e.target.value)}>
               {converterOptions.map(option => (
                 <option key={option.key} value={option.key}>
@@ -154,7 +154,7 @@ const UnitConverter: React.FC = () => {
           </InputGroupUnits>
 
           <InputGroupUnits>
-            <InputLabel>De</InputLabel>
+            <InputLabel>{translated.label_from}</InputLabel>
             <OptionSelect
               onChange={e => setUnitAt(e.target.value)}
               value={unitAt}
@@ -168,7 +168,7 @@ const UnitConverter: React.FC = () => {
           </InputGroupUnits>
 
           <InputGroupUnits>
-            <InputLabel>Para</InputLabel>
+            <InputLabel>{translated.label_to}</InputLabel>
             <OptionSelect
               onChange={e => setUnitFrom(e.target.value)}
               value={unitFrom}

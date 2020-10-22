@@ -9,7 +9,7 @@ const translation = {
     menu_fitting_tolerance_label: 'Tolerância de encaixes',
     menu_polymers_label: 'Polímeros',
     menu_unitconverter_label: 'Conversor de unidades',
-    menu_threaded_hole_calculator: 'Calculadora \n Rosca x Furo',
+    menu_threaded_hole_calculator: 'Calculadora Rosca x Furo',
   },
   en_US: {
     greet: 'Hello,',
@@ -21,7 +21,7 @@ const translation = {
     menu_fitting_tolerance_label: 'Tolerância de encaixes',
     menu_polymers_label: 'Polímeros',
     menu_unitconverter_label: 'Unit converter',
-    menu_threaded_hole_calculator: 'Calculadora \n Rosca x Furo',
+    menu_threaded_hole_calculator: 'Calculadora Rosca x Furo',
   },
 };
 

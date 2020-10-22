@@ -14,6 +14,9 @@ const translations = {
     converter_option_temperature: 'Temperatura',
     converter_option_length: 'Comprimento',
     converter_value_label: 'Digite o valor para converter',
+    label_unit: 'Unidade',
+    label_from: 'De',
+    label_to: 'Para',
   },
   en_US: {
     title: 'Choose the Converter',
@@ -30,6 +33,9 @@ const translations = {
     converter_option_temperature: 'Temperature',
     converter_option_length: 'Length',
     converter_value_label: 'Enter the amount to convert',
+    label_unit: 'Unity',
+    label_from: 'From',
+    label_to: 'To',
   },
 };
 
