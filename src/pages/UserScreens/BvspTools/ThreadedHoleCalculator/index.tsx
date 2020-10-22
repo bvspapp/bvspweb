@@ -7,19 +7,34 @@ import HighlightTitle from '../../../../components/HighlightTitle';
 import translatedContent from './translatedcontent';
 import { useTranslation } from '../../../../hooks/translation';
 
+import npsNpsf from './ReferenceTableColumns/npsNpsf';
+import nptNptf from './ReferenceTableColumns/nptNptf';
+import thickMetricThread from './ReferenceTableColumns/thickMetricThread';
+import thickUnifiedThread from './ReferenceTableColumns/thickUnifiedThread';
+import thickWhitworthThread from './ReferenceTableColumns/thickWhitworthThread';
+import thinMetricThread from './ReferenceTableColumns/thinMetricThread';
+import thinUnifiedThread from './ReferenceTableColumns/thinUnifiedThread';
+import whitWorthThreadPipe from './ReferenceTableColumns/whitworthThreadPipe';
+
 import {
   Container,
   Header,
   Content,
   BackButton,
   OptionSelect,
-  InputRows,
-  InputGroupUnits,
   InputLabel,
+  TableHeaderContainer,
+  HeaderColumn,
+  TableHeaderTitle,
+  TableHeaderLine,
+  TableContent,
+  TableLineContainer,
+  DataLine,
+  TableLineCell,
 } from './styles';
 
 const ThreadedHoleCalculator: React.FC = () => {
-  const [selected, setSelected] = useState('thick_metric_thread');
+  const [dataSelect, setDataSelect] = useState(thickMetricThread);
 
   const history = useHistory();
   const { translation } = useTranslation();
@@ -29,6 +44,26 @@ const ThreadedHoleCalculator: React.FC = () => {
       ? translatedContent.en_US
       : translatedContent.pt_BR;
   }, [translation]);
+
+  const handleSelected = useCallback((picked: string) => {
+    if (picked === 'thin_metric_thread') {
+      setDataSelect(thinMetricThread);
+    } else if (picked === 'thick_unified_thread') {
+      setDataSelect(thickUnifiedThread);
+    } else if (picked === 'thin_unified_thread') {
+      setDataSelect(thinUnifiedThread);
+    } else if (picked === 'thick_whitworth_thread') {
+      setDataSelect(thickWhitworthThread);
+    } else if (picked === 'whitworth_thread_for_Pipe') {
+      setDataSelect(whitWorthThreadPipe);
+    } else if (picked === 'npt_nptf') {
+      setDataSelect(nptNptf);
+    } else if (picked === 'nps_npsf') {
+      setDataSelect(npsNpsf);
+    } else {
+      setDataSelect(thickMetricThread);
+    }
+  }, []);
 
   const threadType = useMemo(() => {
     return [
@@ -82,18 +117,43 @@ const ThreadedHoleCalculator: React.FC = () => {
       <HighlightTitle title={translated.title} subtitle={translated.subtitle} />
 
       <Content>
-        <InputRows>
-          <InputGroupUnits>
-            <InputLabel>Unidade</InputLabel>
-            <OptionSelect onChange={e => setSelected(e.target.value)}>
-              {threadType.map(option => (
-                <option key={option.key} value={option.key}>
-                  {option.label}
-                </option>
+        <InputLabel>{translated.select_title}</InputLabel>
+        <OptionSelect onChange={e => handleSelected(e.target.value)}>
+          {threadType.map(option => (
+            <option key={option.key} value={option.key}>
+              {option.label}
+            </option>
+          ))}
+        </OptionSelect>
+
+        <TableHeaderContainer>
+          {dataSelect.header.map((item, index) => (
+            <HeaderColumn
+              key={String(index)}
+              style={{ width: `${100 / dataSelect.header.length}%` }}
+            >
+              <TableHeaderTitle>{item}</TableHeaderTitle>
+              {index < dataSelect.header.length - 1 && <TableHeaderLine />}
+            </HeaderColumn>
+          ))}
+        </TableHeaderContainer>
+
+        <TableContent>
+          {dataSelect.data.map((item, index) => (
+            <TableLineContainer key={String(index)}>
+              {item.map((subItem, subIndex) => (
+                <DataLine
+                  style={{ width: `${100 / dataSelect.header.length}%` }}
+                >
+                  <TableLineCell>{subItem}</TableLineCell>
+                  {subIndex < dataSelect.header.length - 1 && (
+                    <TableHeaderLine />
+                  )}
+                </DataLine>
               ))}
-            </OptionSelect>
-          </InputGroupUnits>
-        </InputRows>
+            </TableLineContainer>
+          ))}
+        </TableContent>
       </Content>
     </Container>
   );
