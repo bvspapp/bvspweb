@@ -68,9 +68,15 @@ export const Content = styled.main`
 `;
 
 export const MenuContainer = styled.nav`
-  margin-top: 40px;
+  width: 100%;
 
+  margin-top: 40px;
+`;
+
+export const Row = styled.nav`
+  width: 100%;
   display: flex;
+  justify-content: center;
   justify-content: center;
   flex-wrap: wrap;
 `;

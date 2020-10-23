@@ -43,6 +43,8 @@ import ThreadedHoleCalculator from '../pages/UserScreens/BvspTools/ThreadedHoleC
 import StainlessSteels from '../pages/UserScreens/Education/StainlessSteels';
 
 import SteelMicrostructures from '../pages/UserScreens/Education/SteelMicrostructures';
+import Polymers from '../pages/UserScreens/Education/Polymers';
+import PolymerDetails from '../pages/UserScreens/Education/PolymerDetails';
 
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
@@ -127,6 +129,8 @@ const UserRoutes: React.FC = () => (
         exact
         component={SteelMicrostructures}
       />
+      <Route path="/polymers" exact component={Polymers} />
+      <Route path="/polymerdetails/:type" exact component={PolymerDetails} />
 
       <Route path="/institutional" exact component={Institutional} />
       <Route path="/contact" exact component={Contact} />

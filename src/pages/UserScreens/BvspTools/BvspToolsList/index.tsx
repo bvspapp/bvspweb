@@ -10,6 +10,7 @@ import ImgTolerance from '../../../../assets/tolerance.png';
 import ImgPaper from '../../../../assets/paper.png';
 import ImgTable from '../../../../assets/table.png';
 import ImgScient from '../../../../assets/scient.png';
+import ImgStudent from '../../../../assets/student.png';
 
 import {
   Container,
@@ -22,6 +23,7 @@ import {
   Message,
   Content,
   MenuContainer,
+  Row,
 } from './styles';
 
 import translatedContent from './translatedcontent';
@@ -58,35 +60,45 @@ const BvspToolsList: React.FC = () => {
         />
 
         <MenuContainer>
-          <HighlightMenuCard
-            link="/hardnessconverter"
-            image={ImgCalc}
-            title={translated.menu_hardness_converter_label}
-          />
+          <Row>
+            <HighlightMenuCard
+              link="/hardnessconverter"
+              image={ImgCalc}
+              title={translated.menu_hardness_converter_label}
+            />
 
-          <HighlightMenuCard
-            link="/toleranceconverter"
-            image={ImgTolerance}
-            title={translated.menu_fitting_tolerance_label}
-          />
+            <HighlightMenuCard
+              link="/toleranceconverter"
+              image={ImgTolerance}
+              title={translated.menu_fitting_tolerance_label}
+            />
 
-          <HighlightMenuCard
-            link="/unitconverter"
-            image={ImgPaper}
-            title={translated.menu_unitconverter_label}
-          />
+            <HighlightMenuCard
+              link="/unitconverter"
+              image={ImgPaper}
+              title={translated.menu_unitconverter_label}
+            />
+          </Row>
 
-          <HighlightMenuCard
-            link="/threadedholecalculator"
-            image={ImgTable}
-            title={translated.menu_threaded_hole_calculator}
-          />
+          <Row>
+            <HighlightMenuCard
+              link="/threadedholecalculator"
+              image={ImgTable}
+              title={translated.menu_threaded_hole_calculator}
+            />
 
-          <HighlightMenuCard
-            link="/stainlesssteels"
-            image={ImgScient}
-            title={translated.menu_steel_classification_label}
-          />
+            <HighlightMenuCard
+              link="/stainlesssteels"
+              image={ImgScient}
+              title={translated.menu_steel_classification_label}
+            />
+
+            <HighlightMenuCard
+              link="/polymers"
+              image={ImgStudent}
+              title={translated.menu_polymers_label}
+            />
+          </Row>
         </MenuContainer>
       </Content>
     </Container>
