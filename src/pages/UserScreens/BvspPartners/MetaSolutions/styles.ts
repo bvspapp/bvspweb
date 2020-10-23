@@ -26,6 +26,7 @@ export const Content = styled.main`
 
 export const LogoImg = styled.img`
   width: 150px;
+  height: 60px;
 `;
 
 export const ButtonBack = styled.button`
