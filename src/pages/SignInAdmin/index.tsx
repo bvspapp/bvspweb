@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { MdEmail, MdLock } from 'react-icons/md';
@@ -20,8 +19,6 @@ interface ISignFormData {
 
 const SignInAdmin: React.FC = () => {
   const [loading, setLoading] = useState(false);
-
-  const history = useHistory();
 
   const { signIn } = useAuth();
 
@@ -44,8 +41,6 @@ const SignInAdmin: React.FC = () => {
           password: data.password,
           type: 'admin',
         });
-
-        history.push('/');
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           MessageAlert(error.errors[0], 'info');
@@ -54,7 +49,7 @@ const SignInAdmin: React.FC = () => {
         setLoading(false);
       }
     },
-    [signIn, history],
+    [signIn],
   );
 
   return (

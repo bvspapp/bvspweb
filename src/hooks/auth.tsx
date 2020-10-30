@@ -63,6 +63,7 @@ const AuthProvider: React.FC = ({ children }) => {
             localStorage.setItem('@bvspparts:user', JSON.stringify(user));
 
             setData({ user });
+            window.location.href = '/';
           })
           .catch(() => MessageAlert('Usuário e/ou senha inválidos!', 'info'));
       }
