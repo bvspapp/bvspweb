@@ -83,10 +83,3 @@ export const ServiceContainer = styled.div`
 `;
 
 export const HeaderLeft = styled.div``;
-
-export const Subtitle = styled.p`
-  font-size: 14px;
-  font-weight: bold;
-  margin-top: 20px;
-  color: ${props => props.theme.colors.tertiary};
-`;

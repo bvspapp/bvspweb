@@ -123,7 +123,7 @@ const UnitConverter: React.FC = () => {
       result = length(valueAt).from(unitAt).to(unitFrom).value;
     }
 
-    setConvertResult(result.toFixed(3));
+    setConvertResult(result.toFixed(2));
   }, [valueAt, unitAt, unitFrom, selectedConverter]);
 
   return (
@@ -195,8 +195,7 @@ const UnitConverter: React.FC = () => {
             />
           </InputGroupCalc>
           <CalcButton type="button" onClick={handleConverter}>
-            <MdSwapHoriz />
-            {translated.convert_result_label}
+            {translated.button_conveter}
           </CalcButton>
         </InputRows>
 

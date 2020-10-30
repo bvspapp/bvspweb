@@ -35,7 +35,6 @@ import {
   ServiceContainer,
   SelectFilter,
   HeaderLeft,
-  Subtitle,
 } from './styles';
 
 interface IData {
@@ -201,7 +200,6 @@ const DepartmentsSelect: React.FC<IRouteParams> = ({ match }) => {
       <Header>
         <HeaderLeft>
           <HighlightTitle title={translated.title} lineAlign="left" />
-          <Subtitle>{translated.subtitle}</Subtitle>
         </HeaderLeft>
         <BackButton
           type="button"
@@ -212,29 +210,31 @@ const DepartmentsSelect: React.FC<IRouteParams> = ({ match }) => {
         </BackButton>
       </Header>
 
-      <SearchContainer ref={formRef} onSubmit={handleSearchPartByCode}>
-        <SearchInput
-          type="text"
-          name="searchValue"
-          placeholder={translated.input_search_placeholder}
-        />
-        <SelectFilter
-          name="filterValue"
-          icon={FiFilter}
-          options={optionsSearchFilterBvspPart}
-        />
+      {to !== 'checklistdetails' && (
+        <SearchContainer ref={formRef} onSubmit={handleSearchPartByCode}>
+          <SearchInput
+            type="text"
+            name="searchValue"
+            placeholder={translated.input_search_placeholder}
+          />
+          <SelectFilter
+            name="filterValue"
+            icon={FiFilter}
+            options={optionsSearchFilterBvspPart}
+          />
 
-        <SearchButton type="submit" color={light.colors.success}>
-          <FiSearch />
-        </SearchButton>
-        <ClearButton
-          type="button"
-          color={light.colors.tertiary}
-          onClick={handleSearchClear}
-        >
-          <FiX />
-        </ClearButton>
-      </SearchContainer>
+          <SearchButton type="submit" color={light.colors.success}>
+            <FiSearch />
+          </SearchButton>
+          <ClearButton
+            type="button"
+            color={light.colors.tertiary}
+            onClick={handleSearchClear}
+          >
+            <FiX />
+          </ClearButton>
+        </SearchContainer>
+      )}
 
       <SubTitleDivider title={translated.label_choise_department} />
 
