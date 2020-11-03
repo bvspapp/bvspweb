@@ -35,6 +35,7 @@ import {
   SearchInput,
   SearchButton,
   ClearButton,
+  SearchControllers,
 } from './styles';
 
 interface IData {
@@ -183,16 +184,18 @@ const DepartmentList: React.FC = () => {
           name="searchValue"
           placeholder="Pesquisar..."
         />
-        <SearchButton type="submit" color={light.colors.success}>
-          <FiSearch />
-        </SearchButton>
-        <ClearButton
-          type="button"
-          color={light.colors.tertiary}
-          onClick={handleSearchClear}
-        >
-          <FiX />
-        </ClearButton>
+        <SearchControllers>
+          <SearchButton type="submit" color={light.colors.success}>
+            <FiSearch />
+          </SearchButton>
+          <ClearButton
+            type="button"
+            color={light.colors.tertiary}
+            onClick={handleSearchClear}
+          >
+            <FiX />
+          </ClearButton>
+        </SearchControllers>
       </SearchContainer>
 
       {loading ? (

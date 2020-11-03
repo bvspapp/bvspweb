@@ -42,6 +42,12 @@ export const SearchInput = styled(TextInput).attrs({
   },
 })``;
 
+export const SearchControllers = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 19px;
+`;
+
 export const Select = styled(SelectInput)``;
 
 export const SearchButton = styled(Button)`

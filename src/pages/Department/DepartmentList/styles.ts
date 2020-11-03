@@ -50,3 +50,9 @@ export const ClearButton = styled(Button)`
   height: 40px;
   margin-left: 5px;
 `;
+
+export const SearchControllers = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 19px;
+`;

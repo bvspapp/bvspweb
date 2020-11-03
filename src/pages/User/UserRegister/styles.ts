@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Form as Unform } from '@unform/web';
+import SelectInput from '../../../components/Form/SelectInput';
 
 export const Container = styled.div``;
 
@@ -33,3 +34,5 @@ export const FormContent = styled.fieldset`
   border: none;
   border-radius: 7px;
 `;
+
+export const Select = styled(SelectInput)``;

@@ -11,6 +11,8 @@ import { MdCheck, MdArrowBack } from 'react-icons/md';
 import * as Yup from 'yup';
 
 import firebase from '../../../config/firebase';
+import api from '../../../services/api';
+import countries from '../../../utils/countries';
 
 import MessageAlert from '../../../utils/MessageAlert';
 import MessageConfirmation from '../../../utils/MessageConfirmation';
@@ -27,6 +29,7 @@ import {
   FormContent,
   Title,
   ButtonsContainer,
+  Select,
 } from './styles';
 
 interface IFormData {
@@ -34,16 +37,9 @@ interface IFormData {
   email: string;
   company: string;
   city: string;
+  country: string;
   accesscode: string;
-}
-
-interface IUserData {
-  name: string;
-  name_insensitive: string;
-  city: string;
-  company: string;
-  email: string;
-  accesscode: string;
+  profile_type: string;
 }
 
 interface IRouteParams {
@@ -62,6 +58,23 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
 
   const history = useHistory();
   const { id: userId, action: formAction } = match.params;
+
+  const optionsUserTypeProfile = useMemo(() => {
+    return [
+      {
+        value: 'cliente',
+        label: 'Cliente',
+      },
+      {
+        value: 'engenharia',
+        label: 'Engenharia',
+      },
+      {
+        value: 'atendimento',
+        label: 'Atendimento',
+      },
+    ];
+  }, []);
 
   const customFormByAction = useMemo(() => {
     switch (formAction) {
@@ -92,71 +105,6 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
     }
   }, [formAction]);
 
-  const handleUserNew = useCallback(
-    async (data: IFormData) => {
-      setLoading(true);
-
-      const { name, city, company, email, accesscode }: IFormData = data;
-
-      const user: IUserData = {
-        name: name.trim(),
-        name_insensitive: name.toLowerCase().trim(),
-        city: city.toLowerCase().trim(),
-        company: company.toLowerCase().trim(),
-        email: email.toLowerCase().trim(),
-        accesscode: accesscode.toLowerCase().trim(),
-      };
-
-      await firebase
-        .firestore()
-        .collection('users')
-        .add(user)
-        .then(() => {
-          MessageAlert('Cadastrado com sucesso!', 'success').then(() =>
-            history.push('/users'),
-          );
-        })
-        .catch(() => {
-          MessageAlert('Não foi possível cadastrar!', 'error');
-          setLoading(false);
-        });
-    },
-    [history],
-  );
-
-  const handleUserUpdate = useCallback(
-    async (id: string, data: IFormData) => {
-      setLoading(true);
-
-      const { name, city, company, email, accesscode }: IFormData = data;
-
-      const user: IUserData = {
-        name: name.trim(),
-        name_insensitive: name.toLowerCase().trim(),
-        city: city.toLowerCase().trim(),
-        company: company.toLowerCase().trim(),
-        email: email.toLowerCase().trim(),
-        accesscode: accesscode.toLowerCase().trim(),
-      };
-
-      await firebase
-        .firestore()
-        .collection('users')
-        .doc(id)
-        .update(user)
-        .then(() => {
-          MessageAlert('Atualizado com sucesso!', 'success').then(() =>
-            history.push('/users'),
-          );
-        })
-        .catch(() => {
-          MessageAlert('Não foi possível atualizado!', 'error');
-          setLoading(false);
-        });
-    },
-    [history],
-  );
-
   const handleUserDelete = useCallback(
     async (id: string) => {
       const { isConfirmed } = await MessageConfirmation(
@@ -168,11 +116,8 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
       if (isConfirmed) {
         setLoading(true);
 
-        await firebase
-          .firestore()
-          .collection('users')
-          .doc(id)
-          .delete()
+        await api
+          .delete(`users/${id}`)
           .then(() => {
             MessageAlert('Removido com sucesso!', 'success').then(() =>
               history.push('/users'),
@@ -193,8 +138,6 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
 
   const handleFormSubmitData = useCallback(
     async (data: IFormData) => {
-      const { email } = data;
-
       try {
         if (formAction === 'delete') {
           handleUserDelete(userId);
@@ -207,47 +150,66 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
 
             company: Yup.string().required('Empresa é obrigatório.'),
             city: Yup.string().required('Cidade é obrigatório.'),
+            country: Yup.string().required('País é obrigatório.'),
             accesscode: Yup.string().required('Senha é obrigatório.'),
+            profile_type: Yup.string().required(
+              'Perfil do usuário é obrigatório.',
+            ),
           });
 
           await schema.validate(data);
 
           if (formAction === 'new') {
-            const userExists = await firebase
-              .firestore()
-              .collection('users')
-              .where('email', '==', email.toLowerCase().trim())
-              .get()
-              .then(async snapshot => !snapshot.empty);
+            api
+              .post('users', {
+                name: data.name,
+                email: data.email,
+                city: data.city,
+                country: data.country,
+                company: data.company,
+                password: data.accesscode,
+                profile_type: data.profile_type,
+              })
+              .then(() => {
+                MessageAlert('Cadastrado com sucesso!', 'success').then(() =>
+                  history.push('/users'),
+                );
+              })
+              .catch(error => {
+                if (error.response) {
+                  const msg = error.response.data.message;
+                  if (msg === 'Email address already used')
+                    MessageAlert('Este e-mail já está cadastrado.', 'info');
+                } else MessageAlert('Não foi possível cadastrar!', 'error');
 
-            if (userExists) {
-              setLoading(false);
-              MessageAlert(
-                'Esse e-mail já está em uso. Escolha outro!',
-                'info',
-              );
-            } else {
-              handleUserNew(data);
-            }
+                setLoading(false);
+              });
           } else if (formAction === 'edit') {
-            const userExists = await firebase
-              .firestore()
-              .collection('users')
-              .where('email', '==', email.toLowerCase().trim())
-              .get()
-              .then(async snapshot =>
-                snapshot.docs.filter(doc => doc.id !== match.params.id),
-              );
+            api
+              .put('users', {
+                id: userId,
+                name: data.name,
+                email: data.email,
+                city: data.city,
+                country: data.country,
+                company: data.company,
+                password: data.accesscode,
+                profile_type: data.profile_type,
+              })
+              .then(() => {
+                MessageAlert('Cadastrado com sucesso!', 'success').then(() =>
+                  history.push('/users'),
+                );
+              })
+              .catch(error => {
+                if (error.response) {
+                  const msg = error.response.data.message;
+                  if (msg === 'Email address already used')
+                    MessageAlert('Este e-mail já está cadastrado.', 'info');
+                } else MessageAlert('Não foi possível cadastrar!', 'error');
 
-            if (userExists.length > 0) {
-              setLoading(false);
-              MessageAlert(
-                'Esse e-mail já está em uso. Escolha outro!',
-                'info',
-              );
-            } else {
-              handleUserUpdate(userId, data);
-            }
+                setLoading(false);
+              });
           } else {
             MessageAlert('Operação Inválida!', 'info');
           }
@@ -258,14 +220,7 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
         }
       }
     },
-    [
-      userId,
-      formAction,
-      handleUserDelete,
-      handleUserNew,
-      handleUserUpdate,
-      match.params.id,
-    ],
+    [userId, formAction, handleUserDelete, history],
   );
 
   const handleFetchUserData = useCallback(async () => {
@@ -279,16 +234,20 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
           name,
           company,
           city,
+          country,
           email,
           accesscode,
+          profile_type,
         } = snapshot.data() as IFormData;
 
         setInitialDataForm({
           name,
           company,
           city,
+          country,
           email,
           accesscode,
+          profile_type,
         });
       })
       .catch(() => MessageAlert('Não foi possível carregar os dados!', 'error'))
@@ -337,12 +296,23 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
           <TextInput type="text" name="name" label="Nome" required />
           <TextInput type="text" name="company" label="Empresa" required />
           <TextInput type="text" name="city" label="Cidade" required />
+          <Select
+            label="País"
+            name="country"
+            options={countries}
+            defaultValue="BRA"
+          />
           <TextInput type="email" name="email" label="E-mail" required />
           <TextInput
             type="text"
             name="accesscode"
             label="Código de Acesso"
             required
+          />
+          <Select
+            label="Perfil do Usuário"
+            name="profile_type"
+            options={optionsUserTypeProfile}
           />
         </FormContent>
       </Form>

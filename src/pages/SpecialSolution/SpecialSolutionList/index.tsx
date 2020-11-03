@@ -30,6 +30,7 @@ import {
   SearchInput,
   SearchButton,
   ClearButton,
+  SearchControllers,
 } from './styles';
 
 interface IData {
@@ -168,21 +169,23 @@ const SpecialSolutionList: React.FC = () => {
           name="searchValue"
           placeholder="Pesquisar..."
         />
-        <Select
-          name="filterValue"
-          icon={FiFilter}
-          options={optionsSearchFilterSpecialSolution}
-        />
-        <SearchButton type="submit" color={light.colors.success}>
-          <FiSearch />
-        </SearchButton>
-        <ClearButton
-          type="button"
-          color={light.colors.tertiary}
-          onClick={handleSearchClear}
-        >
-          <FiX />
-        </ClearButton>
+        <SearchControllers>
+          <Select
+            name="filterValue"
+            icon={FiFilter}
+            options={optionsSearchFilterSpecialSolution}
+          />
+          <SearchButton type="submit" color={light.colors.success}>
+            <FiSearch />
+          </SearchButton>
+          <ClearButton
+            type="button"
+            color={light.colors.tertiary}
+            onClick={handleSearchClear}
+          >
+            <FiX />
+          </ClearButton>
+        </SearchControllers>
       </SearchContainer>
 
       {loading ? (

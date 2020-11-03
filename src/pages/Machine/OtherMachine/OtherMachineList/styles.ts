@@ -67,3 +67,9 @@ export const PaginationButtons = styled.div`
 export const PaginationButton = styled(Button)`
   height: 27px;
 `;
+
+export const SearchControllers = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 19px;
+`;

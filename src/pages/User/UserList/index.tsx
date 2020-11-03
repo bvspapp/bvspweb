@@ -39,6 +39,7 @@ import {
   Select,
   PaginationButtons,
   PaginationButton,
+  SearchControllers,
 } from './styles';
 
 interface IData {
@@ -283,21 +284,23 @@ const UserList: React.FC = () => {
           name="searchValue"
           placeholder="Pesquisar..."
         />
-        <Select
-          name="filterValue"
-          icon={FiFilter}
-          options={optionsSearchFilterUser}
-        />
-        <SearchButton type="submit" color={light.colors.success}>
-          <FiSearch />
-        </SearchButton>
-        <ClearButton
-          type="button"
-          color={light.colors.tertiary}
-          onClick={handleSearchClear}
-        >
-          <FiX />
-        </ClearButton>
+        <SearchControllers>
+          <Select
+            name="filterValue"
+            icon={FiFilter}
+            options={optionsSearchFilterUser}
+          />
+          <SearchButton type="submit" color={light.colors.success}>
+            <FiSearch />
+          </SearchButton>
+          <ClearButton
+            type="button"
+            color={light.colors.tertiary}
+            onClick={handleSearchClear}
+          >
+            <FiX />
+          </ClearButton>
+        </SearchControllers>
       </SearchContainer>
 
       {loading ? (
