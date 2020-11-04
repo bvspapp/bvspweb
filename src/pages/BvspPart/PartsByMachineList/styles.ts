@@ -67,3 +67,9 @@ export const SelectButton = styled.button`
 `;
 
 export const Table = styled(TableData)``;
+
+export const SearchControllers = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 19px;
+`;

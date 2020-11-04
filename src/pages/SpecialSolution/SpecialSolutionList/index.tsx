@@ -11,6 +11,8 @@ import { FormHandles } from '@unform/core';
 import { FiEdit, FiSearch, FiX, FiFilter } from 'react-icons/fi';
 import { MdRemoveRedEye, MdDelete, MdArrowBack, MdAdd } from 'react-icons/md';
 
+import { useAuth } from '../../../hooks/auth';
+
 import firebase from '../../../config/firebase';
 import light from '../../../styles/themes/light';
 
@@ -48,7 +50,7 @@ const SpecialSolutionList: React.FC = () => {
   const [dataTable, setDataTable] = useState<IData[]>([]);
   const [loading, setLoading] = useState(true);
   const formRef = useRef<FormHandles>(null);
-
+  const { user } = useAuth();
   const history = useHistory();
 
   const dataTableColumns = useMemo(() => {
@@ -65,12 +67,14 @@ const SpecialSolutionList: React.FC = () => {
   }, []);
 
   const controllers = useMemo(() => {
-    return [
-      { route: 'special-solution', action: 'view', icon: MdRemoveRedEye },
-      { route: 'special-solution', action: 'delete', icon: MdDelete },
-      { route: 'special-solution', action: 'edit', icon: FiEdit },
-    ];
-  }, []);
+    return user.profile_type === 'admin'
+      ? [
+          { route: 'special-solution', action: 'view', icon: MdRemoveRedEye },
+          { route: 'special-solution', action: 'delete', icon: MdDelete },
+          { route: 'special-solution', action: 'edit', icon: FiEdit },
+        ]
+      : [{ route: 'special-solution', action: 'view', icon: MdRemoveRedEye }];
+  }, [user.profile_type]);
 
   const optionsSearchFilterSpecialSolution = useMemo(() => {
     return [

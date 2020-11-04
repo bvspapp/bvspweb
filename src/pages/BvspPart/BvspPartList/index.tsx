@@ -21,6 +21,8 @@ import { MdRemoveRedEye, MdDelete, MdArrowBack, MdAdd } from 'react-icons/md';
 import firebase from '../../../config/firebase';
 import light from '../../../styles/themes/light';
 
+import { useAuth } from '../../../hooks/auth';
+
 import TableData from '../../../components/TableData';
 import Button from '../../../components/Form/Button';
 import Select from '../../../components/Form/SelectInput';
@@ -70,7 +72,7 @@ const BvspPartList: React.FC = () => {
   >();
 
   const formRef = useRef<FormHandles>(null);
-
+  const { user } = useAuth();
   const pageSize = 8;
   const history = useHistory();
 
@@ -92,12 +94,14 @@ const BvspPartList: React.FC = () => {
   }, []);
 
   const controllers = useMemo(() => {
-    return [
-      { route: 'bvsp-part', action: 'view', icon: MdRemoveRedEye },
-      { route: 'bvsp-part', action: 'delete', icon: MdDelete },
-      { route: 'bvsp-part', action: 'edit', icon: FiEdit },
-    ];
-  }, []);
+    return user.profile_type === 'admin'
+      ? [
+          { route: 'bvsp-part', action: 'view', icon: MdRemoveRedEye },
+          { route: 'bvsp-part', action: 'delete', icon: MdDelete },
+          { route: 'bvsp-part', action: 'edit', icon: FiEdit },
+        ]
+      : [{ route: 'bvsp-part', action: 'view', icon: MdRemoveRedEye }];
+  }, [user.profile_type]);
 
   const optionsSearchFilterBvspPart = useMemo(() => {
     return [

@@ -34,6 +34,7 @@ import {
   ClearButton,
   SelectButton,
   Table,
+  SearchControllers,
 } from './styles';
 
 interface IData {
@@ -284,21 +285,23 @@ const PartsByMachineList: React.FC<IRouteParams> = ({ match }) => {
           name="searchValue"
           placeholder="Pesquisar..."
         />
-        <Select
-          name="filterValue"
-          icon={FiFilter}
-          options={optionsSearchFilterBvspPart}
-        />
-        <SearchButton type="submit" color={light.colors.success}>
-          <FiSearch />
-        </SearchButton>
-        <ClearButton
-          type="button"
-          color={light.colors.tertiary}
-          onClick={handleSearchClear}
-        >
-          <FiX />
-        </ClearButton>
+        <SearchControllers>
+          <Select
+            name="filterValue"
+            icon={FiFilter}
+            options={optionsSearchFilterBvspPart}
+          />
+          <SearchButton type="submit" color={light.colors.success}>
+            <FiSearch />
+          </SearchButton>
+          <ClearButton
+            type="button"
+            color={light.colors.tertiary}
+            onClick={handleSearchClear}
+          >
+            <FiX />
+          </ClearButton>
+        </SearchControllers>
       </SearchContainer>
       {loading ? (
         <Load />

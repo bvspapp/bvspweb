@@ -67,3 +67,9 @@ export const CloseButton = styled.button`
     opacity: 0.7;
   }
 `;
+
+export const SearchControllers = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 19px;
+`;

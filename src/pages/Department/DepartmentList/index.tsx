@@ -20,6 +20,8 @@ import {
 import firebase from '../../../config/firebase';
 import light from '../../../styles/themes/light';
 
+import { useAuth } from '../../../hooks/auth';
+
 import TableData from '../../../components/TableData';
 import Button from '../../../components/Form/Button';
 import Load from '../../../components/Load';
@@ -51,6 +53,7 @@ const DepartmentList: React.FC = () => {
   const [dataTable, setDataTable] = useState<IData[]>([]);
   const [loading, setLoading] = useState(true);
   const formRef = useRef<FormHandles>(null);
+  const { user } = useAuth();
 
   const history = useHistory();
 
@@ -64,12 +67,14 @@ const DepartmentList: React.FC = () => {
   }, []);
 
   const controllers = useMemo(() => {
-    return [
-      { route: 'department', action: 'view', icon: MdRemoveRedEye },
-      { route: 'department', action: 'delete', icon: MdDelete },
-      { route: 'department', action: 'edit', icon: FiEdit },
-    ];
-  }, []);
+    return user.profile_type === 'admin'
+      ? [
+          { route: 'department', action: 'view', icon: MdRemoveRedEye },
+          { route: 'department', action: 'delete', icon: MdDelete },
+          { route: 'department', action: 'edit', icon: FiEdit },
+        ]
+      : [{ route: 'department', action: 'view', icon: MdRemoveRedEye }];
+  }, [user.profile_type]);
 
   const handleBack = useCallback(() => {
     history.push('/');

@@ -16,6 +16,7 @@ import {
   FiArrowRight,
 } from 'react-icons/fi';
 import { MdRemoveRedEye, MdDelete, MdArrowBack, MdAdd } from 'react-icons/md';
+import { useAuth } from '../../../hooks/auth';
 
 import firebase from '../../../config/firebase';
 import light from '../../../styles/themes/light';
@@ -63,7 +64,7 @@ const ChecklistList: React.FC = () => {
   >();
 
   const formRef = useRef<FormHandles>(null);
-
+  const { user } = useAuth();
   const pageSize = 8;
   const history = useHistory();
 
@@ -77,12 +78,14 @@ const ChecklistList: React.FC = () => {
   }, []);
 
   const controllers = useMemo(() => {
-    return [
-      { route: 'checklist', action: 'view', icon: MdRemoveRedEye },
-      { route: 'checklist', action: 'delete', icon: MdDelete },
-      { route: 'checklist', action: 'edit', icon: FiEdit },
-    ];
-  }, []);
+    return user.profile_type === 'admin'
+      ? [
+          { route: 'checklist', action: 'view', icon: MdRemoveRedEye },
+          { route: 'checklist', action: 'delete', icon: MdDelete },
+          { route: 'checklist', action: 'edit', icon: FiEdit },
+        ]
+      : [{ route: 'checklist', action: 'view', icon: MdRemoveRedEye }];
+  }, [user.profile_type]);
 
   const handleBack = useCallback(() => {
     history.push('/');

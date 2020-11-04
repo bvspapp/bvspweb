@@ -16,6 +16,7 @@ import {
   FiArrowRight,
 } from 'react-icons/fi';
 import { MdRemoveRedEye, MdDelete, MdArrowBack, MdAdd } from 'react-icons/md';
+import { useAuth } from '../../../hooks/auth';
 
 import firebase from '../../../config/firebase';
 import light from '../../../styles/themes/light';
@@ -61,7 +62,7 @@ const FamilyList: React.FC = () => {
   const [firstDocPaginate, setFirstDocPaginate] = useState<
     firebase.firestore.QueryDocumentSnapshot
   >();
-
+  const { user } = useAuth();
   const formRef = useRef<FormHandles>(null);
   const pageSize = 8;
   const history = useHistory();
@@ -76,12 +77,14 @@ const FamilyList: React.FC = () => {
   }, []);
 
   const controllers = useMemo(() => {
-    return [
-      { route: 'family', action: 'view', icon: MdRemoveRedEye },
-      { route: 'family', action: 'delete', icon: MdDelete },
-      { route: 'family', action: 'edit', icon: FiEdit },
-    ];
-  }, []);
+    return user.profile_type === 'admin'
+      ? [
+          { route: 'family', action: 'view', icon: MdRemoveRedEye },
+          { route: 'family', action: 'delete', icon: MdDelete },
+          { route: 'family', action: 'edit', icon: FiEdit },
+        ]
+      : [{ route: 'family', action: 'view', icon: MdRemoveRedEye }];
+  }, [user.profile_type]);
 
   const handleBack = useCallback(() => {
     history.push('/');

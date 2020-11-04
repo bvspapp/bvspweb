@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   FaCube,
   FaProjectDiagram,
@@ -12,11 +13,15 @@ import {
   FaCog,
 } from 'react-icons/fa';
 
+import { useAuth } from '../../hooks/auth';
+
 import TileMenu from '../../components/TileMenu';
 
 import { Container } from './styles';
 
 const HomeAdmin: React.FC = () => {
+  const { user } = useAuth();
+
   return (
     <Container>
       <TileMenu href="/bvsp-parts" title="Peças" icon={FaCog} />
@@ -33,7 +38,11 @@ const HomeAdmin: React.FC = () => {
         title="Soluções Especiais"
         icon={FaCloudsmith}
       />
-      <TileMenu href="/users" title="Gerenciar Usuários" icon={FaUser} />
+
+      {user.profile_type === 'admin' && (
+        <TileMenu href="/users" title="Gerenciar Usuários" icon={FaUser} />
+      )}
+
       <TileMenu
         href="/departments"
         title="Gerenciar Departamentos"

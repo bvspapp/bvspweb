@@ -5,6 +5,7 @@ import React, {
   useState,
   useRef,
 } from 'react';
+
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 
@@ -23,6 +24,8 @@ import {
   MdOpenInNew,
   MdGetApp,
 } from 'react-icons/md';
+
+import { useAuth } from '../../../../hooks/auth';
 
 import firebase from '../../../../config/firebase';
 import light from '../../../../styles/themes/light';
@@ -69,6 +72,7 @@ const OtherMachineList: React.FC = () => {
     firebase.firestore.QueryDocumentSnapshot
   >();
   const formRef = useRef<FormHandles>(null);
+  const { user } = useAuth();
 
   const pageSize = 8;
   const history = useHistory();
@@ -83,14 +87,20 @@ const OtherMachineList: React.FC = () => {
   }, []);
 
   const controllers = useMemo(() => {
-    return [
-      { route: 'export-pdf-parts-machine', action: 'view', icon: MdGetApp },
-      { route: 'bvsp-parts-machine', action: 'list', icon: MdOpenInNew },
-      { route: 'other-machines', action: 'view', icon: MdRemoveRedEye },
-      { route: 'other-machines', action: 'delete', icon: MdDelete },
-      { route: 'other-machines', action: 'edit', icon: FiEdit },
-    ];
-  }, []);
+    return user.profile_type === 'admin'
+      ? [
+          { route: 'export-pdf-parts-machine', action: 'view', icon: MdGetApp },
+          { route: 'bvsp-parts-machine', action: 'list', icon: MdOpenInNew },
+          { route: 'other-machines', action: 'view', icon: MdRemoveRedEye },
+          { route: 'other-machines', action: 'delete', icon: MdDelete },
+          { route: 'other-machines', action: 'edit', icon: FiEdit },
+        ]
+      : [
+          { route: 'export-pdf-parts-machine', action: 'view', icon: MdGetApp },
+          { route: 'bvsp-parts-machine', action: 'list', icon: MdOpenInNew },
+          { route: 'other-machines', action: 'view', icon: MdRemoveRedEye },
+        ];
+  }, [user.profile_type]);
 
   const handleBack = useCallback(() => {
     history.push('/');

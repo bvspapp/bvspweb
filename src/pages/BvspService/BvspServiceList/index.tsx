@@ -16,6 +16,7 @@ import {
   MdAdd,
   MdSwapVert,
 } from 'react-icons/md';
+import { useAuth } from '../../../hooks/auth';
 
 import firebase from '../../../config/firebase';
 import light from '../../../styles/themes/light';
@@ -51,6 +52,7 @@ const BvspService: React.FC = () => {
   const [dataTable, setDataTable] = useState<IData[]>([]);
   const [loading, setLoading] = useState(true);
   const formRef = useRef<FormHandles>(null);
+  const { user } = useAuth();
 
   const history = useHistory();
 
@@ -64,12 +66,14 @@ const BvspService: React.FC = () => {
   }, []);
 
   const controllers = useMemo(() => {
-    return [
-      { route: 'bvsp-service', action: 'view', icon: MdRemoveRedEye },
-      { route: 'bvsp-service', action: 'delete', icon: MdDelete },
-      { route: 'bvsp-service', action: 'edit', icon: FiEdit },
-    ];
-  }, []);
+    return user.profile_type === 'admin'
+      ? [
+          { route: 'bvsp-service', action: 'view', icon: MdRemoveRedEye },
+          { route: 'bvsp-service', action: 'delete', icon: MdDelete },
+          { route: 'bvsp-service', action: 'edit', icon: FiEdit },
+        ]
+      : [{ route: 'bvsp-service', action: 'view', icon: MdRemoveRedEye }];
+  }, [user.profile_type]);
 
   const handleBack = useCallback(() => {
     history.push('/');

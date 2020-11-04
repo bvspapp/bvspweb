@@ -27,6 +27,7 @@ import {
 
 import firebase from '../../../../config/firebase';
 import light from '../../../../styles/themes/light';
+import { useAuth } from '../../../../hooks/auth';
 
 import TableData from '../../../../components/TableData';
 import Button from '../../../../components/Form/Button';
@@ -76,7 +77,7 @@ const BvspMachineList: React.FC = () => {
     firebase.firestore.QueryDocumentSnapshot
   >();
   const formRef = useRef<FormHandles>(null);
-
+  const { user } = useAuth();
   const pageSize = 10;
   const history = useHistory();
 
@@ -94,14 +95,20 @@ const BvspMachineList: React.FC = () => {
   }, []);
 
   const controllers = useMemo(() => {
-    return [
-      { route: 'export-pdf-parts-machine', action: 'view', icon: MdGetApp },
-      { route: 'bvsp-parts-machine', action: 'list', icon: MdOpenInNew },
-      { route: 'bvsp-machine', action: 'view', icon: MdRemoveRedEye },
-      { route: 'bvsp-machine', action: 'delete', icon: MdDelete },
-      { route: 'bvsp-machine', action: 'edit', icon: FiEdit },
-    ];
-  }, []);
+    return user.profile_type === 'admin'
+      ? [
+          { route: 'export-pdf-parts-machine', action: 'view', icon: MdGetApp },
+          { route: 'bvsp-parts-machine', action: 'list', icon: MdOpenInNew },
+          { route: 'bvsp-machine', action: 'view', icon: MdRemoveRedEye },
+          { route: 'bvsp-machine', action: 'delete', icon: MdDelete },
+          { route: 'bvsp-machine', action: 'edit', icon: FiEdit },
+        ]
+      : [
+          { route: 'export-pdf-parts-machine', action: 'view', icon: MdGetApp },
+          { route: 'bvsp-parts-machine', action: 'list', icon: MdOpenInNew },
+          { route: 'bvsp-machine', action: 'view', icon: MdRemoveRedEye },
+        ];
+  }, [user.profile_type]);
 
   const optionsSearchFilterBvspMachine = useMemo(() => {
     return [
