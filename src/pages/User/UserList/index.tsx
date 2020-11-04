@@ -154,15 +154,18 @@ const UserList: React.FC = () => {
           ? setExistsMoreRecords(true)
           : setExistsMoreRecords(false);
 
-        const dataFormatted = snapshot.docs.map(doc => {
-          return {
-            id: String(doc.id),
-            name: String(doc.data().name),
-            email: String(doc.data().email),
-            company: String(doc.data().company),
-            city: String(doc.data().city),
-          };
-        });
+        const dataFormatted = snapshot.docs
+          .map(doc => {
+            return {
+              id: String(doc.id),
+              name: String(doc.data().name),
+              email: String(doc.data().email),
+              company: String(doc.data().company),
+              city: String(doc.data().city),
+              profile_type: String(doc.data().profile_type),
+            };
+          })
+          .filter(user => user.profile_type !== 'admin');
 
         setDataTable(dataFormatted);
       })
@@ -217,15 +220,18 @@ const UserList: React.FC = () => {
             setFirstDocPaginate(firstVisible);
           }
 
-          const dataFormatted = snapshot.docs.map(doc => {
-            return {
-              id: String(doc.id),
-              name: String(doc.data().name),
-              email: String(doc.data().email),
-              company: String(doc.data().company),
-              city: String(doc.data().city),
-            };
-          });
+          const dataFormatted = snapshot.docs
+            .map(doc => {
+              return {
+                id: String(doc.id),
+                name: String(doc.data().name),
+                email: String(doc.data().email),
+                company: String(doc.data().company),
+                city: String(doc.data().city),
+                profile_type: String(doc.data().profile_type),
+              };
+            })
+            .filter(user => user.profile_type !== 'admin');
 
           setDataTable(dataFormatted);
         })
