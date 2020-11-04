@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import SignInAdmin from '../pages/SignInAdmin';
+// import SignInAdmin from '../pages/SignInAdmin';
 import SignInUser from '../pages/SignInUser';
 import SignUpUser from '../pages/SignUpUser';
 import ForgotPassword from '../pages/ForgotPassword';
@@ -14,7 +14,7 @@ const AuthRoutes: React.FC = () => (
     <Route exact path="/forgot-password" component={ForgotPassword} />
     <Route exact path="/reset-password" component={ResetPassword} />
 
-    <Route exact path="/admin" component={SignInAdmin} />
+    {/* <Route exact path="/admin" component={SignInAdmin} /> */}
   </Switch>
 );
 

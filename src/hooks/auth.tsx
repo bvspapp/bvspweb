@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
-import firebase from '../config/firebase';
 import api from '../services/api';
 import MessageAlert from '../utils/MessageAlert';
 
@@ -8,20 +7,19 @@ interface IAuthState {
 }
 
 interface IUser {
-  id?: string;
-  country?: string;
-  city?: string;
-  company?: string;
-  name?: string;
+  id: string;
+  country: string;
+  city: string;
+  company: string;
+  name: string;
   email: string;
-  type: 'user' | 'admin';
+  profile_type: 'atendimento' | 'engenharia' | 'cliente' | 'admin';
   currentCountryCode?: string;
 }
 
 interface ISignInCredentials {
   email: string;
   password: string;
-  type: 'user' | 'admin';
 }
 
 interface IResponseSession {
@@ -53,60 +51,40 @@ const AuthProvider: React.FC = ({ children }) => {
   });
 
   const signIn = useCallback(
-    async ({ email, password, type }: ISignInCredentials) => {
-      if (type === 'admin') {
-        await firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password)
-          .then(() => {
-            const user = { email, type };
-            localStorage.setItem('@bvspparts:user', JSON.stringify(user));
+    async ({ email, password }: ISignInCredentials) => {
+      const countryCode: string = await fetch(
+        'https://geolocation-db.com/json/7733a990-ebd4-11ea-b9a6-2955706ddbf3',
+      )
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          return response.country_code;
+        });
 
-            setData({ user });
-            window.location.href = '/';
-          })
-          .catch(() => MessageAlert('Usuário e/ou senha inválidos!', 'info'));
-      }
-
-      if (type === 'user') {
-        const userData = await api.post('sessions', {
+      await api
+        .post('sessions', {
           email,
           password,
-        });
+        })
+        .then(userData => {
+          const { user, token }: IResponseSession = userData.data;
+          api.defaults.headers.authorization = `Bearer ${token}`;
 
-        const { user: userResponse, token }: IResponseSession = userData.data;
-
-        api.defaults.headers.authorization = `Bearer ${token}`;
-
-        // Get current country user.
-        const countryCode = await fetch(
-          'https://geolocation-db.com/json/7733a990-ebd4-11ea-b9a6-2955706ddbf3',
-        )
-          .then(response => {
-            return response.json();
-          })
-          .then(response => {
-            return response.country_code;
-          });
-
-        localStorage.setItem(
-          '@bvspparts:user',
-          JSON.stringify({
-            ...userResponse,
+          const userFormatted = {
+            ...user,
             currentCountryCode: countryCode,
-            type: 'user',
-          }),
-        );
-        localStorage.setItem('@bvspparts:token', JSON.stringify(token));
+          };
 
-        setData({
-          user: {
-            ...userResponse,
-            currentCountryCode: countryCode,
-            type: 'user',
-          },
-        });
-      }
+          localStorage.setItem(
+            '@bvspparts:user',
+            JSON.stringify(userFormatted),
+          );
+          localStorage.setItem('@bvspparts:token', JSON.stringify(token));
+          setData({ user: userFormatted });
+          window.location.href = '/';
+        })
+        .catch(() => MessageAlert('Usuário e/ou senha inválidos!', 'info'));
     },
     [],
   );

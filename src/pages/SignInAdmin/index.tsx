@@ -39,7 +39,6 @@ const SignInAdmin: React.FC = () => {
         await signIn({
           email: data.email,
           password: data.password,
-          type: 'admin',
         });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {

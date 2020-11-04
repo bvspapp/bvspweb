@@ -106,10 +106,11 @@ const BvspServicesDetails: React.FC = () => {
               user: {
                 id: user.id,
                 city: data.city,
+                country: data.country,
                 company: data.company,
                 email: user.email,
                 name: data.name,
-                type: 'user',
+                profile_type: 'cliente',
               },
             });
           });

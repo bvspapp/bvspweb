@@ -68,7 +68,7 @@ const SignInUser: React.FC = () => {
         await schema.validate(data);
 
         const { email, password } = data;
-        await signIn({ email, password, type: 'user' });
+        await signIn({ email, password });
 
         history.push('/');
       } catch (error) {

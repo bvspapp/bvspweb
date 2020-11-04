@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FaPowerOff, FaHome } from 'react-icons/fa';
-
+import { useHistory } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
 
 import logoImg from '../../assets/logo.png';
@@ -16,6 +16,12 @@ import {
 
 const MainHeaderAdmin: React.FC = () => {
   const { signOut } = useAuth();
+  const history = useHistory();
+
+  const handleSignOut = useCallback(() => {
+    signOut();
+    history.push('/');
+  }, [history, signOut]);
 
   return (
     <Container>
@@ -26,7 +32,7 @@ const MainHeaderAdmin: React.FC = () => {
           <FaHome />
         </NavMenuItemLink>
         <Divider />
-        <NavMenuItemButton onClick={signOut} title="Sair e Desconectar">
+        <NavMenuItemButton onClick={handleSignOut} title="Sair e Desconectar">
           <FaPowerOff />
         </NavMenuItemButton>
       </NavMenu>
