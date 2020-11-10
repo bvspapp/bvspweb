@@ -2038,6 +2038,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-flags-select@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@types/react-flags-select/-/react-flags-select-1.1.2.tgz#7e700a9cd4e65824453f8befa29e15acda89c046"
+  integrity sha512-y3KDRk9c2fgyUcSN0d8iNsQTxWQkd6Frt/ByS1fonZcuCImOXGCCNntVynWJiAt8QzqYPv1YjK1Shd08jmMQEg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-image-gallery@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/react-image-gallery/-/react-image-gallery-1.0.0.tgz#199fc3b347265732901dc718b939a0dfbf126d03"
@@ -9755,6 +9762,13 @@ react-error-overlay@^6.0.7:
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.7.tgz#1dcfb459ab671d53f660a991513cb2f0a0553108"
   integrity sha512-TAv1KJFh3RhqxNvhzxj6LeT5NWklP6rDr2a0jaTfsZ5wSZWHOGeqQyejUp3xxLfPt2UpyJEcVQB/zyPcmonNFA==
+
+react-flags-select@^1.1.13:
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/react-flags-select/-/react-flags-select-1.1.13.tgz#1cc2982d05f62f984c5d30d722527a738c3c4ab9"
+  integrity sha512-yFw1bA60uIbtfVEq6s+Sw5HjnXGBT3xPWRpKrC0PEi23KUZdvUMH1n75SzeVLPPXL4/xnRxo0fEa/I6AEs9tfg==
+  dependencies:
+    prop-types "^15.5.8"
 
 react-icons@^3.10.0:
   version "3.10.0"

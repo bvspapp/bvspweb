@@ -7,6 +7,7 @@ import HighlightMenuCard from '../../../components/HighlightMenuCard';
 
 import phonecallImg from '../../../assets/phonecall.svg';
 import gmailImg from '../../../assets/gmail.svg';
+import whatsappImg from '../../../assets/whatsapp.svg';
 
 import { Container, Content, MenuContainer, MessageText } from './styles';
 
@@ -37,6 +38,12 @@ const AttendanceOptions: React.FC = () => {
             image={phonecallImg}
             title={translated.button_callme_title}
             subtitle={translated.button_callme_subtitle}
+          />
+          <HighlightMenuCard
+            link="/attendance/whatsapp"
+            image={whatsappImg}
+            title={translated.button_whatsapp_title}
+            subtitle={translated.button_whatsapp_subtitle}
           />
           <HighlightMenuCard
             link="/attendance/mail"

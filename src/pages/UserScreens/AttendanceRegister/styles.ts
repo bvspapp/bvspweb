@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Form as Unform } from '@unform/web';
+import ReactFlagsSelect from 'react-flags-select';
 import Button from '../../../components/Form/Button';
 
 export const Container = styled.div`
@@ -23,13 +24,15 @@ export const Content = styled.main`
 
 export const Form = styled(Unform)`
   margin-top: 40px;
+
+  z-index: 1;
 `;
 
 export const ButtonRegister = styled(Button)`
-  font-size: 14px;
-  align-self: flex-end;
+  width: 100%;
+  height: 40px;
 
-  margin: 10px;
+  font-size: 18px;
 `;
 
 export const FormContent = styled.fieldset`
@@ -42,10 +45,18 @@ export const FormContent = styled.fieldset`
 export const InputsColumnContainer = styled.div`
   flex: 1;
   display: flex;
+
   justify-content: center;
   align-items: center;
 
   margin-bottom: 30px;
+`;
+
+export const TextWait = styled.p`
+  font-weight: bold;
+  text-align: center;
+
+  margin-top: 70px;
 `;
 
 export const LabelText = styled.div``;
@@ -58,4 +69,16 @@ export const ContactIllustration = styled.img`
   width: 450px;
 
   align-self: flex-end;
+
+  opacity: 0.9;
+`;
+
+export const CountrySelect = styled(ReactFlagsSelect).attrs({
+  showSelectedLabel: false,
+  showOptionLabel: false,
+  selectedSize: 32,
+  optionsSize: 24,
+})`
+  margin-right: 10px;
+  margin-top: 18px;
 `;

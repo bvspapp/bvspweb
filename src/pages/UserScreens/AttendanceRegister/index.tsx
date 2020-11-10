@@ -1,11 +1,12 @@
 import React, { useMemo, useCallback, useState, useRef } from 'react';
+import 'react-flags-select/css/react-flags-select.css';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 
 import { useAuth } from '../../../hooks/auth';
-import firebase from '../../../config/firebase';
 
+import light from '../../../styles/themes/light';
 import HighlightTitle from '../../../components/HighlightTitle';
 import MessageAlert from '../../../utils/MessageAlert';
 import TextInput from '../../../components/Form/TextInput';
@@ -22,6 +23,8 @@ import {
   InputsColumnContainer,
   LabelText,
   ContactIllustration,
+  TextWait,
+  CountrySelect,
 } from './styles';
 
 import translatedContent from './translatedcontent';
@@ -43,7 +46,7 @@ interface IFormData {
 const AttendanceRegister: React.FC<IRouteParams> = ({ match }) => {
   const [initialDataForm, setInitialDataForm] = useState<IFormData>();
   const { user } = useAuth();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { translation } = useTranslation();
   const formRef = useRef<FormHandles>(null);
   const history = useHistory();
@@ -75,20 +78,6 @@ const AttendanceRegister: React.FC<IRouteParams> = ({ match }) => {
           date: new Date(),
           time: new Date(),
         };
-
-        await firebase
-          .firestore()
-          .collection('attendance')
-          .add(dataFormatted)
-          .then(() => {
-            MessageAlert(translated.success_register, 'success').then(() =>
-              history.push('/'),
-            );
-          })
-          .catch(() => {
-            MessageAlert(translated.error_register, 'error');
-            setLoading(false);
-          });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           MessageAlert(error.errors[0], 'info');
@@ -99,13 +88,7 @@ const AttendanceRegister: React.FC<IRouteParams> = ({ match }) => {
         setLoading(false);
       }
     },
-    [
-      history,
-      translated.error_notfound_contact,
-      translated.success_register,
-      translated.error_register,
-      user.name,
-    ],
+    [translated.error_notfound_contact, translated.error_register, user.name],
   );
 
   return (
@@ -117,33 +100,42 @@ const AttendanceRegister: React.FC<IRouteParams> = ({ match }) => {
           }`}
         />
 
-        <Form
-          ref={formRef}
-          initialData={initialDataForm}
-          onSubmit={handleSubmit}
-        >
-          <FormContent disabled={false}>
-            <LabelText>{translated.label_contact_info}</LabelText>
-            <InputsColumnContainer>
-              <TextInput
-                type="text"
-                name="ddd"
-                required
-                containerCustomStyle={{ maxWidth: 70, marginRight: 10 }}
-                placeholder="DDD"
-              />
-              <TextInput
-                type="text"
-                name="phonenumber"
-                required
-                placeholder={translated.phonenumber_placeholder}
-              />
-            </InputsColumnContainer>
+        {loading ? (
+          <TextWait>{translated.text_wait}</TextWait>
+        ) : (
+          <Form
+            ref={formRef}
+            initialData={initialDataForm}
+            onSubmit={handleSubmit}
+          >
+            <FormContent disabled={false}>
+              <LabelText>{translated.label_contact_info}</LabelText>
+              <InputsColumnContainer>
+                <CountrySelect defaultCountry="BR" />
+                <TextInput
+                  type="text"
+                  name="ddd"
+                  required
+                  containerCustomStyle={{ maxWidth: 70, marginRight: 10 }}
+                  placeholder="DDD"
+                />
+                <TextInput
+                  type="text"
+                  name="phonenumber"
+                  required
+                  placeholder={translated.phonenumber_placeholder}
+                />
+              </InputsColumnContainer>
 
-            <LabelText>{translated.label_about}</LabelText>
-            <TextAreaInput name="about" rows={5} />
-          </FormContent>
-        </Form>
+              <LabelText>{translated.label_about}</LabelText>
+              <TextAreaInput name="about" rows={5} />
+
+              <ButtonRegister type="submit" color={light.colors.primary}>
+                Enviar
+              </ButtonRegister>
+            </FormContent>
+          </Form>
+        )}
 
         <ContactIllustration src={clerkmg} />
       </Content>
