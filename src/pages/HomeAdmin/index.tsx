@@ -11,6 +11,7 @@ import {
   FaStar,
   FaCloudsmith,
   FaCog,
+  FaPhone,
 } from 'react-icons/fa';
 
 import { useAuth } from '../../hooks/auth';
@@ -54,6 +55,8 @@ const HomeAdmin: React.FC = () => {
       <TileMenu href="/checklists" title="Checklist" icon={FaClipboardList} />
 
       <TileMenu href="/portfoliopdf" title="Portfólio" icon={FaElementor} />
+
+      <TileMenu href="/attendance" title="Atendimentos" icon={FaPhone} />
     </Container>
   );
 };
