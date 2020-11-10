@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { FaHome, FaUser, FaPhoneAlt } from 'react-icons/fa';
+import { FaHome, FaUser, FaPhoneAlt, FaMailBulk } from 'react-icons/fa';
 import { TiWorld } from 'react-icons/ti';
 import { GiExitDoor } from 'react-icons/gi';
 
@@ -58,6 +58,11 @@ const FloatMenuUser: React.FC = () => {
         <Menu to="/profile">
           <FaUser />
           {translated.menubar_button_profile}
+        </Menu>
+
+        <Menu to="/attendance">
+          <FaMailBulk />
+          {translated.menubar_button_attendance}
         </Menu>
 
         <Menu to="/contact">
