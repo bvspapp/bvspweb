@@ -49,6 +49,7 @@ import PolymerDetails from '../pages/UserScreens/Education/PolymerDetails';
 import Institutional from '../pages/UserScreens/Institutional';
 import Contact from '../pages/UserScreens/Contact';
 import AttendanceOptions from '../pages/UserScreens/AttendanceOptions';
+import AttendanceRegister from '../pages/UserScreens/AttendanceRegister';
 
 const UserRoutes: React.FC = () => (
   <AppLayoutUser>
@@ -136,6 +137,7 @@ const UserRoutes: React.FC = () => (
       <Route path="/institutional" exact component={Institutional} />
 
       <Route path="/attendance" exact component={AttendanceOptions} />
+      <Route path="/attendance/:type" exact component={AttendanceRegister} />
 
       <Route path="/contact" exact component={Contact} />
     </Switch>

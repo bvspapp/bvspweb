@@ -33,13 +33,13 @@ const AttendanceOptions: React.FC = () => {
 
         <MenuContainer>
           <HighlightMenuCard
-            link="/bvspproducts"
+            link="/attendance/call"
             image={phonecallImg}
             title={translated.button_callme_title}
             subtitle={translated.button_callme_subtitle}
           />
           <HighlightMenuCard
-            link="/ourpartners"
+            link="/attendance/mail"
             image={gmailImg}
             title={translated.button_sendmessage_title}
             subtitle={translated.button_sendmessage_subtitle}
