@@ -13,22 +13,10 @@ const Routes: React.FC = () => {
   const Route = () => {
     if (!user) return <Auth />;
 
-    switch (user.profile.name) {
-      case 'gestão':
-        return <Admin />;
-      case 'atendimento':
-        return <Admin />;
-      case 'engenharia':
-        return <Admin />;
-      case 'orçamento':
-        return <Admin />;
-      case 'venda':
-        return <Admin />;
-      case 'cliente':
-        return <User />;
-      default:
-        return <Auth />;
-    }
+    if(user.profile.name === 'cliente')
+      return <User />;
+    else
+      return <Admin />;
   };
 
   return (
