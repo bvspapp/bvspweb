@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 
 import { useAuth } from '../../../hooks/auth';
 
@@ -27,7 +27,7 @@ import translatedContent from './translatedcontent';
 import { useTranslation } from '../../../hooks/translation';
 
 const HomeUser: React.FC = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { translation } = useTranslation();
 
   const translated = useMemo(() => {
@@ -35,6 +35,12 @@ const HomeUser: React.FC = () => {
       ? translatedContent.en_US
       : translatedContent.pt_BR;
   }, [translation]);
+
+  useEffect(() => {
+    if(!user.name)
+    signOut();
+
+  },[]);
 
   return (
     <Container>
