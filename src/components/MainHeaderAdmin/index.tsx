@@ -30,6 +30,11 @@ const MainHeaderAdmin: React.FC = () => {
   }, [history, signOut]);
 
   useEffect(() => {
+
+    if(!user.name)
+    signOut();
+
+
     async function coutAlerts() {
       await api
         .get(`/requests/alert-count/${user.profile.id}`)
