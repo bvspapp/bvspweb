@@ -50,12 +50,12 @@ const AuthProvider: React.FC = ({ children }) => {
       // Inserindo e definindo o token para todas as requisições.
       api.defaults.headers.authorization = `Bearer ${token}`;
 
-      const userData = {
-        ...JSON.parse(user),
-        name: JSON.parse(user).name ? JSON.parse(user) : ''
-      }
+      const userData = JSON.parse(user);
 
-      return { token, user: userData };
+      if(!userData.name)
+      return {} as IAuthState;
+
+      return { token, user: JSON.parse(user) };
     }
 
     return {} as IAuthState;
