@@ -31,8 +31,7 @@ const MainHeaderAdmin: React.FC = () => {
 
   useEffect(() => {
 
-    if(!user.name)
-    signOut();
+
 
 
     async function coutAlerts() {

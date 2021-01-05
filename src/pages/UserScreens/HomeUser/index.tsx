@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 
 import { useAuth } from '../../../hooks/auth';
 
@@ -36,11 +36,7 @@ const HomeUser: React.FC = () => {
       : translatedContent.pt_BR;
   }, [translation]);
 
-  useEffect(() => {
-    if(!user.name)
-    signOut();
 
-  },[]);
 
   return (
     <Container>
