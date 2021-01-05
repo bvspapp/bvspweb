@@ -31,6 +31,7 @@ import { Container } from './styles';
 const HomeAdmin: React.FC = () => {
   const { user } = useAuth();
 
+
   useEffect(() => {
     async function coutAlerts() {
       await api
@@ -48,11 +49,12 @@ const HomeAdmin: React.FC = () => {
 
   return (
     <Container>
-      {user.profile.name === 'gestão' &&
+      {(user.profile.name === 'gestão' || user.profile.name === 'engenharia') &&
         <>
           <TileMenu href="/bvsp-parts" title="Peças" icon={FaCog} />
 
           <TileMenu href="/bvsp-machines" title="Máquinas BVSP" icon={FaCube} />
+
           <TileMenu
             href="/other-machines"
             title="Outras Máquinas"
@@ -68,7 +70,10 @@ const HomeAdmin: React.FC = () => {
       }
 
       {user.profile.name === 'gestão' && (
-        <TileMenu href="/users" title="Gerenciar Usuários" icon={FaUser} />
+        <>
+          <TileMenu href="/users" title="Gerenciar Usuários" icon={FaUser} />
+          <TileMenu href="/bvsp-services" title="Serviços" icon={FaStar} />
+        </>
       )}
 
       { user.profile.name === 'gestão' &&
@@ -80,14 +85,14 @@ const HomeAdmin: React.FC = () => {
           />
           <TileMenu href="/families" title="Gerenciar Famílias" icon={FaBookmark} />
 
-          <TileMenu href="/bvsp-services" title="Serviços" icon={FaStar} />
+
           <TileMenu href="/checklists" title="Checklist" icon={FaClipboardList} />
 
           <TileMenu href="/portfoliopdf" title="Portfólio" icon={FaElementor} />
         </>
       }
 
-      {(user.profile.name === 'gestão' || user.profile.name === 'venda') &&
+      {(user.profile.name === 'gestão' || user.profile.name === 'atendimento' || user.profile.name === 'técnico' ) &&
         <TileMenu
           href="/attendance-register"
           title="Criar Demandas"

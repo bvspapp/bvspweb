@@ -62,10 +62,6 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
   const optionsUserTypeProfile = useMemo(() => {
     return [
       {
-        value: 1,
-        label: 'Venda',
-      },
-      {
         value: 2,
         label: 'Atendimento',
       },
@@ -74,8 +70,16 @@ const UserRegister: React.FC<IRouteParams> = ({ match }) => {
         label: 'Cliente',
       },
       {
+        value: 4,
+        label: 'Engenharia',
+      },
+      {
         value: 3,
         label: 'Orçamento',
+      },
+      {
+        value: 8,
+        label: 'Técnico',
       },
       {
         value: 7,

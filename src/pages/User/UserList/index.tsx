@@ -112,20 +112,24 @@ const UserList: React.FC = () => {
   const optionsUserProfile = useMemo(() => {
     return [
       {
-        value: 1,
-        label: 'Vendas',
-      },
-      {
         value: 2,
         label: 'Atendimento',
+      },
+      {
+        value: 6,
+        label: 'Cliente',
+      },
+      {
+        value: 4,
+        label: 'Engenharia',
       },
       {
         value: 3,
         label: 'Orçamento',
       },
       {
-        value: 6,
-        label: 'Cliente',
+        value: 8,
+        label: 'Técnico',
       },
       {
         value: 7,

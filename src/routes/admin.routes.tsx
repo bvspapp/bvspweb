@@ -57,6 +57,7 @@ import NotificationsQualityRequestList from '../pages/AttendanceRequests/Notific
 const AdminRoutes: React.FC = () => (
   <Layout>
     <Switch>
+
       <Route path="/" exact component={Home} />
 
       <Route path="/users" exact component={UserList} />
@@ -187,6 +188,7 @@ const AdminRoutes: React.FC = () => (
         exact
         component={NotificationsQualityRequestList}
       />
+
     </Switch>
   </Layout>
 );

@@ -16,7 +16,12 @@ const Routes: React.FC = () => {
     if(user.profile.name === 'cliente')
       return <User />;
     else
-      return <Admin />;
+      return (
+      <>
+        <Admin />
+        <User />
+      </>
+      );
   };
 
   return (
