@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
-import { format } from 'date-fns';
+import { format, subHours } from 'date-fns';
 
 import {
   FiSearch,
@@ -136,6 +136,10 @@ const AttendanceRequestsList: React.FC = () => {
           `requests?name=${searchValue}&request_status_id=${statusFilter}&page=${pageNumber}&perpage=8`,
         )
         .then(response => {
+          const date = new Date();
+          const offsetInHours = date.getTimezoneOffset() / 60;
+
+
           const dataFormatted = response.data.map(
             (request: IRequestResponse) => {
               return {
@@ -143,7 +147,7 @@ const AttendanceRequestsList: React.FC = () => {
                 client_name: String(request.user.name),
                 contact: String(request.contact_type.name).toUpperCase(),
                 date: format(new Date(request.created_at), 'dd/MM/yyyy'),
-                hour: format(new Date(request.created_at), 'HH:mm:ss'),
+                hour: format(subHours(new Date(request.created_at), offsetInHours),'HH:mm:ss'),
               };
             },
           );

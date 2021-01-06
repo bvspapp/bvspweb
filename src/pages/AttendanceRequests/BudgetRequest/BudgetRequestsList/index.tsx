@@ -116,8 +116,7 @@ const BudgetRequestsList: React.FC = () => {
           `requests/followup/search-all?name=${searchValue}&request_status_id=${statusFilter}&request_type_id=3&page=${pageNumber}&perpage=8`,
         )
         .then(response => {
-          const date = new Date();
-          const offsetInHours = date.getTimezoneOffset() / 60;
+
 
           const dataFormatted = response.data.map(
             (request: IRequestResponse) => {
@@ -125,7 +124,7 @@ const BudgetRequestsList: React.FC = () => {
                 id: String(request.request_id),
                 client_name: String(request.user_name),
                 date: format(new Date(request.created_at), 'dd/MM/yyyy'),
-                hour: format(subHours((new Date(request.created_at)), offsetInHours), 'HH:mm:ss'),
+                hour: format(new Date(request.created_at), 'HH:mm:ss'),
               };
             },
           );

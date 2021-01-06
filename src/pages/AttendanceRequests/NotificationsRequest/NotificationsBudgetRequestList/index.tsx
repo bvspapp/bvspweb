@@ -29,7 +29,6 @@ import {
   PaginationButtons,
   PaginationButton,
   PageNumberLabel,
-  NoRemembers,
 } from './styles';
 
 interface IData {
