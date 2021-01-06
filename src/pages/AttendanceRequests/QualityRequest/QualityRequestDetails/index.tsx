@@ -56,6 +56,7 @@ import {
   FormRow,
   FilesContainer,
   FileLink,
+  FilesTitle
 } from './styles';
 
 interface IData {
@@ -470,11 +471,12 @@ const QualityRequestDetails: React.FC<IRouteParams> = ({ match }) => {
           </Form>
 
           <FilesContainer>
+            <FilesTitle>Arquivos Anexo ao Pedido</FilesTitle>
             {files.map((item, index) => (
               <FileLink key={String(index)} href={item.url} target="_blank">
                 Abrir Arquivo
 {' '}
-{index}
+{(index + 1)}
               </FileLink>
             ))}
           </FilesContainer>

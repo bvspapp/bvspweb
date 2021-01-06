@@ -127,7 +127,21 @@ export const FileLink = styled.a`
 
   margin-right: 15px;
 
+  text-decoration: none;
+  cursor: pointer;
+
+  background-color: ${props => props.theme.colors.primary};
+  color: ${props => props.theme.colors.white};
+  padding: 7px 10px;
+  border-radius: 5px;
+
+
   &:hover {
     opacity: 0.8;
   }
+`;
+
+export const FilesTitle = styled.p`
+  margin-bottom: 10px;
+  font-weight: bold;
 `;
