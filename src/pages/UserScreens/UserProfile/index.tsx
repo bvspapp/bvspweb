@@ -129,6 +129,7 @@ const BvspServicesDetails: React.FC = () => {
               name: user.profile.name,
             },
             currentCountryCode: user.currentCountryCode,
+            environment: user.environment
           },
         });
 

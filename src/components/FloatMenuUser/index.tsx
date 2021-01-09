@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { FaHome, FaUser, FaPhoneAlt, FaMailBulk } from 'react-icons/fa';
 import { TiWorld } from 'react-icons/ti';
-import { GiExitDoor } from 'react-icons/gi';
+import { GiExitDoor, GiAbstract050 } from 'react-icons/gi';
 
 import logoImg from '../../assets/logo.png';
 
@@ -22,8 +22,9 @@ import {
 } from './styles';
 
 const FloatMenuUser: React.FC = () => {
-  const { signOut } = useAuth();
+  const { signOut, user, setData } = useAuth();
   const history = useHistory();
+
 
   const { translation } = useTranslation();
 
@@ -37,6 +38,14 @@ const FloatMenuUser: React.FC = () => {
     signOut();
     history.push('/');
   }, [history, signOut]);
+
+  const handleGoClientPlataform = useCallback(() => {
+    user.environment = 'managment';
+    setData({
+      user
+    });
+
+  },[]);
 
   return (
     <Container>
@@ -69,6 +78,14 @@ const FloatMenuUser: React.FC = () => {
           <FaPhoneAlt />
           {translated.menubar_button_contact}
         </Menu>
+
+        {
+          user.profile.name !== 'cliente' &&
+          <Logout type="button" onClick={handleGoClientPlataform} title="Sair e Desconectar">
+            <GiAbstract050 />
+            Plataforma BVSP
+          </Logout>
+        }
       </MenuContainer>
 
       <Logout type="button" onClick={handleSignOut} title="Sair e Desconectar">

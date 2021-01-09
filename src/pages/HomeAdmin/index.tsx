@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 
 import {
@@ -12,6 +12,7 @@ import {
   FaStar,
   FaCloudsmith,
   FaCog,
+  FaSmileWink
 } from 'react-icons/fa';
 
 import {
@@ -26,12 +27,18 @@ import api from '../../services/api';
 
 import TileMenu from '../../components/TileMenu';
 
-import { Container } from './styles';
+import { Container, TileButton } from './styles';
 
 const HomeAdmin: React.FC = () => {
-  const { user } = useAuth();
+  const { user, setData } = useAuth();
 
+  const handleGoClientPlataform = useCallback(() => {
+    user.environment = 'client';
+    setData({
+      user
+    });
 
+  },[]);
 
   useEffect(() => {
     async function coutAlerts() {
@@ -46,6 +53,8 @@ const HomeAdmin: React.FC = () => {
     }
 
     coutAlerts();
+  console.log(user)
+
   }, []);
 
   return (
@@ -124,6 +133,12 @@ const HomeAdmin: React.FC = () => {
         />
         </>
       }
+
+
+      <TileButton onClick={handleGoClientPlataform}>
+        <FaSmileWink />
+        Plataforma do Cliente
+      </TileButton>
     </Container>
   );
 };

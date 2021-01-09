@@ -20,6 +20,7 @@ interface IUser {
     name: string;
   };
   currentCountryCode?: string;
+  environment: string;
 }
 
 interface ISignInCredentials {
@@ -86,6 +87,7 @@ const AuthProvider: React.FC = ({ children }) => {
           const userFormatted = {
             ...user,
             currentCountryCode: countryCode,
+            environment: 'default'
           };
 
           localStorage.setItem(

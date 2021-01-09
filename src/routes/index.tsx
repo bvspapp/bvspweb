@@ -16,12 +16,7 @@ const Routes: React.FC = () => {
     if(user.profile.name === 'cliente')
       return <User />;
     else
-      return (
-      <>
-        <Admin />
-        <User />
-      </>
-      );
+      return user.environment === 'client' ? <User /> : <Admin />;
   };
 
   return (
