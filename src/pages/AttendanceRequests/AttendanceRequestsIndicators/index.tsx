@@ -16,9 +16,6 @@ import {
   MdArrowBack,
   MdPeople,
   MdReceipt,
-  MdShoppingCart,
-  MdDescription,
-  MdBuild,
   MdFeedback,
 } from 'react-icons/md';
 import { FiFilter, FiCheck } from 'react-icons/fi';
@@ -61,13 +58,43 @@ const years = [
 ];
 
 const orcamento = [
-  { name: 'Aberto', value: 30, percent: 30, color: 'red' },
   { name: 'Andamento', value: 20, percent: 20, color: 'green' },
   { name: 'Concluído', value: 50, percent: 50, color: 'blue' },
 ];
 
-interface IHistory {
-  month: number;
+interface IHistoryPerYear {
+  quality: {
+    name: string;
+    value: number;
+    percent: number;
+  }[];
+  budget: {
+    name: string;
+    value: number;
+    percent: number;
+  }[];
+  per_month: {
+    month: string;
+    value: number;
+  }[];
+}
+
+interface IHistoryPerMonth {
+  quality: {
+    name: string;
+    value: number;
+    percent: number;
+  }[];
+  budget: {
+    name: string;
+    value: number;
+    percent: number;
+  }[];
+  per_day:
+    {
+      day: number;
+      value: number;
+    }[]
 }
 
 const AttendanceRequestsList: React.FC = () => {
@@ -77,7 +104,8 @@ const AttendanceRequestsList: React.FC = () => {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
 
-  const [historyData, setHistoryData] = useState<IHistory[]>([]);
+  const [historyPerYear, setHistoryPerYear] = useState<IHistoryPerYear>({} as IHistoryPerYear);
+  const [historyPerMonth, setHistoryPerMonth] = useState<IHistoryPerMonth>({} as IHistoryPerMonth);
 
   const history = useHistory();
 
@@ -103,7 +131,7 @@ const AttendanceRequestsList: React.FC = () => {
 
     if (filterBy === 'year') {
       api.get(`requests/indicators/by-year?year=${year}`).then(response => {
-        setHistoryData(response.data);
+        setHistoryPerYear(response.data);
       });
     }
 
@@ -111,7 +139,7 @@ const AttendanceRequestsList: React.FC = () => {
       api
         .get(`requests/indicators/by-month?month=${month}&&year=${year}`)
         .then(response => {
-          setHistoryData(response.data);
+          setHistoryPerMonth(response.data);
         });
     }
 
@@ -185,11 +213,11 @@ const AttendanceRequestsList: React.FC = () => {
 
               <ResponsiveContainer maxHeight="85%">
                 <LineChart
-                  data={historyData}
+                  data={filterBy === 'year' ? historyPerYear.per_month : historyPerMonth.per_day}
                   margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#cecece" />
-                  <XAxis dataKey="parameter" stroke="#cecece" />
+                  <XAxis dataKey={filterBy === 'year' ? "month" : "day"} stroke="#cecece" />
                   <Tooltip />
                   <Line
                     type="monotone"
@@ -212,49 +240,12 @@ const AttendanceRequestsList: React.FC = () => {
                 <MdReceipt size={20} />
               </BoxHeader>
               <ResponsiveContainer maxHeight="85%">
-                <BarChart data={orcamento}>
+                <BarChart data={filterBy === 'year' ? historyPerYear.budget : historyPerMonth.budget}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <Bar dataKey="value" name="Valor" label={{ position: 'top' }}>
                     <Cell key={orcamento[0].name} fill={COLORS[0]} />
                     <Cell key={orcamento[1].name} fill={COLORS[1]} />
-                    <Cell key={orcamento[2].name} fill={COLORS[2]} />
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </BarChartBox>
-
-            <BarChartBox>
-              <BoxHeader>
-                <ChartTitle>Vendas</ChartTitle>
-                <MdShoppingCart size={20} />
-              </BoxHeader>
-              <ResponsiveContainer maxHeight="85%">
-                <BarChart data={orcamento}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <Bar dataKey="value" name="Valor" label={{ position: 'top' }}>
-                    <Cell key={orcamento[0].name} fill={COLORS[0]} />
-                    <Cell key={orcamento[1].name} fill={COLORS[1]} />
-                    <Cell key={orcamento[2].name} fill={COLORS[2]} />
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </BarChartBox>
-
-            <BarChartBox>
-              <BoxHeader>
-                <ChartTitle>Cobranças</ChartTitle>
-                <MdDescription size={20} />
-              </BoxHeader>
-              <ResponsiveContainer maxHeight="85%">
-                <BarChart data={orcamento}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <Bar dataKey="value" name="Valor" label={{ position: 'top' }}>
-                    <Cell key={orcamento[0].name} fill={COLORS[0]} />
-                    <Cell key={orcamento[1].name} fill={COLORS[1]} />
-                    <Cell key={orcamento[2].name} fill={COLORS[2]} />
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
@@ -266,35 +257,18 @@ const AttendanceRequestsList: React.FC = () => {
                 <MdFeedback size={20} />
               </BoxHeader>
               <ResponsiveContainer maxHeight="85%">
-                <BarChart data={orcamento}>
+                <BarChart data={filterBy === 'year' ? historyPerYear.quality : historyPerMonth.quality}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <Bar dataKey="value" name="Valor" label={{ position: 'top' }}>
                     <Cell key={orcamento[0].name} fill={COLORS[0]} />
                     <Cell key={orcamento[1].name} fill={COLORS[1]} />
-                    <Cell key={orcamento[2].name} fill={COLORS[2]} />
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </BarChartBox>
 
-            <BarChartBox>
-              <BoxHeader>
-                <ChartTitle>Técnicos</ChartTitle>
-                <MdBuild size={20} />
-              </BoxHeader>
-              <ResponsiveContainer maxHeight="85%">
-                <BarChart data={orcamento}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <Bar dataKey="value" name="Valor" label={{ position: 'top' }}>
-                    <Cell key={orcamento[0].name} fill={COLORS[0]} />
-                    <Cell key={orcamento[1].name} fill={COLORS[1]} />
-                    <Cell key={orcamento[2].name} fill={COLORS[2]} />
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </BarChartBox>
+
           </TilesLine>
         </Content>
       )}

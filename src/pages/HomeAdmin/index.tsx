@@ -12,7 +12,8 @@ import {
   FaStar,
   FaCloudsmith,
   FaCog,
-  FaSmileWink
+  FaSmileWink,
+  FaChartPie
 } from 'react-icons/fa';
 
 import {
@@ -132,6 +133,10 @@ const HomeAdmin: React.FC = () => {
           icon={MdNotifications}
         />
         </>
+      }
+
+      {user.profile.name === 'gestão' &&
+        <TileMenu href="/attendance-request-indicators" title="Indicadores do Atendimento" icon={FaChartPie} />
       }
 
 
