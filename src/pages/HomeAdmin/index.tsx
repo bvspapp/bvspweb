@@ -13,7 +13,7 @@ import {
   FaCloudsmith,
   FaCog,
   FaSmileWink,
-  FaChartPie
+  FaChartPie,
 } from 'react-icons/fa';
 
 import {
@@ -36,10 +36,9 @@ const HomeAdmin: React.FC = () => {
   const handleGoClientPlataform = useCallback(() => {
     user.environment = 'client';
     setData({
-      user
+      user,
     });
-
-  },[]);
+  }, []);
 
   useEffect(() => {
     async function coutAlerts() {
@@ -54,13 +53,13 @@ const HomeAdmin: React.FC = () => {
     }
 
     coutAlerts();
-  console.log(user)
-
+    console.log(user);
   }, []);
 
   return (
     <Container>
-      {(user.profile.name === 'gestão' || user.profile.name === 'engenharia') &&
+      {(user.profile.name === 'gestão' ||
+        user.profile.name === 'engenharia') && (
         <>
           <TileMenu href="/bvsp-parts" title="Peças" icon={FaCog} />
 
@@ -78,7 +77,7 @@ const HomeAdmin: React.FC = () => {
             icon={FaCloudsmith}
           />
         </>
-      }
+      )}
 
       {user.profile.name === 'gestão' && (
         <>
@@ -87,58 +86,71 @@ const HomeAdmin: React.FC = () => {
         </>
       )}
 
-      { user.profile.name === 'gestão' &&
+      {user.profile.name === 'gestão' && (
         <>
           <TileMenu
             href="/departments"
             title="Gerenciar Departamentos"
             icon={FaProjectDiagram}
           />
-          <TileMenu href="/families" title="Gerenciar Famílias" icon={FaBookmark} />
+          <TileMenu
+            href="/families"
+            title="Gerenciar Famílias"
+            icon={FaBookmark}
+          />
 
-
-          <TileMenu href="/checklists" title="Checklist" icon={FaClipboardList} />
+          <TileMenu
+            href="/checklists"
+            title="Checklist"
+            icon={FaClipboardList}
+          />
 
           <TileMenu href="/portfoliopdf" title="Portfólio" icon={FaElementor} />
         </>
-      }
+      )}
 
-      {(user.profile.name === 'gestão' || user.profile.name === 'atendimento' || user.profile.name === 'técnico' ) &&
+      {(user.profile.name === 'gestão' ||
+        user.profile.name === 'atendimento' ||
+        user.profile.name === 'técnico') && (
         <TileMenu
           href="/attendance-register"
           title="Criar Demandas"
           icon={MdPermPhoneMsg}
         />
-      }
+      )}
 
-
-    {(user.profile.name === 'gestão' || user.profile.name === 'qualidade') &&
-    <>
-      <TileMenu href="/quality" title="Qualidade" icon={MdFeedback} />
-      <TileMenu
-        href="/request-notifications-quality"
-        title="Lembretes da Qualidade"
-        icon={MdNotifications}
-      />
-      </>
-      }
-
-      {(user.profile.name === 'gestão' || user.profile.name === 'orçamento') &&
-      <>
-        <TileMenu href="/budgets" title="Orçamentos" icon={MdReceipt} />
-
-        <TileMenu
-          href="/request-notifications-budget"
-          title="Lembretes do Orçamento"
-          icon={MdNotifications}
-        />
+      {(user.profile.name === 'gestão' ||
+        user.profile.name === 'qualidade') && (
+        <>
+          <TileMenu href="/quality" title="Qualidade" icon={MdFeedback} />
+          <TileMenu
+            href="/request-notifications-quality"
+            title="Lembretes da Qualidade"
+            icon={MdNotifications}
+          />
         </>
-      }
+      )}
 
-      {user.profile.name === 'gestão' &&
-        <TileMenu href="/attendance-request-indicators" title="Indicadores do Atendimento" icon={FaChartPie} />
-      }
+      {(user.profile.name === 'gestão' ||
+        user.profile.name === 'orçamento') && (
+        <>
+          <TileMenu href="/budgets" title="Orçamentos" icon={MdReceipt} />
 
+          <TileMenu
+            href="/request-notifications-budget"
+            title="Lembretes do Orçamento"
+            icon={MdNotifications}
+          />
+        </>
+      )}
+
+      {/* {user.profile.name === 'gestão' && (
+        <TileMenu
+          href="/attendance-request-indicators"
+          title="Indicadores do Atendimento"
+          icon={FaChartPie}
+        />
+      )} */}
 
       <TileButton onClick={handleGoClientPlataform}>
         <FaSmileWink />
