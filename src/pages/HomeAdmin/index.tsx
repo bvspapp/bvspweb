@@ -144,13 +144,13 @@ const HomeAdmin: React.FC = () => {
         </>
       )}
 
-      {/* {user.profile.name === 'gestão' && (
+      {user.profile.name === 'gestão' && (
         <TileMenu
           href="/attendance-request-indicators"
           title="Indicadores do Atendimento"
           icon={FaChartPie}
         />
-      )} */}
+      )}
 
       <TileButton onClick={handleGoClientPlataform}>
         <FaSmileWink />
